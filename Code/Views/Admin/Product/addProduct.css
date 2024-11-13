@@ -1,0 +1,113 @@
+/* Định dạng form */
+form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+h3 {
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="file"] {
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+button {
+  display: inline-block;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Phần Biến Thể Sản Phẩm */
+#variants {
+  margin-top: 20px;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.variant {
+  border-bottom: 1px dashed #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.variant:last-child {
+  border-bottom: none;
+}
+
+/* Phần ảnh đại diện và album ảnh */
+#main_image,
+#album_images {
+  margin-bottom: 10px;
+}
+
+input[type="file"]:not(:last-of-type) {
+  margin-bottom: 10px;
+}
+
+/* Thêm padding cho button thêm biến thể */
+button[type="button"] {
+  margin: 10px 0;
+  background-color: #007bff;
+}
+
+button[type="button"]:hover {
+  background-color: #0056b3;
+}
+
+/* Định dạng thông báo */
+.success-message,
+.error-message {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.success-message {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.error-message {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+}

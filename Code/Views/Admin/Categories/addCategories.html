@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/form.css">
+    <title>Add Categories</title>
+  </head>
+  <body>
+    <form action="" method="post" enctype="multipart/form-data">
+      <div>
+        <h3></h3>
+        <label for="categories_name">Tên Danh Mục:</label>
+        <input type="text" id="categories_name" name="categories_name" required /><br />
+
+        <label for="description">Mô tả Danh Mục:</label>
+        <textarea id="description" name="description"></textarea><br />
+
+         <!-- Parent Category -->
+         <label for="parent_category">Parent Category</label>
+         <select id="parent_category" name="parent_category">
+             <option value="">None</option>
+             <!-- Option values should be dynamically generated from existing categories in the database -->
+             <option value="1">Category 1</option>
+             <option value="2">Category 2</option>
+             <!-- Add more categories as needed -->
+         </select>
+
+        <label for="">Hoạt động nhập hàng:</label>
+        <input type="text" id="categories_name" name="categories_name" required /><br />
+      </div>
+      <button type="submit">Thêm Thương Hiệu</button>
+    </form>
+  </body>
+</html>
