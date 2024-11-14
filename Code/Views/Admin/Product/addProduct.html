@@ -1,114 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/form.css" />
-    <title>Add Product</title>
-  </head>
-  <body>
-    <form action="" method="post" enctype="multipart/form-data">
-      <!-- Thông tin sản phẩm chung -->
-      <div>
-        <h3>Thông Tin Sản Phẩm</h3>
-        <label for="product_name">Tên sản phẩm:</label>
-        <input
-          type="text"
-          id="product_name"
-          name="product_name"
-          required
-        /><br />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/form.css">
+    <title>Add Product Variants</title>
+</head>
+<body>
+ <!-- Form Thêm Sản Phẩm -->
+ <form id="addProductForm" action="" method="post" enctype="multipart/form-data">
+    <h3>Thông Tin Sản Phẩm</h3>
+    <div id="productsContainer">
+        <div class="product">
+            <label for="product_name">Tên sản phẩm:</label>
+            <input type="text" name="product_name[]" required><br>
 
-        <label for="description">Mô tả sản phẩm:</label>
-        <textarea id="description" name="description"></textarea><br />
+            <label for="description">Mô tả sản phẩm:</label>
+            <textarea name="description[]"></textarea><br>
 
-        <label for="brand_id">Thương hiệu:</label>
-        <select id="brand_id" name="brand_id" required>
-          <option value="1">Thương hiệu A</option>
-          <option value="2">Thương hiệu B</option></select
-        ><br />
+            <label for="brand_id">Thương hiệu:</label>
+            <select name="brand_id[]" required>
+                <option value="1">Thương hiệu A</option>
+                <option value="2">Thương hiệu B</option>
+            </select><br>
 
-        <label for="category_id">Danh mục:</label>
-        <select id="category_id" name="category_id" required>
-          <option value="1">Danh mục X</option>
-          <option value="2">Danh mục Y</option></select
-        ><br />
-      </div>
-
-      <!-- Biến thể sản phẩm -->
-
-      <div id="variants">
-        <h3>Biến Thể Sản Phẩm</h3>
-
-        <div class="variant">
-          <label for="variant_price">Giá:</label>
-          <input
-            type="number"
-            id="variant_price"
-            name="variant_price[]"
-            required
-          /><br />
-
-          <label for="variant_color">Màu sắc:</label>
-          <select id="variant_color" name="variant_color[]">
-            <option value="1">Đỏ</option>
-            <option value="2">Xanh</option></select
-          ><br />
-
-          <label for="variant_size">Kích thước:</label>
-          <select id="variant_size" name="variant_size[]">
-            <option value="1">S</option>
-            <option value="2">M</option></select
-          ><br />
-
-          <label for="variant_quantity">Số lượng:</label>
-          <input
-            type="number"
-            id="variant_quantity"
-            name="variant_quantity[]"
-            required
-          /><br />
-
-          <!-- Hình ảnh cho từng biến thể -->
-          <label for="variant_main_image">Ảnh Chính Đại Diện:</label>
-          <input
-            type="file"
-            id="variant_main_image"
-            name="variant_main_image[]"
-            accept="image/*"
-            required
-          /><br />
-
-          <label for="variant_album_images">Album Ảnh (chọn nhiều ảnh):</label>
-          <input
-            type="file"
-            id="variant_album_images"
-            name="variant_album_images[][]"
-            accept="image/*"
-            multiple
-          /><br />
+            <label for="category_id">Danh mục:</label>
+            <select name="category_id[]" required>
+                <option value="1">Danh mục X</option>
+                <option value="2">Danh mục Y</option>
+            </select><br>
         </div>
-      </div>
+    </div>
 
-      <button type="button" onclick="addVariant()">Thêm Biến Thể Khác</button
-      ><br />
+    <button type="button" onclick="addProduct()">Thêm Sản Phẩm Khác</button>
+    <button type="submit">Thêm Tất Cả Sản Phẩm</button>
+</form>
 
-      <button type="submit">Thêm Sản Phẩm</button>
-    </form>
-  </body>
+</body>
 </html>
 <script>
-  function addVariant() {
-    const variantDiv = document.querySelector(".variant");
-    const newVariant = variantDiv.cloneNode(true); // Clone the first variant section
-    document.getElementById("variants").appendChild(newVariant);
-
-    // Clear the cloned inputs for new data
-    const inputs = newVariant.querySelectorAll("input");
-    inputs.forEach((input) => {
-      if (input.type === "file") {
-        input.value = ""; // Clear file inputs for new upload
-      }
-    });
-  }
+    function addProduct() {
+        // Select the first product form as a template
+        const productTemplate = document.querySelector('.product');
+        const newProduct = productTemplate.cloneNode(true); // Clone the first product form
+        // Clear input values in the cloned form
+        newProduct.querySelectorAll('input, textarea').forEach(input => input.value = '');
+        document.getElementById('productsContainer').appendChild(newProduct);
+    }
 </script>

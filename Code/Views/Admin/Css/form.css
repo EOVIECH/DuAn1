@@ -54,7 +54,12 @@ form {
   button:hover {
     background-color: #45a049;
   }
-  
+  /* Phần Sản Phẩm */
+  .product {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 15px;
+  } 
   /* Phần Biến Thể Sản Phẩm */
   #variants {
     margin-top: 20px;
@@ -90,6 +95,17 @@ form {
   
   button[type="button"]:hover {
     background-color: #0056b3;
+  }
+
+  input[type="submit"]{
+    background-color: #04AA6D; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
   }
   
   /* Định dạng thông báo */

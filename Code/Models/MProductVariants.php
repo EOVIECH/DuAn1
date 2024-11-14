@@ -1,7 +1,7 @@
 <?php
 require_once 'connectDB.php';
 
-class Brands
+class ProductsVariants
 {
     public $connect;
 
@@ -10,11 +10,11 @@ class Brands
         $this -> connect = new ConnectDB();
     }
 
-    public function addBrand($id,$name,$des,$img,$status)
+    public function addProductVariants()
         {
-            $sql = 'INSERT INTO brands VALUES (?,?,?,?,?)';
+            $sql = 'INSERT INTO  VALUES ()';
             $this -> connect -> setQuery($sql);
-            $this -> connect -> execute([$id,$name,$des,$img,$status]);
+            $this -> connect -> execute([]);
         }
 }
 ?>
