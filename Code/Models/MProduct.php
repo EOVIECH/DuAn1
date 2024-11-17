@@ -10,11 +10,12 @@ class Products
         $this -> connect = new ConnectDB();
     }
 
-    public function addProduct()
-        {
-            $sql = 'INSERT INTO  VALUES ()';
-            $this -> connect -> setQuery($sql);
-            $this -> connect -> execute([]);
-        }
+    public function addProduct($id,$brand_id,$name,$des,$status,$created_at)
+    {
+        $sql = 'INSERT INTO products VALUES (?,?,?,?,?,?)';
+        $this -> connect -> setQuery($sql);
+        $this -> connect -> execute([$id,$brand_id,$name,$des,$status,$created_at]);
+        return $this -> connect -> lastInsertId(); // lấy id sản phẩm vừa thêm
+    }
 }
 ?>

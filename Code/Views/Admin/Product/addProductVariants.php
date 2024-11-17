@@ -27,6 +27,7 @@
           <label for="variant_price">Giá:</label>
           <input type="number" name="variant_price[]" required /><br />
 
+
           <label for="variant_color">Màu sắc:</label>
           <select name="variant_color[]">
             <option value="1">Đỏ</option>

@@ -84,6 +84,11 @@
                 // throw $e; // Chuyển ngoại lệ để xử lý ở nơi khác nếu cần
             }
         }
+
+        // Lấy ID tự động tăng
+        public function lastInsertId() {
+            return $this->PDO->lastInsertId();
+        }
     
     }
 ?>
