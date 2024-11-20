@@ -27,7 +27,8 @@ class CProduct{
             && isset($_POST['brand_id'])
             && isset($_POST['category_id']))
             {
-                for($i = 0; $i < count($_POST['brand_id']); $i++){
+                $amount = $_POST['totalProducts'];
+                for($i = 0; $i < $_POST['totalProducts']; $i++){
                     // Thêm sản phẩm vào bảng product
                     $lastInsertId = $mProduct -> addProduct('',$_POST['brand_id'][$i],$_POST['product_name'][$i],$_POST['description'][$i],'active',$currentDate);
                     // Thêm sản phẩm vào bảng product_categories

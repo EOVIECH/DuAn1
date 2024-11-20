@@ -26,7 +26,7 @@ class CBrand{
                     }else
                     {
                         $target_dir = 'Images/';
-                        $name_img = time().$_FILES['brand_image']['name'];
+                        $name_img = time() . '_' .$_FILES['brand_image']['name'];
                         $target_path = $target_dir . $name_img;
                         move_uploaded_file($_FILES['brand_image']['tmp_name'], $target_path);
                         $mBrand -> addBrand('',$_POST['brand_name'],$_POST['description'],$target_path,$_POST['brand_status']);

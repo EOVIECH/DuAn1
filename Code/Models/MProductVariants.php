@@ -10,11 +10,12 @@ class ProductsVariants
         $this -> connect = new ConnectDB();
     }
 
-    public function addProductVariants($id,$product_id,$price,$price_coupon,$start_date,$end_date,$quantity,$color_id,$size_id)
-        {
-            $sql = 'INSERT INTO productvariants VALUES (?,?,?,?,?,?,?,?,?)';
-            $this -> connect -> setQuery($sql);
-            $this -> connect -> execute([$id,$product_id,$price,$price_coupon,$start_date,$end_date,$quantity,$color_id,$size_id]);
-        }
+    public function addProductVariants($id,$product_id,$price,$price_coupon,$start_date,$end_date,$quantity,$color_id,$sku)
+    {
+        $sql = 'INSERT INTO productvariants VALUES (?,?,?,?,?,?,?,?,?)';
+        $this -> connect -> setQuery($sql);
+        $this -> connect -> execute([$id,$product_id,$price,$price_coupon,$start_date,$end_date,$quantity,$color_id,$sku]);
+        return $this -> connect -> lastInsertId(); // lấy id sản phẩm vừa thêm
+    }
 }
 ?>

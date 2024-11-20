@@ -1,7 +1,7 @@
 <?php
 require_once 'connectDB.php';
 
-class Size
+class ProductsVariantSize
 {
     public $connect;
 
@@ -10,11 +10,11 @@ class Size
         $this -> connect = new ConnectDB();
     }
 
-    public function getDataSize()
+    public function addProductVariantsSize($id,$size_id)
     {
-        $sql = 'SELECT * FROM sizes';
+        $sql = 'INSERT INTO product_variant_sizes VALUES (?,?)';
         $this -> connect -> setQuery($sql);
-        return $this -> connect -> loadData();
+        $this -> connect -> execute([$id,$size_id]);
     }
 }
 ?>
