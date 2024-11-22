@@ -71,11 +71,36 @@ switch($options){
     }
 
   // END CATEGORY
+  
+  // CASE PRODUCT
+
     case 'AddProducts':
     {
         $cProduct -> InsertProducts();
         break;
     }
+    case 'EditProduct':
+    {
+        $cProduct -> UpdateProduct();
+        break;
+    }
+    case 'ListProduct':
+    {
+        $cProduct -> ListProduct();
+        break;
+    }
+    case 'DeleteProduct':
+    {
+        $cProduct -> DeleteProduct();
+        break;
+    }
+    case 'DeleteSelectedProduct':
+    {
+        $cProduct -> DeleteSelectedProduct();
+        break;
+    }
+
+  // END PRODUCT
     case 'AddProductVariants':
     {
         $cProductVariants -> InsertProductVariants();

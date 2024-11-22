@@ -83,31 +83,31 @@ class CBrand{
     }
 
     public function DeleteSelectedBrand()
+    {
+        $mBrand = new Brands();
+        if(isset($_POST['btn-delSelected']))
         {
-            $mBrand = new Brands();
-            if(isset($_POST['btn-delSelected']))
+            $deletedItems = isset($_POST['checkboxes']) ? $_POST['checkboxes'] : [];
+            foreach ($deletedItems as $deletedItem)
             {
-                $deletedItems = isset($_POST['checkboxes']) ? $_POST['checkboxes'] : [];
-                foreach ($deletedItems as $deletedItem)
-                {
-                    $mBrand -> deleteBrand($deletedItem);
-                    header('Location: index.PHP?act=ListBrand');
-                    // echo 'success';
-                }
+                $mBrand -> deleteBrand($deletedItem);
+                header('Location: index.PHP?act=ListBrand');
+                // echo 'success';
             }
-            include_once 'Views/Admin/Brand/listBrand.php';
         }
+        include_once 'Views/Admin/Brand/listBrand.php';
+    }
 
         public function DeleteBrand()
+    {
+        if(isset($_GET['id']))
         {
-            if(isset($_GET['id']))
-            {
-                $mBrand = new Brands();
-                $id = $_GET['id'];
-                $mBrand -> deleteBrand($id);
-                header('Location: index.PHP?act=ListBrand');
-            }
-            include_once 'Views/Admin/Brand/listBrand.php';
+            $mBrand = new Brands();
+            $id = $_GET['id'];
+            $mBrand -> deleteBrand($id);
+            header('Location: index.PHP?act=ListBrand');
         }
+        include_once 'Views/Admin/Brand/listBrand.php';
+    }
 }
 ?>
