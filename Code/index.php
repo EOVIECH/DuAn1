@@ -17,6 +17,26 @@ switch($options){
         $cBrand -> InsertBrand();
         break;
     }
+    case 'EditBrand':
+    {
+        $cBrand -> UpdateBrand();
+        break;
+    }
+    case 'ListBrand':
+    {
+        $cBrand -> ListBrand();
+        break;
+    }
+    case 'DeleteBrand':
+    {
+        $cBrand -> DeleteBrand();
+        break;
+    }
+    case 'DeleteSelectedBrand':
+    {
+        $cBrand -> DeleteSelectedBrand();
+        break;
+    }
     case 'AddCategories':
     {
         $cCategories -> InsertCategories();
@@ -34,3 +54,32 @@ switch($options){
     }
 }
 ?>
+
+
+<script>
+    function selectAll()
+    {
+      let checkboxes = document.querySelectorAll('.checkbox');
+      checkboxes.forEach(function(checkbox)
+      {
+        checkbox.checked = true;
+      });
+    }
+
+    function deselectAll()
+    {
+      let checkboxes = document.querySelectorAll('.checkbox');
+      checkboxes.forEach(function(checkbox)
+      {
+        checkbox.checked = false;
+      });
+    }
+
+    function confirmDeleted(delURL)
+    {
+      if(confirm('ARE YOU SURE DELETE SELECTED DATA'))
+      {
+        document.location = delURL;
+      }
+    }
+</script>

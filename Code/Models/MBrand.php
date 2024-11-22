@@ -22,5 +22,23 @@ class Brands
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData();
     }
+    public function getDataBrandsById($id)
+    {
+        $sql = 'SELECT * FROM brands WHERE brand_id = ?';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$id],false);
+    }
+    public function editBrand($name,$des,$img,$status,$id)
+    {
+        $sql = 'UPDATE `brands` SET `name`= ?,`description`= ?,`image`= ?,`status`= ? WHERE brand_id = ?';
+        $this -> connect -> setQuery($sql);
+        $this -> connect -> execute([$name,$des,$img,$status,$id]);
+    }
+    public function deleteBrand($id)
+    {
+        $sql = 'DELETE FROM `brands` WHERE brand_id= ?';
+        $this -> connect -> setQuery($sql);
+        $this -> connect -> execute([$id]);
+    }
 }
 ?>
