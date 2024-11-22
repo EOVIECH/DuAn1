@@ -12,6 +12,8 @@ $cProduct = new CProduct();
 $cProductVariants = new CProductVariants();
 $options = isset($_GET['act']) ? $_GET['act'] : '/';
 switch($options){
+  // CASE BRAND
+
     case 'AddBrand':
     {
         $cBrand -> InsertBrand();
@@ -37,11 +39,38 @@ switch($options){
         $cBrand -> DeleteSelectedBrand();
         break;
     }
+
+  // END BRAND
+
+  // CASE CATEGORY
+
     case 'AddCategories':
     {
         $cCategories -> InsertCategories();
         break;
     }
+     case 'EditCategory':
+    {
+        $cCategories -> UpdateCategory();
+        break;
+    }
+    case 'ListCategory':
+    {
+        $cCategories -> ListCategories();
+        break;
+    }
+    case 'DeleteCategory':
+    {
+        $cCategories -> DeleteCategory();
+        break;
+    }
+    case 'DeleteSelectedCategory':
+    {
+        $cCategories -> DeleteSelectedCategory();
+        break;
+    }
+
+  // END CATEGORY
     case 'AddProducts':
     {
         $cProduct -> InsertProducts();

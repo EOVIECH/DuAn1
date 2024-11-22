@@ -23,5 +23,29 @@ class Categories
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData();
     }
+    public function getDataCategoryById($id)
+    {
+        $sql = 'SELECT * FROM categories WHERE category_id = ?';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$id],false);
+    }
+    public function getDataCategoryByParentCategoryId($parent_category_id)
+    {
+        $sql = 'SELECT * FROM categories WHERE parent_category_id = ?';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$parent_category_id],false);
+    }
+    public function editCategory($name,$des,$parentId,$id)
+    {
+        $sql = 'UPDATE `categories` SET `name`= ?,`description`= ?,`parent_category_id`= ? WHERE category_id = ?';
+        $this -> connect -> setQuery($sql);
+        $this -> connect -> execute([$name,$des,$parentId,$id]);
+    }
+    public function deleteCategory($id)
+    {
+        $sql = 'DELETE FROM `categories` WHERE category_id = ?';
+        $this -> connect -> setQuery($sql);
+        $this -> connect -> execute([$id]);
+    }
 }
 ?>
