@@ -20,6 +20,7 @@ class CProduct{
         $currentDate = date("Y-m-d H:i:s");
         $listBrand = $mBrand -> getDataBrands();
         $listCategories = $mCategories -> getDataCategories();
+        $err = false;
         if(isset($_POST['add_Product']))
         {
             if(isset($_POST['product_name'])
@@ -33,6 +34,7 @@ class CProduct{
                     $lastInsertId = $mProduct -> addProduct('',$_POST['brand_id'][$i],$_POST['product_name'][$i],$_POST['description'][$i],'active',$currentDate);
                     // Thêm sản phẩm vào bảng product_categories
                     $mProductCategories->addProductCategories((int)$lastInsertId, $_POST['category_id'][$i]);
+                    $err = true;
                 }
             }
         }
@@ -53,6 +55,7 @@ class CProduct{
             $listCategories = $mCategories -> getDataCategories();
             $listProById = $mProduct -> getDataProductById($id);
             $listProductCategoryById = $mProductCategories -> getProductCategoryById($id);
+            $err = false;
             if(isset($_POST['edit_Product']))
             {
                 if(isset($_POST['product_name'])
@@ -62,6 +65,7 @@ class CProduct{
                 {
                         $mProduct -> editProduct($_POST['brand_id'],$_POST['product_name'],$_POST['description'],'active',$currentDate,$id);
                         $mProductCategories->editProductCategories($_POST['category_id'],$id);
+                        $err = true;
                     }
             }
         }
@@ -75,11 +79,31 @@ class CProduct{
         $mProductCategories = new ProductCategories();
         $mBrand = new Brands();
         $mCategories = new Categories();
-        $currentDate = date("Y-m-d H:i:s");
-        $listBrand = $mBrand -> getDataBrands();
-        $listCategories = $mCategories -> getDataCategories();
-        $listProduct = $mProduct -> getDataProduct();
 
+        $listCategories = $mCategories->getDataCategories();
+
+        // Phân trang
+        $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $perPage = 10; // Số sản phẩm trên mỗi trang
+        $offset = ($currentPage - 1) * $perPage;
+
+        // Lấy category_id nếu có
+        $categoryId = isset($_GET['category']) ? $_GET['category'] : null;
+
+      
+        if ($categoryId) {
+            // Lọc sản phẩm theo category_id
+            $totalProducts = $mProduct->countProductsByCategoryId($categoryId); // Tổng số sản phẩm theo danh mục
+            $listProduct = $mProduct->getDataProductByCategoryIdWithPagination($categoryId,$offset,$perPage);
+        } else {
+            // Hiển thị tất cả sản phẩm
+            $totalProducts = $mProduct->countAllProducts(); // Tổng số sản phẩm 
+            $listProduct = $mProduct->getDataProductWithPagination($offset,$perPage);
+        }
+
+        // Tính tổng số trang
+        $totalPages = ceil(($totalProducts -> total) / $perPage);
+        // Hiển thị danh sách sản phẩm
         include_once 'Views/Admin/Product/listProduct.php';
     }
         

@@ -10,19 +10,46 @@ class Products
         $this -> connect = new ConnectDB();
     }
 
-    public function getDataProduct()
+    public function getDataProductWithPagination($offset,$perPage)
     {
-        $sql = 'SELECT 
-                products.*,
-                brands.name AS brand_name
-            FROM 
-                products
-            JOIN  
-                brands
-            ON 
-                products.brand_id = brands.brand_id;';
+        $sql = 'SELECT products.*, brands.name as brand_name, categories.name as category_name, categories.category_id FROM products
+                JOIN brands on products.brand_id = brands.brand_id
+                JOIN productcategories on products.product_id = productcategories.product_id
+                JOIN categories on productcategories.category_id = categories.category_id
+                ORDER BY product_id DESC
+                LIMIT '. (int)$offset . ',' . (int)$perPage;
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData();
+    }
+
+    public function getDataProductByCategoryIdWithPagination($category_id,$offset,$perPage)
+    {
+        $sql = 'SELECT products.*, brands.name as brand_name, categories.name as category_name, categories.category_id FROM products
+                JOIN brands on products.brand_id = brands.brand_id
+                JOIN productcategories on products.product_id = productcategories.product_id
+                JOIN categories on productcategories.category_id = categories.category_id
+                WHERE categories.category_id = ' . (int)$category_id . 
+                ' ORDER BY product_id DESC
+                LIMIT '. (int)$offset . ',' . (int)$perPage;
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData();
+    }
+
+    public function countAllProducts()
+    {
+        $sql = "SELECT COUNT(*) AS total FROM products";
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([],false);
+    }
+
+    public function countProductsByCategoryId($categoryId)
+    {
+        $sql = "SELECT COUNT(*) AS total 
+                FROM products 
+                JOIN productcategories ON products.product_id = productcategories.product_id
+                WHERE productcategories.category_id = ?";
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$categoryId],false);
     }
 
     public function getDataProductById($id)

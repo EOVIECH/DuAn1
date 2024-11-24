@@ -99,15 +99,15 @@ class CBrand{
     }
 
         public function DeleteBrand()
-    {
-        if(isset($_GET['id']))
         {
-            $mBrand = new Brands();
-            $id = $_GET['id'];
-            $mBrand -> deleteBrand($id);
-            header('Location: index.PHP?act=ListBrand');
+            if(isset($_GET['id']))
+            {
+                $mBrand = new Brands();
+                $id = $_GET['id'];
+                $mBrand -> deleteBrand($id);
+                header('Location: index.PHP?act=ListBrand');
+            }
+            include_once 'Views/Admin/Brand/listBrand.php';
         }
-        include_once 'Views/Admin/Brand/listBrand.php';
-    }
 }
 ?>
