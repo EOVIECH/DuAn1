@@ -101,11 +101,28 @@ switch($options){
     }
 
   // END PRODUCT
+
+  // CASE PRODUCT-VARIANT
+
     case 'AddProductVariants':
     {
         $cProductVariants -> InsertProductVariants();
         break;
     }
+
+    case 'ListProductVariant':
+    {
+        $cProductVariants -> ListProductVariant();
+        break;
+    }
+
+    case 'EditProductVariant':
+    {
+        $cProductVariants -> UpdateProductVariant();
+        break;
+    }
+    
+  // END PRODUCT-VARIANT
 }
 ?>
 

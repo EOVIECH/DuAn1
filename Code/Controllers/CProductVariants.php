@@ -144,5 +144,171 @@ class CProductVariants{
         }
         include_once 'Views/Admin/Product/addProductVariants.php';
     }
+
+    public function ListProductVariant()
+    {
+        $mProductVariants = new ProductsVariants();
+        $mProductVariantSize = new ProductsVariantSize();
+        $listProductVariants = $mProductVariants -> listProductVariant();
+        $listProductVariantSize = $mProductVariantSize -> ListProductVariantsSize();
+
+        // var_dump($listProductVariants);
+        include_once 'Views/Admin/Product/listProductVariants.php';
+    }
+
+    public function UpdateProductVariant()
+    {
+        if(isset($_GET['id']))
+        {
+            $id = $_GET['id'];
+            $mProductVariantSize = new ProductsVariantSize();
+            $mProductVariants = new ProductsVariants();
+            $mProduct = new Products();
+            $mColor = new Color();
+            $mSize = new Size();
+            $mImage = new Image();
+            $allDataProduct = $mProduct -> getDataProduct();
+            $listProductVariantById = $mProductVariants -> listProductVariantById($id);
+            $listProductVariantSizeById = $mProductVariantSize -> ListProductVariantsSizeById($id);
+            $allDataColor = $mColor -> getDataColor();
+            $allDataSize = $mSize -> getDataSize();
+            $mainImageById = $mImage -> getMainImageById($id);
+            $albumImageById = $mImage -> getAlbumImageById($id);
+            $isValid = true;
+
+            if(isset($_POST['editProductVariants']))
+            {
+                // var_dump($_FILES);
+                // die();
+                // Validate dữ liệu kiểm tra đầu vào
+
+                // var_dump($_POST['variant_size']);
+                // die();
+                
+                if(empty($_POST['product_id']) || !is_numeric($_POST['product_id']))
+                {
+                    die('Sản phẩm không hợp lệ.');
+                }
+                if(empty($_POST['variant_price']) ||  $_POST['variant_price'] <= 0)
+                {
+                    $isValid = false;
+                    // echo "Giá của biến thể " . ($i) . " không hợp lệ.<br>";
+                }
+                if (empty($_POST['variant_sku'])) {
+                    $isValid = false;
+                    // echo "SKU của biến thể " . ($i) . " không được để trống.<br>";
+                }
+        
+                if (empty($_POST['variant_quantity']) || $_POST['variant_quantity'] <= 0) {
+                    $isValid = false;
+                    // echo "Số lượng của biến thể " . ($i) . " không hợp lệ.<br>";
+                }
+
+                if($isValid)
+                {
+                    // Sửa sản phẩm biến thể
+                    $mProductVariants -> editProductVariants($_POST['product_id'],
+                                                                    $_POST['variant_price'],
+                                                                    $_POST['variant_priceCoupon'],
+                                                                    $_POST['variant_start_date'],
+                                                                    $_POST['variant_end_date'],
+                                                                    $_POST['variant_quantity'],
+                                                                    $_POST['variant_color'],
+                                                                    $_POST['variant_sku'],$id);
+
+                    // Sửa size sản phẩm
+
+                    if (isset($_POST['variant_size'])) 
+                    {
+                        // Lấy danh sách kích thước được chọn
+                        $selectedSizes = array_keys($_POST['variant_size']);
+                        
+                        // Xóa các kích thước cũ trong bảng liên kết
+                        $mProductVariantSize -> deleteProductVariantsSize($id);
+                    
+                        // Thêm lại các kích thước mới được chọn
+                        foreach ($selectedSizes as $sizeId) {
+                            $mProductVariantSize -> addProductVariantsSize($id, $sizeId);
+                        }
+                    }
+
+                    // Sửa image album
+                    $validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+                    $target_dir = 'Images/';
+                    
+                    $product_variant_id = $id;
+                    
+                    if (isset($_FILES['variant_album_images']['name'][0]) && !empty($_FILES['variant_album_images']['name'][0])) 
+                    {
+                        // Xóa toàn bộ ảnh album hiện tại trong cơ sở dữ liệu
+                        $mImage->deleteAlbumImagesByVariantId($product_variant_id); // Viết hàm xóa bên dưới
+
+                        // Duyệt qua từng file album images
+                        foreach ($_FILES['variant_album_images']['name'] as $index => $fileName) {
+                            $imageType = $_FILES['variant_album_images']['type'][$index];
+                            $tmpPath = $_FILES['variant_album_images']['tmp_name'][$index];
+                            $error = $_FILES['variant_album_images']['error'][$index];
+
+                            // Kiểm tra lỗi upload
+                            if ($error !== UPLOAD_ERR_OK) {
+                                echo "Error uploading file $fileName. Error code: $error<br>";
+                                continue;
+                            }
+
+                            // Kiểm tra loại file
+                            if (!in_array($imageType, $validImageTypes)) {
+                                echo "File type for $fileName is not allowed. Only JPEG, PNG, and GIF are accepted.<br>";
+                                continue;
+                            }
+
+                            // Đặt tên file và lưu vào thư mục
+                            $newFileName = time() . '_' . $fileName;
+                            $target_path = $target_dir . $newFileName;
+
+                            if (move_uploaded_file($tmpPath, $target_path)) {
+                                // Thêm ảnh vào cơ sở dữ liệu với album = 0 (ảnh album)
+                                $mImage->addImages(null, $product_variant_id, $target_path, 0, 'active');
+                            } else {
+                                echo "Failed to move file $fileName to $target_path.<br>";
+                            }
+                        }
+                    }
+
+                    // Cập nhật ảnh chính
+                    if (isset($_FILES['variant_main_image']['name']) && $_FILES['variant_main_image']['error'] == UPLOAD_ERR_OK && !empty($_FILES['variant_main_image']['name'])) {
+                        $imageType = $_FILES['variant_main_image']['type'];
+                        $tmpPath = $_FILES['variant_main_image']['tmp_name'];
+                    
+                        // Kiểm tra loại file
+                        if (!in_array($imageType, $validImageTypes)) {
+                            echo "Main image type is not allowed. Only JPEG, PNG, and GIF are accepted.<br>";
+                        } else {
+                            $newFileName = time() . '_main_' . $_FILES['variant_main_image']['name'];
+                            $target_path = $target_dir . $newFileName;
+                    
+                            if (move_uploaded_file($tmpPath, $target_path)) {
+                                // Kiểm tra xem ảnh chính đã tồn tại trong DB hay chưa
+                                $existingMainImage = $mImage->getMainImageById($product_variant_id); // Hàm này cần được viết trong model của bạn
+                    
+                                if ($existingMainImage) {
+                                    // Nếu đã có ảnh chính, thực hiện UPDATE
+                                    $mImage->editMainImage($target_path, $product_variant_id);
+                                } else {
+                                    // Nếu chưa có, thực hiện INSERT
+                                    $mImage->addImages(null, $product_variant_id, $target_path, 1, 'active');
+                                }
+                            } else {
+                                echo "Failed to move main image to $target_path.<br>";
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            include_once 'Views/Admin/Product/editProductVariants.php';
+        }
+        
+    }
 }
 ?>
