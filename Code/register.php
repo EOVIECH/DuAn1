@@ -67,7 +67,6 @@
     let email = document.getElementById("email").value.trim();
     let phone = document.getElementById("phone").value.trim();
     let address = document.getElementById("address").value.trim();
-    let createAt = document.getElementById("create_at").value;
 
     document.querySelectorAll(".error").forEach((el) => (el.textContent = ""));
 
@@ -89,16 +88,17 @@
     } else if (password.length < 12) {
         document.getElementById("error_password").textContent = "Mật khẩu phải có ít nhất 12 ký tự.";
         isValid = false;
-    } else if(!/^(?=.*[A-Z])(?=.*[!@#$%^&*()_{}\[\]:;<>,.?/~`])[\w\d!@#$%^&*()_{}\[\]:;<>,.?/~`]$/.test(password)){
-        document.getElementById("error_password").textContent = "Mật khẩu phải có ít nhất 1 chữ in hoa và 1 ký tự đặc biệt";
-        isValid = false;
     }
+    else if (!/^(?=.*[A-Z])(?=.*[!@#$%^&*()_{}\[\]:;<>,.?/~`]).{12,}$/.test(password)) {
+    document.getElementById("error_password").textContent = "Mật khẩu phải có ít nhất 1 chữ in hoa, 1 ký tự đặc biệt và tối thiểu 8 ký tự.";
+    isValid = false;
+}
 
 
     if (email === "") {
         document.getElementById("error_email").textContent = "Email không được để trống.";
         isValid = false;
-    } else if (!/\S@\S\.\S/.test(email)) {
+    } else if (!/\S+@\S+\.\S/.test(email)) {
         document.getElementById("error_email").textContent = "Email không đúng định dạng.";
         isValid = false;
     }

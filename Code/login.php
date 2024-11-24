@@ -60,14 +60,14 @@
               </div>
               </div>
               <div class="check">
-                <div><input type="checkbox" name="" id=""> remmember me</div>
-                <a href="./?act=register">Forgot password</a>
+                <div><input type="checkbox" name="remmember" id=""> remmember me</div>
+                <a href="./?act=forgot">Forgot password</a>
               </div>
               <div class="d-grid">
-                <button type="submit" class="btn btn-success">Login</button> <br>
+                <button type="submit" class="btn btn-success" name="submit">Login</button> <br>
               </div>
 
-            
+              <a href="./?act=register">Resgister</a>
             </form>
           </div>
         </div>

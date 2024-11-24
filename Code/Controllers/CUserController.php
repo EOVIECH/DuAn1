@@ -1,52 +1,92 @@
 <?php
 
 class userController {
+
+        public function dashboard(){
+         $name = $_SESSION['username'];
+
+         include_once './Views/Admin/dashboard.php';
+        }
+
+        public function logOut(){
+            include_once './logout.php';
+        }
+        
+
+
     public function inForUser() {
         $aUser = new user();
         $inFor = $aUser->getAllUser(); 
 
         $users = (array) $inFor;
+        // var_dump($users);
+        // exit;
     
         // Check if the form is submitted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $emailInput = trim($_POST['email']);
-            $passwordInput = trim($_POST['password']);
-    
+            $passwordInput = trim(strval($_POST['password']));
+            
   
             foreach ($users as $user) {
+                // var_dump($user->password);
+                // var_dump($emailInput);
+                //  var_dump($user->email);
+                //  var_dump(password_verify($passwordInput, $user->password));
+                //  exit;
                 
                 // var_dump($user->role);
                 if (strtolower($user->email) === strtolower($emailInput) ) {
+                    // var_dump(password_verify($passwordInput, $user->password));
+                    // exit;
             
                    if(password_verify($passwordInput, $user->password)){
+                    // var_dump(password_verify($passwordInput, $user->password));
+                        // echo "<script>alert('Vao thanh cong')</script>";
+                        // exit;
                         
                         if($user->role === 'admin'){
-
-                                header('Location: ?act=listProduct');
-                                exit;
-                                echo "Dang nhao vao admin";
-                        } elseif($user->role === 'user'){
                             $_SESSION['user_id'] = $user->user_id;
+                            $_SESSION['username'] = $user->username;
+                            echo "<script>
+                            alert('Dang nhao vao admin');
+                            window.location.href= '?act=dashboard';
+                          </script>";
+                                exit;
+
+                        } 
+
+                        else if($user->role === 'user'){
+                            $_SESSION['user_id'] = $user->user_id;
+                               if(isset($_POST['remmember'])&&$_POST['remmember']){
+
+                                setcookie("user", $user->username,time()+(86400*2));
+                                setcookie("password", $user->password,time()+(86400*2));
                                 echo "Dang nhap vao user";
-                                header('Location: ?act=comment');
+                                header('Location: ?act=trangchu');
+                                exit;
+                               }
+                               echo "Dang nhap vao user";
+                                header('Location: ?act=trangchu');
                                 exit;
                         }
 
-                        if(isset($user->email)){
-                            $_SESSION['idUser'] = $user->user_id;
-                            $_SESSION['username'] = $user->username;
-                        }
+                        // if(isset($user->email)){
+                        //   return  $_SESSION['idUser'] = $user->user_id;
+                        //     $_SESSION['username'] = $user->username;
+                        // }
 
-                    } else {
+                    } 
+                    // else {
 
-                        echo "NOT FOUND 404";
+                    //     echo "NOT FOUND 404";
 
-                    }
+                    // }
                    }
             }
     
             // If no match is found, display an error message
-            echo "<script>alert('Mật khẩu hoặc password của bạn sai')</script>";
+            // echo "<script>alert('Mật khẩu hoặc password của bạn sai')</script>";
         }
     
         // Include the login form
@@ -56,96 +96,267 @@ class userController {
     public function insertUser(){
         if(isset($_POST['submit'])){
 
-           $user_name = $_POST['user_name'];
-           $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $oPro = new user();
 
+            $emailUser = $oPro->getEmailUser();
+
+            // var_dump($emailUser);
+            // exit;
+
+            $email = trim($_POST['email']);
+            $phone = $_POST['phone'];
+            $address = $_POST['address'];
+            $create_at = date('Y-m-d');
+            $user_name = $_POST['user_name'];
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+ 
+            $errors = [];
+
+            if (empty($user_name)) {
+                $errors['user_name'] = "Tên đăng nhập không được để trống.";
+            } elseif (strlen($user_name) < 5) {
+                $errors['user_name'] = "Tên đăng nhập phải có ít nhất 6 ký tự.";
+            }
+    
+            // Kiểm tra mật khẩu
+            if (empty($password)) {
+                $errors['password'] = "Mật khẩu không được để trống.";
+            } elseif (strlen($password) < 12) {
+                $errors['password'] = "Mật khẩu phải có ít nhất 12 ký tự.";
+            }
+    
+            // Kiểm tra email
+            if (empty($email)) {
+                $errors['email'] = "Email không được để trống.";
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+             //FILTER_VALIDATE_EMAIL: Là một hằng số trong PHP, đại diện cho bộ lọc để kiểm tra tính hợp lệ của một địa chỉ email.
+             //Hàm filter_var() sẽ kiểm tra xem giá trị trong biến $email có tuân theo định dạng của một địa chỉ email tiêu chuẩn hay không (ví dụ: có dấu @, có tên miền, ...).
+                $errors['email'] = "Định dạng email không hợp lệ.";
+            } 
+ 
+    
+            // Kiểm tra số điện thoại
+            if (empty($phone)) {
+                $errors['phone'] = "Số điện thoại không được để trống.";
+            } elseif (!preg_match('/^[0-9]{10,11}$/', $phone)) {
+                $errors['phone'] = "Số điện thoại phải từ 10-11 chữ số.";
+            }
+    
+            // Kiểm tra địa chỉ
+            if (empty($address)) {
+                $errors['address'] = "Địa chỉ không được để trống.";
+            }
+
+            if (!empty($errors)) {
+                foreach ($errors as $key => $error) {
+                    echo "<p style='color: red;'>$error</p>";
+                }
+                return; // Dừng lại nếu có lỗi
+            }
+
+
+            foreach($emailUser as $value){
+                if(strtolower($email) === strtolower($value->email)){
+                    echo "<script> 
+                    alert('Email đã tồn tại. Vui long thử lại email khác');
+                    window.location.href = '?act=register';
+                    </script>";
+                    return;
+                }
+                    $oPro = new user();
+                    $result = $oPro -> setInsertDataUser('',$user_name,$password,$email,$phone,$address,'user','active',$create_at);
+                    header('location: ?act=login');
+
+            }
+    
+            // Nếu có lỗi, trả về thông báo lỗi
+            
            //PASSWORD_DÈAULT:   đảm bảo mật khẩu mạnh phù hợp với an ninh
 
-           $email = $_POST['email'];
-           $phone = $_POST['phone'];
-           $address = $_POST['address'];
-           $create_at = date('Y-m-d');
-
-           $errors = [];
+          
 
            // Kiểm tra tên đăng nhập
-           if (empty($user_name)) {
-               $errors['user_name'] = "Tên đăng nhập không được để trống.";
-           } elseif (strlen($user_name) < 12) {
-               $errors['user_name'] = "Tên đăng nhập phải có ít nhất 12 ký tự.";
-           }
-   
-           // Kiểm tra mật khẩu
-           if (empty($password)) {
-               $errors['password'] = "Mật khẩu không được để trống.";
-           } elseif (strlen($password) < 12) {
-               $errors['password'] = "Mật khẩu phải có ít nhất 12 ký tự.";
-           }
-   
-           // Kiểm tra email
-           if (empty($email)) {
-               $errors['email'] = "Email không được để trống.";
-           } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            //FILTER_VALIDATE_EMAIL: Là một hằng số trong PHP, đại diện cho bộ lọc để kiểm tra tính hợp lệ của một địa chỉ email.
-            //Hàm filter_var() sẽ kiểm tra xem giá trị trong biến $email có tuân theo định dạng của một địa chỉ email tiêu chuẩn hay không (ví dụ: có dấu @, có tên miền, ...).
-               $errors['email'] = "Định dạng email không hợp lệ.";
-           }
-
-   
-           // Kiểm tra số điện thoại
-           if (empty($phone)) {
-               $errors['phone'] = "Số điện thoại không được để trống.";
-           } elseif (!preg_match('/^[0-9]{10,11}$/', $phone)) {
-               $errors['phone'] = "Số điện thoại phải từ 10-11 chữ số.";
-           }
-   
-           // Kiểm tra địa chỉ
-           if (empty($address)) {
-               $errors['address'] = "Địa chỉ không được để trống.";
-           }
-   
-           // Nếu có lỗi, trả về thông báo lỗi
-           if (!empty($errors)) {
-               foreach ($errors as $key => $error) {
-                   echo "<p style='color: red;'>$error</p>";
-               }
-               return; // Dừng lại nếu có lỗi
-           }
-
-
-        $oPro = new user();
-        $result = $oPro -> setInsertDataUser('',$user_name,$password,$email,$phone,$address,'user','active',$create_at);
-        //    var_dump($result);
-                 echo 'Ban da them thanh cong';
-                 if ($result === "") {
-                    echo 'Lỗi: Không thể thêm người dùng.';
-                } else {
-                    header('Location: ?act=login');
-                    exit;
-                }
-
-                exit;
-     
      }
         include_once 'register.php';
 }
 
 public function insertComment(){
     if(isset($_POST['submit'])){
+
         $content = $_POST['comment'];
         $user_id = $_SESSION['user_id'];
+        $product_id = $_GET['id'];
         $create_at = date('Y-m-d');
 
-        $oPro = new user();
-        $result = $oPro -> setInsertComment('',$user_id,NULL,NULL,$content,$create_at);
-        if(!empty($result)){
-            echo "<script>alert('Ban them comment thanh cong')</script>";
+
+        $error = [];
+
+          if(empty($content)){
+            $error['comment'] = "<script>alert('Nội dung không được để trống.')</script>";
+          }
+
+          if(empty($user_id)){
+            $error['user_id'] = "<script>alert('Không tim thấy thông tin của người dùng.')</script>";
+          }
+
+          if(empty($product_id)){
+            $error['id'] = "<script>alert('Không tìm thấy thông tin của sản phẩm.')</script>";
+          }
+
+          if (!empty($error)) {
+            foreach ($error as $key => $errors) {
+                echo "
+                <p style='color: red;'>$errors</p>
+                ";
+            }
+            return; 
         }
+
+
+
+        $oPro = new user();
+        $result = $oPro -> setInsertComment('',$user_id,$product_id,NULL,$content,$create_at);
+        // var_dump($result);
+        // exit;
+            echo "<script>
+            alert('Bạn đã thêm bình luận thành công!')
+            </script>";
+    }
+
+    include_once './Views/Users/comment.php';
+}
+
+// public function getDataComment(){
+//     if(isset($_SESSION['user_id'])){
+//        // echo $_GET['id'];
+//        $bPro = new user();
+//        $idPro = $bPro -> getIdDataComment($_SESSION['user_id']);
+//        if(isset($_POST['submit'])){
+           
+//         $content = $_POST['comment'];
+//         $user_id = $_SESSION['user_id'];
+//         $product_id = $_GET['id'];
+//         $create_at = date('Y-m-d');
+
+//         $oPro = new user();
+//         $result = $oPro -> setInsertComment('',$user_id,$product_id,NULL,$content,$create_at);
+//         if(!empty($result)){
+//             echo "<script>alert('Ban them comment thanh cong')</script>";
+//         }
+//        }
+//     }
+//        include_once './Views/Users/comment.php';
+
+//  }
+
+public function forgotPasswordUser() {
+     if (isset($_POST['submit'])) {
+        // var_dump($_POST['submit']);
+        // exit;
+
+    $aUser = new user();
+    $inFor = $aUser->getAllUser(); 
+
+    $users = (array) $inFor;
+    // var_dump($users);
+        // var_dump($users);
+        // exit;
+    // Check if the form is submitted
+   
+        $user_name = trim($_POST['username']);
+        $emailInput = trim($_POST['email']);
+        $phone = trim($_POST['phone']);
+        
+
+        $error = null;
+
+        foreach ($users as $user) {
+            if (trim(strtolower($user->username)) === strtolower($user_name)) {
+
+                if (strtolower($user->email) === strtolower($emailInput)) {
+
+                    if (trim($user->phone) === $phone) {
+                       
+                        $_SESSION['id'] = $user->user_id;
+                        echo "<script>
+                            alert('Xác nhận người dùng thành công!');
+                            window.location.href= '?act=change';
+                        </script>";
+                        exit;
+                    } else {
+                        $error = 'Số điện thoại sai, vui lòng đăng nhập lại.';
+                        break;
+                    }
+                } else {
+                    $error = 'Email sai, vui lòng đăng nhập lại.';
+                    break;
+                }
+            }
+        }
+        
+        // Nếu không tìm thấy người dùng hoặc có lỗi
+        if (!$error) {
+            $error = 'Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại tên';
+        }
+        
+        echo "<script>
+            alert('$error');
+            window.location.href= '?act=forgot';
+        </script>";
 
     }
 
-    include_once './Views/Users/product_detail.php';
+    // Include the login form
+    include_once './Views/Users/forgotPassword.php';
 }
 
+
+    public function changePassword(){
+        if(isset($_POST['submit'])){
+            if(isset($_SESSION['id'])){
+            $id = $_SESSION['id'];
+            $cPro = new user();
+            $getDataId = $cPro->getAllUser();
+
+            if(!$id){
+                echo "<script>
+            alert('Khong tim thay thong tin nguoi dung');
+                </script>";
+            }
+
+            if(!$_POST['pass1'] || !$_POST['pass2']){
+                echo "<script>
+                alert('Thong tin khong duoc de trong');
+                    </script>";
+                }
+            
+            if(trim(strtolower($_POST['pass1'])) === trim(strtolower($_POST['pass2']))){
+                $password = password_hash($_POST['pass1'], PASSWORD_DEFAULT);
+                $change = $cPro->changePass($password,$id);
+
+                echo "<script>
+                alert('Sua thong tin thanh cong');
+                window.location.href= '?act=login';
+                    </script>";
+                 exit;
+            
+            }
+        }
+
+        }
+        
+        include_once './changePass.php';
+    }
+
+    public function getDataComment(){
+        $cPro = new user();
+        $data = $cPro->getDataComment();
+
+        
+        include_once './Views/Users/dataComment.php';
+    }
+
 }
+
+
 ?>
