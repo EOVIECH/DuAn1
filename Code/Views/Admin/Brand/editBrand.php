@@ -3,11 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="Views/Admin/Css/form.css">
+    <!-- <link rel="stylesheet" href="Views/Admin/Css/form.css"> -->
     <title>Edit Brand</title>
   </head>
   <body>
-    <form action="?act=EditBrand&id=<?php echo $listBrandById -> brand_id ?>" method="post" enctype="multipart/form-data" onsubmit="validateForm()">
+  <?php require_once 'Components/Admin/navbar.php' ?>
+  <div class="content-page">
+     <div class="container-fluid add-form-list">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">Edit Brand</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form action="?act=EditBrand&id=<?php echo $listBrandById -> brand_id ?>" method="post" enctype="multipart/form-data" onsubmit="validateForm()">
+                            <div class="row">
+                              <div class="col-md-12">                      
+                                <div class="form-group">
+                                    <label for="brand_name">Tên thương hiệu:</label>
+                                    <input type="text" id="brand_name"  name="brand_name" value="<?php echo $listBrandById -> name ?>" class="form-control" placeholder="Enter Name Brand" data-errors="Please Enter Name Brand." required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                              </div>    
+                              <div class="col-md-12">
+                                  <div class="form-group">
+                                      <label for="description">Mô tả thương hiệu:</label>
+                                      <textarea name="description" id="description"  class="form-control" rows="4"><?php echo $listBrandById -> description ?></textarea>
+                                      <div class="help-block with-errors"></div>
+                                  </div>
+                              </div> 
+                              <div class="col-md-12">
+                                  <div class="form-group">
+                                      <label for="brand_image">Ảnh thương hiệu:</label>
+                                      <img style="width: 50px;" src="<?php echo $listBrandById -> image ?>" alt="">
+                                      <input type="file" id="brand_image" name="brand_image" accept="image/*" class="form-control image-file">
+                                  </div>
+                              </div>
+                              <div class="col-md-12"> 
+                                  <div class="form-group">
+                                      <label for="brand_status">Hoạt động nhập hàng:</label>
+                                      <select name="brand_status" id="brand_status"  class=" form-control" data-style="py-0" required>
+                                        <option value="active" <?php echo ($listBrandById->status == 'active') ? 'selected' : '' ?>>Có</option>
+                                        <option value="inactive" <?php echo ($listBrandById->status == 'inactive') ? 'selected' : '' ?>>Không</option>
+                                      </select>
+                                  </div>
+                              </div> 
+                              <!-- <input class="btn btn-primary" style="cursor: pointer" name="add_Brand" value="Thêm Thương Hiệu" type="submit"> -->
+                              <button type="submit" name="edit_Brand" value="Sửa Thương Hiệu" class="btn btn-primary mr-2">Sửa Thương Hiệu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Page end  -->
+    </div>
+  </div>
+    <!-- <form action="?act=EditBrand&id=<?php echo $listBrandById -> brand_id ?>" method="post" enctype="multipart/form-data" onsubmit="validateForm()">
       <div>
         <h3></h3>
         <label for="brand_name">Tên thương hiệu:</label>
@@ -32,7 +86,7 @@
         ><br />
       </div>
       <input name="edit_Brand" type="submit" value="edit Thương Hiệu"></input>
-    </form>
+    </form> -->
   </body>
 </html>
 <script>
