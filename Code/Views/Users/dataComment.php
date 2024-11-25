@@ -31,7 +31,7 @@
   </thead>
   <?php
 // var_dump($data);
-foreach($data as $index){
+foreach($result as $index){
     ?>
             <tbody>
                 <tr>

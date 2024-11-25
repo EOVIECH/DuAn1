@@ -1,14 +1,14 @@
 <?php
-class productController{
+class CProductController{
  public function listProduct(){
-    $mPro = new product();
+    $mPro = new MProduct();
     $listProduct = $mPro->getAllDataProduct();
    //  var_dump($listProduct);
     include_once './Views/Admin/list_product.php';
    }
 
    public function detailProduct(){
-      $mPro = new product();
+      $mPro = new MProduct();
       $listProduct = $mPro->getAllDataProduct();
      //  var_dump($listProduct);
       include_once './Views/Admin/detail_product.php';
@@ -23,7 +23,7 @@ class productController{
          $status = $_POST['status'];
          $create_at = $_POST['create_at'];
 
-         $nPro = new product();
+         $nPro = new MProduct();
          $nPro -> setInsertDataProduct(NULL,NULL,$sku,$name,$description,$status,$create_at);
          var_dump($nPro);
       }
@@ -34,7 +34,7 @@ class productController{
    public function editProduct(){
       if(isset($_GET['id'])){
          // echo $_GET['id'];
-         $bPro = new product();
+         $bPro = new MProduct();
          $idPro = $bPro -> getIdDataProduct($_GET['id']);
          if(isset($_POST['submit'])){
             var_dump([$_FILES['img']]);
@@ -50,7 +50,7 @@ class productController{
             $target_path = $target_dir.$name_img;
             //b4: upload vao thu muc 
             move_uploaded_file($_FILES['img']['tmp_name'],$target_path);
-            $nPro = new product();
+            $nPro = new MProduct();
             $nPro -> updateProduct($name,$price,1,$quantity,$target_path,$_GET['id']);
          }
    

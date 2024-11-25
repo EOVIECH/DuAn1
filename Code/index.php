@@ -4,15 +4,18 @@ session_start();
 // $cPro = new ConnectDB();
 require_once './Models/MProducts.php';
 require_once './Models/MUsers.php';
+require_once './Models/MReviews.php';
 require_once './Controllers/CProductController.php';
 require_once './Controllers/CUserController.php';
 require_once './Controllers/CManage_client.php';
 require_once './Controllers/CIndex_user.php';
+require_once './Controllers/CReview.php';
 
-$inFor = new productController();
-$inFors = new userController();
-$manage_client = new clientController();
-$main = new index_user();
+$Product = new CProductController();
+$User = new CUserController();
+$manage_client = new CClientController();
+$main = new CIndex_user();
+$Review = new CReviewController();
 
 // var_dump($_SESSION['user_id']);
 // var_dump($_SESSION['username']);
@@ -24,19 +27,19 @@ $error = "";
 switch ($act) {
 
     // case 'listProduct':
-    //     $inFor->listProduct();
+    //     $Product->listProduct();
     //     break;
 
     case 'login':
-        $inFors->inForUser();
+        $User->inForUser();
         break;
 
     case 'register':
-        $inFors->insertUser();
+        $User->insertUser();
         break;
 
     case 'logout':
-        $infors->logOut();
+        $User->logOut();
         break;
 
     case 'trangchu':
@@ -44,11 +47,11 @@ switch ($act) {
         break;
 
         case 'dashboard':
-            $inFors->dashboard();
+            $User->dashboard();
             break;
 
     case 'comment':
-        $inFors->insertComment();
+        $Review->insertComment();
         break;
 
     case 'list-user':
@@ -68,23 +71,23 @@ switch ($act) {
         break;
 
     case 'list-product':
-        $inFor->listProduct();
+        $Product->listProduct();
         break;
     
     case 'detail-product':
-        $inFor->detailProduct();
+        $Product->detailProduct();
         break; 
         
         case 'forgot':
-            $inFors->forgotPasswordUser();
+            $User->forgotPasswordUser();
             break;
 
             case 'change':
-                $inFors->changePassword();
+                $User->changePassword();
                 break;
 
                 case 'dataComment':
-                    $inFors->getDataComment();
+                    $Review->getDataComment();
                     break;
         
 };

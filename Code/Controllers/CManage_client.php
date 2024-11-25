@@ -1,8 +1,8 @@
 <?php
 
-class clientController {
+class CClientController {
     public function inForClient(){
-        $aUser = new user();
+        $aUser = new MUser();
         $in = $aUser->getAllUser();
 
         // var_dump($in);
@@ -68,7 +68,7 @@ class clientController {
                          return; // Dừng lại nếu có lỗi
                      }
             
-                     $nPro = new user();
+                     $nPro = new MUser();
                      $nPro -> setInsertDataUser('',$name,$password,$email,$phone,$address,'user','active', $created_at);
                      if (isset($nPro) && $nPro != '') {
                         echo "<script>
@@ -85,7 +85,7 @@ class clientController {
 
     public function updateClient(){
             if(isset($_GET['id'])){
-                $nPro = new user(); 
+                $nPro = new MUser(); 
                 $getID = $nPro->getIdDataUser($_GET['id']);
                 // var_dump($getID);
 
@@ -122,8 +122,8 @@ class clientController {
     public function delUser(){
         if(isset($_GET['id'])) {
             $id = $_GET['id'];
-            $nPro = new user();
-            $delReview = $nPro -> deleteReview($id);
+            $nPro = new MUser();
+            $delReview = $nPro -> deleteComment_IdUser($id);
             $del = $nPro -> deleteUser($id);
     
             header('location: ?act=list-user');

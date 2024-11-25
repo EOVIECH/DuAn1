@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Comment</title>
     <script src="https://kit.fontawesome.com/e2b0b931b4.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,7 +51,7 @@
             width: 100%;
             padding: 10px;
             background-color: #3498db;
-            color: #fff;
+            color: #ccc;
             border: none;
             border-radius: 5px;
             font-size: 16px;
@@ -58,6 +60,25 @@
         }
         .comment-button:hover {
             background-color: #2980b9;
+        }
+
+        .rating {
+            direction: rtl; /* Đảo chiều để chọn sao từ phải sang trái */
+            unicode-bidi: bidi-override;
+            display: inline-flex;
+        }
+        .rating input {
+            display: none; /* Ẩn input radio */
+        }
+        .rating label {
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+        }
+        .rating input:checked ~ label,
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #f5a623; /* Màu vàng cho sao được chọn */
         }
     </style>
 </head>
@@ -69,94 +90,25 @@
             <div class="form-group">
                 <label for="comment">Bình luận</label>
                 <textarea id="comment" name="comment" placeholder="Nhập nội dung bình luận" ></textarea>
+                <br> <br>
+
+                <div class="rating">
+            <input type="radio" id="star5" name="rating" value="5">
+            <label for="star5">&#9733;</label>
+            <input type="radio" id="star4" name="rating" value="4">
+            <label for="star4">&#9733;</label>
+            <input type="radio" id="star3" name="rating" value="3">
+            <label for="star3">&#9733;</label>
+            <input type="radio" id="star2" name="rating" value="2">
+            <label for="star2">&#9733;</label>
+            <input type="radio" id="star1" name="rating" value="1">
+            <label for="star1">&#9733;</label>
+        </div>
+        <button type="submit" name="submit" class="btn btn-success">Gửi đánh giá</button>
             </div>
-
-            <h1>Danh gia san pham</h1>
-    <ul>
-    <?php
-$product_id = $_GET['id']; // Thay bằng ID sản phẩm thực tế
-for ($count = 1; $count <= 5; $count++) {
-    $color = ($count <= 1) ? 'color: #ffcc00' : 'color: #ccc;';
-    ?>
-    <li id="<?= $product_id ?>-<?= $count ?>" 
-        class="rating" 
-        data-index="<?= $count ?>" 
-        data-product_id="<?= $product_id ?>" 
-        data-rating="0"
-        style="cursor: pointer; font-size: 40px; <?= $color ?>">
-        <i class="fa-solid fa-star"></i>
-    </li>
-    <?php
-}
-?>
-
-    </ul>
-            <!-- Nút Gửi bình luận -->
-            <button type="submit" class="comment-button" name="submit" onclick="remove_background($_GET['id'])">Gửi bình luận</button>
-        </form>
+</form>
     </div>
-
-   
 </body>
-
-<script>
-				 function remove_background(product_id)
-					{
-						for(var count = 1; count <= 5; count++)
-						{
-						$('#'+product_id+'-'+count).css('color', '#ccc'); 
-						}
-					}
-					//hover chuột đánh giá sao
-					$(document).on('mouseenter', '.rating', function(){
-							var index = $(this).data("index"); //3
-							var product_id = $(this).data('product_id'); //13
-						
-							// alert(index);
-							// alert(product_id);
-							remove_background(product_id);
-							for(var count = 1; count<=index; count++)
-							{
-							$('#'+product_id+'-'+count).css('color', '#ffcc00');
-							}
-					});
-					  //nhả chuột ko đánh giá
-						$(document).on('mouseleave', '.rating', function(){
-							var index = $(this).data("index");
-							var product_id = $(this).data('product_id');
-							var rating = $(this).data("rating");
-							remove_background(product_id);
-							//alert(rating);
-							for(var count = 1; count<=rating; count++)
-							{
-							$('#'+product_id+'-'+count).css('color', '#ffcc00');
-							}
-							});
-
-				</script>
-				<script>
-					 $('.rating').click(function(){
-						var index = $(this).data("index"); //3
-						var product_id = $(this).data('product_id');
-						var customer_id = $(this).data('customer_id');
-						$.ajax(
-								{ url: 'ajax/rating.php',
-									data: {index:index, product_id:product_id, customer_id:customer_id},
-									type: 'POST',
-									success: function(data) {
-										
-											alert('Đánh giá '+index+' sao thành công');
-										
-											
-
-											}
-							});
-					})
-					$(document).on('mouseenter', '.rating_login', function(){
-						alert('Làm ơn đăng nhập để đánh giá sao.');
-					})
-				</script>
-
 </html>
 
 
