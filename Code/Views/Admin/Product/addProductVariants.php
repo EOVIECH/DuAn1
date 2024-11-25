@@ -136,7 +136,7 @@
                             <div class="d-flex justify-content-end">
                               <button type="button" class="btn btn-primary mr-2" onclick="addVariant()">Thêm Biến Thể Khác</button>
                               <input class="btn btn-primary" style="cursor: pointer" name="addProductVariants" value="Thêm Tất Cả Biến Thể" type="submit">
-                          </div>    
+                            </div>    
                             <!-- <button type="button" class="btn btn-primary mr-2" onclick="addVariant()">Thêm Biến Thể Khác</button
                               ><br />
                               <input class="btn btn-primary mr-2"

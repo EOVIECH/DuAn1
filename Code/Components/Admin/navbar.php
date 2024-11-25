@@ -186,12 +186,12 @@
                 data-parent="#iq-sidebar-toggle"
               >
                 <li class="">
-                  <a href="page-list-category.html">
+                  <a href="?act=ListCategory">
                     <i class="las la-minus"></i><span>List Category</span>
                   </a>
                 </li>
                 <li class="">
-                  <a href="page-add-category.html">
+                  <a href="?act=AddCategories">
                     <i class="las la-minus"></i><span>Add Category</span>
                   </a>
                 </li>

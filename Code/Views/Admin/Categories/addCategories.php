@@ -3,36 +3,62 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="Views/Admin/Css/form.css">
+    <!-- <link rel="stylesheet" href="Views/Admin/Css/form.css"> -->
     <title>Add Categories</title>
   </head>
   <body>
-    <form action="" method="post" enctype="multipart/form-data" onsubmit="validateForm()">
-      <div>
-        <h3></h3>
-        <label for="categories_name">Tên Danh Mục:</label>
-        <input type="text" id="categories_name" name="categories_name" required /><br />
+    <?php require_once 'Components/Admin/navbar.php' ?>
+  
 
-        <label for="description">Mô tả Danh Mục:</label>
-        <textarea id="description" name="description"></textarea><br />
-
-         <!-- Parent Category -->
-         <label for="parent_category">Parent Category</label>
-         <select id="parent_category" name="parent_category">
-             <option value='null'>None</option>
-             <!-- Option values should be dynamically generated from existing categories in the database -->
-            <?php
-            foreach($listCategories as $category){
-              ?>
-                <option value="<?php echo $category -> category_id ?>"><?php echo $category -> name ?></option>
-              <?php
-            }
-            ?>
-             <!-- Add more categories as needed -->
-         </select>
-          <input type="submit" name="add_categories" value="Thêm Danh Mục">
-      </div>
-    </form>
+    <div class="content-page">
+        <div class="container-fluid add-form-list">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="header-title">
+                                <h4 class="card-title">Add Category</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form action="" method="post" enctype="multipart/form-data" onsubmit="validateForm()">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="category_name">Category Name *</label>
+                                            <input type="text" class="form-control" id="categories_name" name="categories_name" placeholder="Enter category name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="description">Mô tả Danh Mục:</label>
+                                            <<textarea id="description" class="form-control" name="description"></textarea><br />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="parent_category">Parent Category</label>
+                                            <select class="form-control " id="parent_category" name="parent_category">
+                                                <option value="null">None</option>
+                                                <?php
+                                                  foreach($listCategories as $category){
+                                                    ?>
+                                                      <option value="<?php echo $category -> category_id ?>"><?php echo $category -> name ?></option>
+                                                    <?php
+                                                  }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" name="add_categories" value="Thêm Danh Mục" class="btn btn-primary mr-2">Add Category</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </body>
 </html>
 <script>

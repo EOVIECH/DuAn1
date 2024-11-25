@@ -7,40 +7,68 @@
     <title>Edit Category</title>
   </head>
   <body>
-    <form action="?act=EditCategory&id=<?php echo $listCategoryById -> category_id ?>" method="post" enctype="multipart/form-data" onsubmit="validateForm()">
-      <div>
-        <h3></h3>
-        <label for="category_name">Tên Danh Mục:</label>
-        <input type="text" id="category_name" name="category_name" value="<?php echo $listCategoryById -> name ?>" required /><br />
+  <?php require_once 'Components/Admin/navbar.php' ?>
 
-        <label for="description">Mô tả:</label>
-        <textarea id="description" name="description"><?php echo $listCategoryById -> description ?></textarea><br />
-
-        <label for="parent_category_id">Thuộc đối tượng cha:</label>
-        <select id="parent_category_id" name="parent_category_id" required>
-        <?php
-                if($listCategoryById -> parent_category_id == null)
-                {
-                    ?>
-                        <option value="null" >NULL</option>
-                    <?php
-                }else
-                {
-                    ?>
-                    <option value="null" >NULL</option>
-                    <?php
-                }
-                foreach($listCategories as $category)
-                {
-                    ?>
-                        <option value="<?php echo $category -> category_id ?>" <?php echo ($listCategoryById -> parent_category_id == $category -> category_id) ? 'selected' : '' ?>><?php echo $category -> name ?></option>
-                    <?php
-                }
-                ?>
-        ><br />
-      </div>
-      <input name="edit_Category" type="submit" value="edit Danh Muc"></input>
-    </form>
+  <div class="content-page">
+        <div class="container-fluid add-form-list">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="header-title">
+                                <h4 class="card-title">Add Category</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form action="?act=EditCategory&id=<?php echo $listCategoryById -> category_id ?>" method="post" enctype="multipart/form-data" onsubmit="validateForm()">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="category_name">Category Name *</label>
+                                            <input type="text" class="form-control" id="category_name" value="<?php echo $listCategoryById -> name ?>" name="category_name" placeholder="Enter category name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="description">Mô tả Danh Mục:</label>
+                                            <<textarea id="description" class="form-control" name="description"><?php echo $listCategoryById -> description ?></textarea><br />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="parent_category_id">Parent Category</label>
+                                            <select class="form-control " id="parent_category_id" name="parent_category_id">
+                                              <?php
+                                                if($listCategoryById -> parent_category_id == null)
+                                                {
+                                                    ?>
+                                                        <option value="null" >NULL</option>
+                                                    <?php
+                                                }else
+                                                {
+                                                    ?>
+                                                    <option value="null" >NULL</option>
+                                                    <?php
+                                                }
+                                                foreach($listCategories as $category)
+                                                {
+                                                    ?>
+                                                        <option value="<?php echo $category -> category_id ?>" <?php echo ($listCategoryById -> parent_category_id == $category -> category_id) ? 'selected' : '' ?>><?php echo $category -> name ?></option>
+                                                    <?php
+                                                }
+                                              ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" name="edit_Category" value="edit Danh Mục" class="btn btn-primary mr-2">Edit Category</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </body>
 </html>
 <script>
