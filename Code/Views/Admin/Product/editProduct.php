@@ -75,7 +75,7 @@
                   </div>
 
                   <div class="d-flex justify-content-between mt-4">
-                    <input name="edit_Product" type="submit" class="btn btn-primary" value="Cập Nhật Sản Phẩm" />
+                    <input name="edit_Product" type="submit" class=" btn btn-primary mr-2" value="Cập Nhật Sản Phẩm" />
                   </div>
                 </form>
               </div>

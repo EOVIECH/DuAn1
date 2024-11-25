@@ -59,6 +59,13 @@ class Products
         return $this -> connect -> loadData([$id],false);
     }
 
+    public function getDataProduct()
+    {
+        $sql = 'SELECT * FROM products';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([]);
+    }
+
     public function addProduct($id,$brand_id,$name,$des,$status,$created_at)
     {
         $sql = 'INSERT INTO products VALUES (?,?,?,?,?,?)';

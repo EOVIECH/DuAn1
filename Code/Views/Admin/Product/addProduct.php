@@ -4,12 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- <link rel="stylesheet" href="Views/Admin/Css/form.css"> -->
-    <title>Add Product Variants</title>
+    <title>Add Products</title>
   </head>
   <body>
     <?php require_once 'Components/Admin/navbar.php' ?>
-
-
+    
     <div class="content-page">
      <div class="container-fluid add-form-list">
         <div class="row">
@@ -17,7 +16,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <div class="header-title">
-                            <h4 class="card-title">Add Product</h4>
+                            <h4 class="card-title">Add Products</h4>
                         </div>
                     </div>
 
@@ -51,30 +50,32 @@
                                 <label for="product_name" class="form-label">Tên sản phẩm:</label>
                                 <input type="text" name="product_name[]" class="form-control" required />
                               </div>
-
+                              <div class="col-md-12">
+                                  <div for="description" class="form-group">
+                                      <label>Description / Product Details</label>
+                                      <textarea name="description[]" class="form-control" rows="4"></textarea>
+                                  </div>
+                              </div>
                               <div class="col-md-6">
-                                <label for="description" class="form-label">Mô tả sản phẩm:</label>
-                                <textarea name="description[]" class="form-control" rows="2"></textarea>
+                                <div class="form-group">
+                                  <label for="brand_id">Thương hiệu:</label>
+                                    <select name="brand_id[]" class=" form-control" data-style="py-0" required>
+                                      <?php
+                                        foreach($listBrand as $brand) {
+                                      ?>
+                                      <option value="<?php echo $brand->brand_id ?>">
+                                        <?php echo $brand->name ?>
+                                      </option>
+                                      <?php
+                                        }
+                                      ?>
+                                    </select>
+                                </div>
                               </div>
 
                               <div class="col-md-6">
-                                <label for="brand_id" class="form-label">Thương hiệu:</label>
-                                <select name="brand_id[]" class="form-select" required>
-                                  <?php
-                                    foreach($listBrand as $brand) {
-                                  ?>
-                                  <option value="<?php echo $brand->brand_id ?>">
-                                    <?php echo $brand->name ?>
-                                  </option>
-                                  <?php
-                                    }
-                                  ?>
-                                </select>
-                              </div>
-
-                              <div class="col-md-6">
-                                <label for="category_id" class="form-label">Danh mục:</label>
-                                <select name="category_id[]" class="form-select" required>
+                                <label for="category_id">Danh mục:</label>
+                                <select name="category_id[]" class=" form-control" data-style="py-0" required>
                                   <?php
                                     foreach($listCategories as $category) {
                                   ?>

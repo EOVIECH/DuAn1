@@ -30,7 +30,8 @@ class CProductVariants{
 
         if(isset($_POST['addProductVariants']))
         {
-            // Validate dữ liệu kiểm tra đầu vào
+           
+            // Validate dữ liệu kiểm tra đầu vào    
             for($i=0;$i<$_POST['totalVariants'];$i++) 
             {
                 if(empty($_POST['product_id']) || !is_numeric($_POST['product_id']))
@@ -65,81 +66,84 @@ class CProductVariants{
                                                                 $_POST['variant_quantity'][$i],
                                                                 $_POST['variant_color'][$i],
                                                                 $_POST['variant_sku'][$i]);
-                }
+                    $productVariantIds[] = $lastInsertId;
+                    
+                    if (!empty($_POST['variant_size'][$i])) 
+                    {
+                        foreach ($_POST['variant_size'][$i] as $size) 
+                        {
+                            if (!empty($size)) 
+                            {
+                                // Thêm từng kích thước cho biến thể vào bảng
+                                $mProductVariantSize->addProductVariantsSize($lastInsertId, $size);
+                            }
+                        }
+                    }
 
-                 // Thêm size sản phẩm
-                foreach($_POST['variant_size'] as $index => $size)
-                {
-                    $mProductVariantSize -> addProductVariantsSize($lastInsertId,$size);
-                }
-                
-
-                 // Thêm image album
-                $validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
-                $target_dir = 'Images/';
+                        // Thêm image album
+                    $validImageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+                    $target_dir = 'Images/';
  
-                foreach ($_FILES['variant_album_images']['name'] as $index1 => $filesGroup) {
-                    foreach ($filesGroup as $index2 => $fileName) {
-                        $imageType = $_FILES['variant_album_images']['type'][$index1][$index2];
-                        $tmpPath = $_FILES['variant_album_images']['tmp_name'][$index1][$index2];
-                        $error = $_FILES['variant_album_images']['error'][$index1][$index2];
+                    if (isset($_FILES['variant_album_images']['name'][$i])) {
+                        foreach ($_FILES['variant_album_images']['name'][$i] as $key => $fileName) {
+                            $imageType = $_FILES['variant_album_images']['type'][$i][$key];
+                            $tmpPath = $_FILES['variant_album_images']['tmp_name'][$i][$key];
+                            $error = $_FILES['variant_album_images']['error'][$i][$key];
+                    
+                            // Kiểm tra lỗi upload
+                            if ($error !== UPLOAD_ERR_OK) {
+                                echo "Error uploading file $fileName. Error code: $error<br>";
+                                continue;
+                            }
+                    
+                            // Kiểm tra loại file
+                            if (!in_array($imageType, $validImageTypes)) {
+                                echo "File type for $fileName is not allowed.<br>";
+                                continue;
+                            }
+                    
+                            // Đặt tên file và lưu vào thư mục
+                            $newFileName = time() . '_' . $fileName;
+                            $target_path = $target_dir . $newFileName;
+                    
+                            if (move_uploaded_file($tmpPath, $target_path)) {
+                                $mImage->addImages(null, (int)$lastInsertId, $target_path, 0, 'active');
+                            } else {
+                                echo "Failed to move file $fileName to $target_path.<br>";
+                            }
+                        }
+                    }
 
+                 // Thêm image main
+                    if (isset($_FILES['variant_main_image']['name'][$i]) && !empty($_FILES['variant_main_image']['name'][$i])) {
+                        $fileName = $_FILES['variant_main_image']['name'][$i];
+                        $imageType = $_FILES['variant_main_image']['type'][$i];
+                        $tmpPath = $_FILES['variant_main_image']['tmp_name'][$i];
+                        $error = $_FILES['variant_main_image']['error'][$i];
+                    
                         // Kiểm tra lỗi upload
                         if ($error !== UPLOAD_ERR_OK) {
-                            echo "Error uploading file $fileName. Error code: $error";
+                            echo "Error uploading file $fileName. Error code: $error<br>";
                             continue;
                         }
-
+                    
                         // Kiểm tra loại file
                         if (!in_array($imageType, $validImageTypes)) {
-                            echo "File type for $fileName is not allowed. Only JPEG, PNG, and GIF are accepted.";
+                            echo "File type for $fileName is not allowed.<br>";
                             continue;
                         }
-
+                    
                         // Đặt tên file và lưu vào thư mục
                         $newFileName = time() . '_' . $fileName;
                         $target_path = $target_dir . $newFileName;
-
+                    
                         if (move_uploaded_file($tmpPath, $target_path)) {
-                            $mImage -> addImages(null,(int)$lastInsertId,$target_path,0,'active');
-                            // echo "File $fileName uploaded successfully to $target_path.<br>";
+                            $mImage->addImages(null, (int)$lastInsertId, $target_path, 1, 'active');
                         } else {
                             echo "Failed to move file $fileName to $target_path.<br>";
                         }
                     }
                 }
-
-                 // Thêm image main
-                 
-                 foreach ($_FILES['variant_main_image']['name'] as $index1 => $filesName) {
-                    $imageType = $_FILES['variant_main_image']['type'][$index1];
-                    $tmpPath = $_FILES['variant_main_image']['tmp_name'][$index1];
-                    $error = $_FILES['variant_main_image']['error'][$index1];
-
-                    // Kiểm tra lỗi upload
-                    if ($error !== UPLOAD_ERR_OK) {
-                        echo "Error uploading file $fileName. Error code: $error";
-                        continue;
-                    }
-
-                    // Kiểm tra loại file
-                    if (!in_array($imageType, $validImageTypes)) {
-                        echo "File type for $fileName is not allowed. Only JPEG, PNG, and GIF are accepted.";
-                        continue;
-                    }
-
-                    // Đặt tên file và lưu vào thư mục
-                    $newFileName = time() . '_' . $fileName;
-                    $target_path = $target_dir . $newFileName;
-
-                    if (move_uploaded_file($tmpPath, $target_path)) {
-                        $mImage -> addImages(null,(int)$lastInsertId,$target_path,1,'active');
-                        // echo "File $fileName uploaded successfully to $target_path.<br>";
-                    } else {
-                        echo "Failed to move file $fileName to $target_path.<br>";
-                    }
-                }
-
             }
         }
         include_once 'Views/Admin/Product/addProductVariants.php';
@@ -149,10 +153,31 @@ class CProductVariants{
     {
         $mProductVariants = new ProductsVariants();
         $mProductVariantSize = new ProductsVariantSize();
-        $listProductVariants = $mProductVariants -> listProductVariant();
+        $mProduct = new Products();
+        $listProduct = $mProduct -> getDataProduct();
         $listProductVariantSize = $mProductVariantSize -> ListProductVariantsSize();
 
+        // Phân trang
+        $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $perPage = 10; // Số sản phẩm trên mỗi trang
+        $offset = ($currentPage - 1) * $perPage;
+        // Lấy product_id nếu có
+        $productId = isset($_GET['product_id']) ? $_GET['product_id'] : null;
         // var_dump($listProductVariants);
+
+        if ($productId) {
+            // Lọc sản phẩm theo category_id
+            $totalProductVariants = $mProductVariants->countProductVariantsByProductId($productId); // Tổng số sản phẩm theo danh mục
+            $listProductVariants = $mProductVariants->getDataProductVariantByProductIdWithPagination($productId,$offset,$perPage);
+        } else {
+            // Hiển thị tất cả sản phẩm
+            $totalProductVariants = $mProductVariants->countAllProductVariants(); // Tổng số sản phẩm 
+            $listProductVariants = $mProductVariants->getDataProductVariantWithPagination($offset,$perPage);
+        }
+
+        // Tính tổng số trang
+        $totalPages = ceil(($totalProductVariants -> total) / $perPage);
+
         include_once 'Views/Admin/Product/listProductVariants.php';
     }
 

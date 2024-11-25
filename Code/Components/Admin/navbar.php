@@ -126,6 +126,16 @@
                     <i class="las la-minus"></i><span>Add Product</span>
                   </a>
                 </li>
+                <li class="">
+                  <a href="?act=ListProductVariant">
+                    <i class="las la-minus"></i><span>List Product Variant</span>
+                  </a>
+                </li>
+                <li class="">
+                  <a href="?act=AddProductVariants">
+                    <i class="las la-minus"></i><span>Add Product Variant</span>
+                  </a>
+                </li>
               </ul>
             </li>
             <li class=" ">

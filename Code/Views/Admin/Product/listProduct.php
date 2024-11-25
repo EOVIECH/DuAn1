@@ -24,7 +24,7 @@
                     to list your products and offerings in the most appealing way.
                 </p>
                 </div>
-                <a href="?act=AddProducts" class="btn btn-primary"><i class="las la-plus mr-2"></i>Add Product</a>
+                <a href="?act=AddProducts" class="btn btn-primary"><i class="las la-plus mr-2"></i>Add Product </a>
             </div>
             </div>
         </div>
@@ -89,7 +89,7 @@
                 </div>
 
 <!-- Pagination -->
-<nav aria-label="Page navigation">
+                <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
                         <?php 
                             if(isset($totalPages)){
