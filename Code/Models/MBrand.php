@@ -34,11 +34,11 @@ class Brands
         $this -> connect -> setQuery($sql);
         $this -> connect -> execute([$name,$des,$img,$status,$id]);
     }
-    public function deleteBrand($id)
-    {
-        $sql = 'DELETE FROM `brands` WHERE brand_id= ?';
-        $this -> connect -> setQuery($sql);
-        $this -> connect -> execute([$id]);
-    }
+    // public function deleteBrand($id)
+    // {
+    //     $sql = 'DELETE FROM `brands` WHERE brand_id= ?';
+    //     $this -> connect -> setQuery($sql);
+    //     $this -> connect -> execute([$id]);
+    // }
 }
 ?>

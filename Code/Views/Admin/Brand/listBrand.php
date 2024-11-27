@@ -71,8 +71,8 @@
                                                     href="#"><i class="ri-eye-line mr-0"></i></a> -->
                                                 <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"
                                                     href="?act=EditBrand&id=<?php echo $brand -> brand_id ?>"><i class="ri-pencil-line mr-0"></i></a>
-                                                <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
-                                                    href="#" onclick="confirmDeleted('?act=DeleteBrand&id=<?php echo $brand -> brand_id?>')"><i class="ri-delete-bin-line mr-0"></i></a>
+                                                <!-- <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
+                                                    href="#" onclick="confirmDeleted('?act=DeleteBrand&id=<?php echo $brand -> brand_id?>')"><i class="ri-delete-bin-line mr-0"></i></a> -->
                                             </div>
                                         </td>
                                     </tr>
@@ -82,9 +82,9 @@
                         </tbody>
                     </table>
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-primary mr-2" onclick="selectAll()">Chọn tất cả</button>
+                        <!-- <button type="button" class="btn btn-primary mr-2" onclick="selectAll()">Chọn tất cả</button>
                         <button type="button"  class="btn btn-primary mr-2" onclick="deselectAll()">Bỏ chọn tất cả</button>
-                        <button class="btn btn-primary" onclick="confirmDeleted('?act=DeleteSelectedBrand')" type="submit" name="btn-delSelected">Xoá các mục đã chọn</button>
+                        <button class="btn btn-primary" onclick="confirmDeleted('?act=DeleteSelectedBrand')" type="submit" name="btn-delSelected">Xoá các mục đã chọn</button> -->
                         <button style="margin-left: 10px;" class="btn btn-primary" type="button"><a style="color: white;" href="?act=AddBrand">Nhập thêm</a></button>
                     </div>   
                 </form>
