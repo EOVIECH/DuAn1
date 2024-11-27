@@ -104,6 +104,16 @@ class Products
         return $this -> connect -> loadData([$id],false);
     }
 
+    public function getDataProductByCategoryId($id)
+    {
+        $sql = 'SELECT products.*, categories.* FROM `products` 
+                JOIN productcategories on productcategories.product_id = products.product_id
+                JOIN categories on productcategories.category_id = categories.category_id
+                WHERE categories.category_id = ?';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$id]);
+    }
+
     public function getDataProduct()
     {
         $sql = 'SELECT * FROM products';

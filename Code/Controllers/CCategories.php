@@ -78,19 +78,29 @@ class CCategories{
                 // echo 'success';
             }
         }
-        include_once 'Views/Admin/Categories/listCategory.php';
+        // include_once 'Views/Admin/Categories/listCategory.php';
     }
 
     public function DeleteCategory()
     {
         if(isset($_GET['id']))
         {
-            $mCategories = new Categories();
             $id = $_GET['id'];
-            $mCategories -> deleteCategory($id);
-            header('Location: index.PHP?act=ListCategory');
+            $mCategories = new Categories();
+            $mProduct = new Products();
+            $err = '';
+            $listCategories  = $mProduct -> getDataProductByCategoryId($id);
+            if(empty($listCategories))
+            {
+                $mCategories -> deleteCategory($id);
+                $_SESSION['message'] = "Danh mục đã được xóa thành công!";
+            }else if(!empty($listCategories))
+            {
+                $_SESSION['error'] = "Bạn không thể xoá danh mục này vì nó đang chứa sản phẩm.";
+            }
         }
-        include_once 'Views/Admin/Categories/listCategory.php';
+        header('Location: index.php?act=ListCategory');
+        exit();
     }
 }
 ?>

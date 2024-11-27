@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'Controllers/CBrand.php';
 require_once 'Controllers/CCategories.php';
 require_once 'Controllers/CProduct.php';

@@ -24,6 +24,18 @@
                     <a href="?act=AddCategories" class="btn btn-primary add-list"><i class="las la-plus mr-3"></i>Add Category</a>
                 </div>
             </div>
+            <?php 
+                if (isset($_SESSION['error'])) {
+                    echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+                    unset($_SESSION['error']); // Xóa session sau khi hiển thị
+                }
+                
+                // Hiển thị thông báo thành công
+                if (isset($_SESSION['message'])) {
+                    echo '<div class="alert alert-success">' . $_SESSION['message'] . '</div>';
+                    unset($_SESSION['message']); // Xóa session sau khi hiển thị
+                }
+            ?>
             <div class="col-lg-12">
                 <form action="?act=DeleteSelectedCategory" method="post">
                 <div class="table-responsive rounded mb-3">
