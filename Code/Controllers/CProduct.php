@@ -61,11 +61,13 @@ class CProduct{
                 if(isset($_POST['product_name'])
                 && isset($_POST['description'])
                 && isset($_POST['brand_id'])
-                && isset($_POST['category_id']))
+                && isset($_POST['category_id'])
+                && isset($_POST['status_id']))
                 {
-                        $mProduct -> editProduct($_POST['brand_id'],$_POST['product_name'],$_POST['description'],'active',$currentDate,$id);
+                        $mProduct -> editProduct($_POST['brand_id'],$_POST['product_name'],$_POST['description'],$_POST['status_id'],$currentDate,$id);
                         $mProductCategories->editProductCategories($_POST['category_id'],$id);
                         $err = true;
+                        header('Location: index.PHP?act=ListProduct');
                     }
             }
         }
@@ -82,28 +84,39 @@ class CProduct{
 
         $listCategories = $mCategories->getDataCategories();
 
+        
         // Phân trang
         $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
-        $perPage = 10; // Số sản phẩm trên mỗi trang
-        $offset = ($currentPage - 1) * $perPage;
-
-        // Lấy category_id nếu có
-        $categoryId = isset($_GET['category']) ? $_GET['category'] : null;
-
-      
-        if ($categoryId) {
-            // Lọc sản phẩm theo category_id
-            $totalProducts = $mProduct->countProductsByCategoryId($categoryId); // Tổng số sản phẩm theo danh mục
-            $listProduct = $mProduct->getDataProductByCategoryIdWithPagination($categoryId,$offset,$perPage);
-        } else {
-            // Hiển thị tất cả sản phẩm
-            $totalProducts = $mProduct->countAllProducts(); // Tổng số sản phẩm 
-            $listProduct = $mProduct->getDataProductWithPagination($offset,$perPage);
-        }
+        $perPage = 10;
+        $offset =  ($currentPage - 1) * $perPage;
+        // Xử lý logic tìm kiếm
+        // if(isset($_POST['search']))
+        // {
+            $product_name = isset($_POST['product_name']) ? $_POST['product_name'] : null;
+            $categoryId = isset($_POST['category_id']) ? intval($_POST['category_id']) : null;
+            if (!empty($_POST['product_name']) && !empty($_POST['category_id'])) {
+                // Tìm kiếm theo tên sản phẩm và danh mục
+                $totalProducts = $mProduct->countAllProductsByNameAndCategoryId($categoryId,$categoryId);
+                $listProduct = $mProduct->getDataProductByCategoryIdAndNameWithPagination($categoryId, $product_name, $offset, $perPage);
+            }elseif (!empty($product_name)) {
+                // Tìm kiếm theo tên sản phẩm
+                $totalProducts = $mProduct->countAllProductsByName($product_name);
+                $listProduct = $mProduct->getDataProductWithPaginationAndName($product_name, $offset, $perPage);
+            } elseif (!empty($categoryId)) {
+                // Lọc theo danh mục
+                $totalProducts = $mProduct->countProductsByCategoryId($categoryId);
+                $listProduct = $mProduct->getDataProductByCategoryIdWithPagination($categoryId, $offset, $perPage);
+            } else {
+                // Hiển thị tất cả sản phẩm
+                $totalProducts = $mProduct->countAllProducts();
+                $listProduct = $mProduct->getDataProductWithPagination($offset, $perPage);
+            }
+        // }
 
         // Tính tổng số trang
         $totalPages = ceil(($totalProducts -> total) / $perPage);
         // Hiển thị danh sách sản phẩm
+        // var_dump($totalPages);
         include_once 'Views/Admin/Product/listProduct.php';
     }
         
@@ -130,11 +143,11 @@ class CProduct{
     {
         if(isset($_GET['id']))
         {
-            $mProduct = new Products();
-            $mProductCategories = new ProductCategories();
             $id = $_GET['id'];
-            $mProductCategories -> deleteProductCategories($id);
+            $mProduct = new Products();
+            $mProductVariant = new ProductsVariants();
             $mProduct -> deleteProduct($id);
+            $mProductVariant -> deleteProductVariant($id);
             header('Location: index.PHP?act=ListProduct');
         }
         include_once 'Views/Admin/Brand/listProduct.php';

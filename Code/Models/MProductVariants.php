@@ -84,5 +84,12 @@ class ProductsVariants
         $this -> connect -> setQuery($sql);
         $this -> connect -> execute([$product_id,$price,$price_coupon,$start_date,$end_date,$quantity,$color_id,$sku,$product_variant_id]);
     }
+
+    public function deleteProductVariant($productVariant_id)
+    {
+        $sql = 'UPDATE productvariants SET status = "inactive" WHERE product_id = ?';
+        $this -> connect -> setQuery($sql);
+        $this -> connect -> execute([$productVariant_id]);
+    }
 }
 ?>

@@ -26,25 +26,47 @@
                 </div>
                 <a href="?act=AddProducts" class="btn btn-primary"><i class="las la-plus mr-2"></i>Add Product </a>
             </div>
+            
+            
+
             </div>
         </div>
 
-
-         <!-- Filter by Categories -->
+         <!-- Filter by Categories and Name-Product -->
          <div class="row">
+            <form action="index.php?act=ListProduct" method="POST">
                 <div class="col-lg-12 mb-4">
-                    <h4>Danh Mục</h4>
-                    <div class="d-flex flex-wrap">
-                        <a href="?act=ListProduct" class="btn btn-outline-primary m-2">Tất Cả</a>
-                        <?php foreach ($listCategories as $category): ?>
-                            <a href="?act=ListProduct&category=<?php echo $category->category_id ?>" 
-                               class="btn btn-outline-primary m-2">
-                                <?php echo $category->name ?>
-                            </a>
-                        <?php endforeach; ?>
+                    <div class="input-group">
+                            <input type="search" name="product_name" class="form-control rounded" placeholder="Search" aria-label="Search By Name" aria-describedby="search-addon" />
+                            <select name="category_id" class="form-select">
+                                <?php
+                                    if(!isset($_POST['product_name']) && !isset($_POST['category_id']))
+                                    {
+                                        ?>
+                                            <option value="" selected>Search By Category</option>
+                                        <?php
+                                    }
+                                ?>
+                                <?php
+                                    foreach($listCategories as $category)
+                                    {
+                                        ?>
+                                            <option value="<?php echo $category->category_id ?>" 
+                                            <?php
+                                            if(isset($_GET['category']))
+                                            {if($_POST['category'] == $category -> name)
+                                            {echo 'selected';}
+                                            } ?> > <?php echo $category->name ?>  </option>
+                                        <?php
+                                    }
+                                ?>
+                                <option value="">All</option>
+                            </select>
+                            <button type="submit" name="search" class="btn btn-outline-primary" data-mdb-ripple-init>Filter</button>
                     </div>
                 </div>
-            </div>
+            </form>
+        </div>
 
             <!-- Product Table -->
             <form action="?act=DeleteSelectedProduct" method="post">
@@ -97,7 +119,7 @@
                                 {
                                     ?>
                                         <li class="page-item <?php echo $i == $currentPage ? 'active' : '' ?>">
-                                            <a class="page-link" href="?act=ListProduct&page=<?php echo $i ?>&category=<?php echo isset($_GET['category']) ? $_GET['category'] : '' ?>">
+                                            <a class="page-link" href="?act=ListProduct&page=<?php echo $i ?>">
                                                 <?php echo $i ?>
                                             </a>
                                         </li>

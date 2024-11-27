@@ -70,6 +70,16 @@
                                 ?>
                             </select>
                         </div>
+
+                        <div class="col-md-6">
+                          <label for="status_id" class="form-label" >Status:</label>
+                            <select name="status_id" class="form-select"  required>
+                                <option value="active" <?php echo ($listProById -> status == 'active') ? 'selected' : '' ?>>active</option>
+                                <option value="inactive" <?php echo ($listProById -> status == 'inactive') ? 'selected' : '' ?>>inactive</option>
+                            </select>
+                        </div>
+
+
                       </div>
                     </div>
                   </div>
@@ -86,46 +96,6 @@
       </div>
 </div>
 
- <!-- Form Thêm Sản Phẩm -->
- <form id="addProductForm" onsubmit="return validateForm()" action="" method="post" enctype="multipart/form-data">
-    <h3>Thông Tin Sản Phẩm</h3>
-    <!-- Input để lưu số lượng sản phẩm -->
-    <input type="hidden" id="totalProductsInput" name="totalProducts" value="1">
-    <div id="productsContainer">
-        <div class="product">
-            
-
-            <label for="description">Mô tả sản phẩm:</label>
-            <textarea name="description"><?php echo $listProById -> description ?></textarea><br>
-
-            <label for="brand_id">Thương hiệu:</label>
-            <select name="brand_id" required>
-                <?php
-                    foreach($listBrand as $brand)
-                    {
-                        ?>
-                            <option value="<?php echo $brand->brand_id ?>" <?php echo ($listProById -> brand_id == $brand -> brand_id) ? 'selected' : '' ?>><?php echo $brand->name ?></option>
-                        <?php
-                    }
-                ?>
-            </select><br>
-
-            <label for="category_id">Danh mục:</label>
-            <select name="category_id" required>
-                <?php
-                    foreach($listCategories as $category)
-                    {
-                        ?>
-                            <option value="<?php echo $category->category_id ?>" <?php echo ($listProductCategoryById -> category_id == $category -> category_id) ? 'selected' : '' ?>><?php echo $category->name ?></option>
-                        <?php
-                    }
-                ?>
-            </select><br>
-        </div>
-    </div>
-
-    <input name="edit_Product" type="submit" value="Sửa Sản Phẩm">
-</form>
 </body>
 </html>
 <script>

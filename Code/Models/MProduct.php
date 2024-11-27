@@ -16,10 +16,26 @@ class Products
                 JOIN brands on products.brand_id = brands.brand_id
                 JOIN productcategories on products.product_id = productcategories.product_id
                 JOIN categories on productcategories.category_id = categories.category_id
+                WHERE products.status = "active"
                 ORDER BY product_id DESC
-                LIMIT '. (int)$offset . ',' . (int)$perPage;
+                LIMIT '. $offset . ',' . $perPage;
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData();
+    }
+
+    public function getDataProductWithPaginationAndName($productName,$offset,$perPage)
+    {
+        $sql = 'SELECT products.*, brands.name as brand_name, categories.name as category_name, categories.category_id 
+            FROM products
+            JOIN brands ON products.brand_id = brands.brand_id
+            JOIN productcategories ON products.product_id = productcategories.product_id
+            JOIN categories ON productcategories.category_id = categories.category_id
+            WHERE products.status = "active" AND products.name LIKE ?
+            ORDER BY product_id DESC
+            LIMIT ' . $offset . ', ' . $perPage;
+        $this->connect->setQuery($sql);
+        echo $sql;
+        return $this->connect->loadData(['%' . $productName . '%']);
     }
 
     public function getDataProductByCategoryIdWithPagination($category_id,$offset,$perPage)
@@ -28,18 +44,24 @@ class Products
                 JOIN brands on products.brand_id = brands.brand_id
                 JOIN productcategories on products.product_id = productcategories.product_id
                 JOIN categories on productcategories.category_id = categories.category_id
-                WHERE categories.category_id = ' . (int)$category_id . 
-                ' ORDER BY product_id DESC
+                WHERE categories.category_id = ? AND products.status = "active" ORDER BY product_id DESC
                 LIMIT '. (int)$offset . ',' . (int)$perPage;
         $this -> connect -> setQuery($sql);
-        return $this -> connect -> loadData();
+        return $this -> connect -> loadData([$category_id]);
     }
 
     public function countAllProducts()
     {
-        $sql = "SELECT COUNT(*) AS total FROM products";
+        $sql = 'SELECT COUNT(*) AS total FROM products';
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData([],false);
+    }
+
+    public function countAllProductsByName($productName)
+    {
+        $sql = 'SELECT COUNT(*) AS total FROM products WHERE products.name LIKE ?';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData(['%' . $productName . '%'],false);
     }
 
     public function countProductsByCategoryId($categoryId)
@@ -50,6 +72,29 @@ class Products
                 WHERE productcategories.category_id = ?";
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData([$categoryId],false);
+    }
+
+    public function countAllProductsByNameAndCategoryId($categoryId,$productName)
+    {
+        $sql = 'SELECT COUNT(*) AS total FROM products
+                JOIN productcategories ON products.product_id = productcategories.product_id
+                 WHERE productcategories.category_id = ? AND products.name LIKE ?';
+        $this -> connect -> setQuery($sql);
+        echo $sql;
+        return $this -> connect -> loadData([$categoryId,'%' . $productName . '%'],false);
+    }
+
+    public function getDataProductByCategoryIdAndNameWithPagination($category_id,$productName,$offset,$perPage)
+    {
+        $sql = 'SELECT products.*, brands.name as brand_name, categories.name as category_name, categories.category_id FROM products
+                JOIN brands on products.brand_id = brands.brand_id
+                JOIN productcategories on products.product_id = productcategories.product_id
+                JOIN categories on productcategories.category_id = categories.category_id
+                WHERE categories.category_id = ? AND products.status = "active" AND products.name LIKE ?
+                ORDER BY product_id DESC
+                LIMIT '. (int)$offset . ',' . (int)$perPage;
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$category_id,'%' . $productName . '%']);
     }
 
     public function getDataProductById($id)
@@ -80,11 +125,12 @@ class Products
         $this -> connect -> setQuery($sql);
         $this -> connect -> execute([$brand_id,$name,$des,$status,$created_at,$id]);
     }
-    public function deleteProduct($id)
+
+    public function deleteProduct($product_id)
     {
-        $sql = 'DELETE FROM `products` WHERE product_id = ?';
+        $sql = 'UPDATE products SET status = "inactive" WHERE product_id = ?';
         $this -> connect -> setQuery($sql);
-        $this -> connect -> execute([$id]);
+        $this -> connect -> execute([$product_id]);
     }
 }
 ?>
