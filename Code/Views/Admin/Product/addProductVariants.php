@@ -16,7 +16,7 @@
   </head>
   <body>
 
-  <?php require_once 'Components/Admin/navbar.php' ?>
+  <?php require_once 'Components/Admin/navbar.php';?>
 
 
   <div class="content-page">
@@ -28,13 +28,20 @@
                         <div class="header-title">
                             <h4 class="card-title">Add Product Variants</h4>
                         </div>
+                        <?php
+                          if (isset($_SESSION['error_message'])) 
+                          {
+                            echo '<div class="alert alert-danger">' . $_SESSION['error_message'] . '</div>';
+                            unset($_SESSION['error_message']); // Xóa thông báo sau khi hiển thị
+                          }
+                        ?>
                     </div>
                     <div class="card-body">
-                        <form id="addVariantForm" method="post" enctype="multipart/form-data" data-toggle="validator">
+                        <form id="addVariantForm" method="post" enctype="multipart/form-data">
                             <div class="row">
                             <input type="hidden" id="totalVariantsInput" name="totalVariants" value="1">
                                 <div class="col-md-12">
-                                    <div class="form-group">
+                                    <div class="form-group">  
                                         <label>Product Type *</label>
                                         <select id="product_id" name="product_id" class=" form-control" data-style="py-0" required>
                                           <?php foreach($allDataProduct as $product): ?>
@@ -126,6 +133,7 @@
                                               <input type="file" name="variant_album_images[0][]" accept="image/*" multiple class="form-control image-file">
                                           </div>
                                       </div>
+                                      
                                       <button id="delVariant" class="btn btn-danger" type="button" onclick="removeVariant(this)">
                                         Xóa Biến Thể
                                       </button>

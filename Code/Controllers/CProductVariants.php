@@ -6,7 +6,6 @@ require_once './Models/MColor.php';
 require_once './Models/MSize.php';
 require_once './Models/MImages.php';
 
-
 class CProductVariants{
     public $connect;
 
@@ -25,12 +24,11 @@ class CProductVariants{
         $allDataProduct = $mProduct -> getDataProduct();
         $allDataColor = $mColor -> getDataColor();
         $allDataSize = $mSize -> getDataSize();
-
+        $err = '';
         $isValid = true;
 
         if(isset($_POST['addProductVariants']))
         {
-           
             // Validate dữ liệu kiểm tra đầu vào    
             for($i=0;$i<$_POST['totalVariants'];$i++) 
             {
@@ -65,7 +63,8 @@ class CProductVariants{
                                                                 $_POST['variant_end_date'][$i],
                                                                 $_POST['variant_quantity'][$i],
                                                                 $_POST['variant_color'][$i],
-                                                                $_POST['variant_sku'][$i]);
+                                                                $_POST['variant_sku'][$i],
+                                                                'active');
                     $productVariantIds[] = $lastInsertId;
                     
                     if (!empty($_POST['variant_size'][$i])) 
@@ -239,7 +238,8 @@ class CProductVariants{
                                                                     $_POST['variant_end_date'],
                                                                     $_POST['variant_quantity'],
                                                                     $_POST['variant_color'],
-                                                                    $_POST['variant_sku'],$id);
+                                                                    $_POST['variant_sku'],
+                                                                    $_POST['variant_status'],$id);
 
                     // Sửa size sản phẩm
 

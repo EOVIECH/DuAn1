@@ -115,6 +115,15 @@ h<!DOCTYPE html>
                                       </div>
                                       <div class="col-md-12">
                                           <div class="form-group">
+                                              <label for="status">Status</label>
+                                              <select class="form-control " id="variant_status" name="variant_status">
+                                                <option value="active" <?php echo ($listProductVariantById -> status == 'active') ? 'selected' : '' ?>>Active</option>
+                                                <option value="inactive" <?php echo ($listProductVariantById -> status == 'inactive') ? 'selected' : '' ?>>InActive</option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                      <div class="col-md-12">
+                                          <div class="form-group">
                                               <label for="variant_main_image">Main Image</label>
                                               <input type="file" name="variant_main_image" accept="image/*" class="form-control image-file">
                                           </div>

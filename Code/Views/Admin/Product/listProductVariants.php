@@ -27,22 +27,7 @@
                 </div>
             </div>
 
-             <!-- Filter by Categories -->
-            <div class="row">
-                <div class="col-lg-12 mb-4">
-                    <h4>Danh Mục</h4>
-                    <div class="d-flex flex-wrap">
-                        <a href="?act=ListProductVariant" class="btn btn-outline-primary m-2">Tất Cả</a>
-                        <?php foreach ($listProduct as $product): ?>
-                            <a href="?act=ListProductVariant&productId=<?php echo $product->product_id ?>" 
-                               class="btn btn-outline-primary m-2">
-                                <?php echo $product->name ?>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            </div>
-
+            
 
             <!-- Product Variant Table -->
             <form action="?act=DeleteSelectedProductVariant" method="post">
@@ -110,7 +95,7 @@
                         <?php if (isset($totalPages)): ?>
                             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                                 <li class="page-item <?php echo $i == $currentPage ? 'active' : '' ?>">
-                                    <a class="page-link" href="?act=ListProductVariant&page=<?php echo $i ?>&productId=<?php echo $product->product_id ?>">
+                                    <a class="page-link" href="?act=ListProductVariant&page=<?php echo $i ?>">
                                         <?php echo $i ?>
                                     </a>
                                 </li>

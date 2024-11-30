@@ -10,12 +10,29 @@ class ProductsVariants
         $this -> connect = new ConnectDB();
     }
 
-    public function addProductVariants($id,$product_id,$price,$price_coupon,$start_date,$end_date,$quantity,$color_id,$sku)
+    public function addProductVariants($id, $product_id, $price, $price_coupon, $start_date, $end_date, $quantity, $color_id, $sku, $status)
     {
-        $sql = 'INSERT INTO productvariants VALUES (?,?,?,?,?,?,?,?,?)';
-        $this -> connect -> setQuery($sql);
-        $this -> connect -> execute([$id,$product_id,$price,$price_coupon,$start_date,$end_date,$quantity,$color_id,$sku]);
-        return $this -> connect -> lastInsertId(); // lấy id sản phẩm vừa thêm
+        // Kiểm tra nếu biến thể với màu đã tồn tại
+        if ($this->checkDuplicateColor($product_id, $color_id)) {
+             // Lưu thông báo lỗi vào session
+            $_SESSION['error_message'] = 'Biến thể với màu này đã tồn tại!';
+            // Chuyển hướng về trang thêm sản phẩm
+            header('Location: index.php?act=AddProductVariants');
+            exit;
+        }
+
+        $sql = 'INSERT INTO productvariants VALUES (?,?,?,?,?,?,?,?,?,?)';
+        $this->connect->setQuery($sql);
+        $this->connect->execute([$id, $product_id, $price, $price_coupon, $start_date, $end_date, $quantity, $color_id, $sku, $status]);
+        return $this->connect->lastInsertId();
+    }
+
+    public function checkDuplicateColor($product_id, $color_id)
+    {
+        $sql = 'SELECT COUNT(*) FROM productvariants WHERE product_id = ? AND color_id = ?';
+        $this->connect->setQuery($sql);
+        $result = $this->connect->execute([$product_id, $color_id]);
+        return $result->fetchColumn() > 0; // True nếu đã tồn tại
     }
 
     public function listProductVariant()
@@ -36,12 +53,36 @@ class ProductsVariants
 
     public function getDataProductVariantWithPagination($offset,$perPage)
     {
-        $sql = 'SELECT productvariants.*, products.name AS product_name, sizes.name AS size_name, colors.name AS color_name FROM productvariants
-                JOIN products on productvariants.product_id = products.product_id
-                JOIN colors on productvariants.color_id = colors.color_id
-                JOIN product_variant_sizes on productvariants.product_variant_id = product_variant_sizes.product_variant_id
-                JOIN sizes on product_variant_sizes.size_id = sizes.size_id
-                ORDER BY product_variant_id DESC
+                $sql = 'SELECT 
+            productvariants.product_variant_id,
+            productvariants.product_id,
+            productvariants.price,
+            productvariants.price_coupon,
+            productvariants.start_date,
+            productvariants.end_date,
+            productvariants.quantity,
+            productvariants.color_id,
+            productvariants.sku,
+            productvariants.status,
+            products.name AS product_name,
+            colors.name AS color_name,
+            GROUP_CONCAT(sizes.name ORDER BY sizes.size_id ASC SEPARATOR ", ") AS size_names
+            FROM 
+                productvariants
+            JOIN 
+                products ON productvariants.product_id = products.product_id
+            JOIN 
+                colors ON productvariants.color_id = colors.color_id
+            JOIN 
+                product_variant_sizes ON productvariants.product_variant_id = product_variant_sizes.product_variant_id
+            JOIN 
+                sizes ON product_variant_sizes.size_id = sizes.size_id
+            WHERE 
+                productvariants.status = "active"
+            GROUP BY 
+                productvariants.product_variant_id
+            ORDER BY 
+                product_variant_id DESC
                 LIMIT '. (int)$offset . ',' . (int)$perPage;
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData();
@@ -49,16 +90,34 @@ class ProductsVariants
 
     public function getDataProductVariantByProductIdWithPagination($product_id,$offset,$perPage)
     {
-        $sql = 'SELECT productvariants.*, products.name AS product_name, sizes.name AS size_name, colors.name AS color_name FROM productvariants
-                JOIN products on productvariants.product_id = products.product_id
-                JOIN colors on productvariants.color_id = colors.color_id
-                JOIN product_variant_sizes on productvariants.product_variant_id = product_variant_sizes.product_variant_id
-                JOIN sizes on product_variant_sizes.size_id = sizes.size_id
-                WHERE products.product_id ' . (int)$product_id . 
-                ' ORDER BY product_variant_id DESC
+        $sql = 'SELECT 
+                productvariants.product_variant_id,
+                productvariants.product_id,
+                productvariants.price,
+                productvariants.price_coupon,
+                productvariants.start_date,
+                productvariants.end_date,
+                productvariants.quantity,
+                productvariants.color_id,
+                productvariants.sku,
+                productvariants.status,
+                products.name AS product_name,
+                colors.name AS color_name,
+                GROUP_CONCAT(sizes.name ORDER BY sizes.size_id ASC SEPARATOR ", ") AS size_names
+                FROM 
+                    productvariants
+                JOIN 
+                    products ON productvariants.product_id = products.product_id
+                JOIN 
+                    colors ON productvariants.color_id = colors.color_id
+                JOIN 
+                    product_variant_sizes ON productvariants.product_variant_id = product_variant_sizes.product_variant_id
+                JOIN 
+                    sizes ON product_variant_sizes.size_id = sizes.size_id
+                WHERE products.product_id = ? AND productvariants.status = "active" ORDER BY product_variant_id DESC
                 LIMIT '. (int)$offset . ',' . (int)$perPage;
         $this -> connect -> setQuery($sql);
-        return $this -> connect -> loadData();
+        return $this -> connect -> loadData([$product_id]);
     }
 
     public function countAllProductVariants()
@@ -78,16 +137,23 @@ class ProductsVariants
     }
 
 
-    public function editProductVariants($product_id,$price,$price_coupon,$start_date,$end_date,$quantity,$color_id,$sku,$product_variant_id)
+    public function editProductVariants($product_id,$price,$price_coupon,$start_date,$end_date,$quantity,$color_id,$sku,$status,$product_variant_id)
     {
-        $sql = 'UPDATE `productvariants` SET `product_id`= ?,`price`= ?,`price_coupon`= ?,`start_date`= ?,`end_date`= ?,`quantity`= ?,`color_id`= ?,`sku`= ?WHERE `product_variant_id` = ? ';
+        $sql = 'UPDATE `productvariants` SET `product_id`= ?,`price`= ?,`price_coupon`= ?,`start_date`= ?,`end_date`= ?,`quantity`= ?,`color_id`= ?,`sku`= ?, `status` =  ? WHERE `product_variant_id` = ? ';
         $this -> connect -> setQuery($sql);
-        $this -> connect -> execute([$product_id,$price,$price_coupon,$start_date,$end_date,$quantity,$color_id,$sku,$product_variant_id]);
+        $this -> connect -> execute([$product_id,$price,$price_coupon,$start_date,$end_date,$quantity,$color_id,$sku,$status,$product_variant_id]);
     }
 
     public function deleteProductVariant($productVariant_id)
     {
         $sql = 'UPDATE productvariants SET status = "inactive" WHERE product_id = ?';
+        $this -> connect -> setQuery($sql);
+        $this -> connect -> execute([$productVariant_id]);
+    }
+
+    public function deleteProductVariantByVariantId($productVariant_id)
+    {
+        $sql = 'UPDATE productvariants SET status = "inactive" WHERE product_variant_id = ?';
         $this -> connect -> setQuery($sql);
         $this -> connect -> execute([$productVariant_id]);
     }

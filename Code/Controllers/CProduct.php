@@ -124,17 +124,12 @@ class CProduct{
     {
         if(isset($_POST['btn-delSelected']))
         {
-            // echo '1';
-            // die();
-            $mProductCategories = new ProductCategories();
             $mProduct = new Products();
             $deletedItems = isset($_POST['checkboxes']) ? $_POST['checkboxes'] : [];
             foreach ($deletedItems as $deletedItem)
             {
-                $mProductCategories -> deleteProductCategories($deletedItem);
                 $mProduct -> deleteProduct($deletedItem);
-                // header('Location: index.PHP?act=ListProduct');
-                // echo 'success';
+                header('Location: index.PHP?act=ListProduct');
             }
         }
     }
