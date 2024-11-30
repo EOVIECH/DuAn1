@@ -8,8 +8,83 @@ class CProductController{
    }
 
    public function detailProduct(){
-      $mPro = new MProduct();
-      $listProduct = $mPro->getAllDataProduct();
+      $MProduct = new MProduct();
+      $listProduct = $MProduct->getAllDataProduct();
+
+      if(isset($_GET['id'])){
+
+         $mReview = new MReview();
+         $rating = $mReview->getRatingComment($_GET['id']);
+
+         $arrayRating = (array) $rating;
+
+         $count = count($arrayRating);
+
+         $sum = 0;
+         $average = 0;
+         foreach($arrayRating as $value){
+          $sum += $value->rating;
+           $average = $sum/$count;   
+         }
+
+         $_SESSION['average'] = number_format($average,1);
+ 
+           if (isset($_POST['rating'])) {
+               $rating = intval($_POST['rating']);
+              
+           } else {
+               $rating = null;
+           }
+
+      if(isset($_POST['submit'])){
+   
+           $content = $_POST['comment'];
+           $user_id = $_SESSION['user_id'];
+           $product_id = $_GET['id'];
+           $create_at = date('Y-m-d');
+   
+           $error = [];
+   
+             if(empty($content)){
+               $error['comment'] = "<script>
+               alert('Nội dung không được để trống.')
+               window.location.href = '?act=detail-product';
+               </script>";
+               exit;
+             }
+   
+             if(empty($user_id)){
+               $error['user_id'] = "<script>
+               alert('Không tim thấy thông tin của người dùng.')
+               window.location.href = '?act=detail-product';
+               </script>";
+               exit;
+             }
+   
+             if(empty($product_id)){
+               $error['id'] = "<script>
+               alert('Không tìm thấy thông tin của sản phẩm.')
+               window.location.href = '?act=detail-product';
+               </script>";
+               exit;
+             }
+   
+             if (!empty($error)) {
+               foreach ($error as $key => $errors) {
+                   echo "
+                   <p style='color: red;'>$errors</p>
+                   ";  
+               }
+               return; 
+           }
+           
+           $result = $mReview -> setInsertComment('',$user_id,$product_id,$rating,$content,$create_at,0);
+
+               echo "<script>
+               alert('Bạn đã thêm bình luận thành công!')
+               </script>";
+       }
+   }
      //  var_dump($listProduct);
       include_once './Views/Admin/detail_product.php';
      }

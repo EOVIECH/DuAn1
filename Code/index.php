@@ -17,19 +17,23 @@ $manage_client = new CClientController();
 $main = new CIndex_user();
 $Review = new CReviewController();
 
+
+// exit;
+
+//   var_dump('ahihihi');
+//   exit;
 // var_dump($_SESSION['user_id']);
 // var_dump($_SESSION['username']);
+// var_dump($_SESSION['average']);
+// exit;
 
 
 $act = $_GET['act'] ?? 'trangchu';
+
+
 // debug($act);
 $error = "";
 switch ($act) {
-
-    // case 'listProduct':
-    //     $Product->listProduct();
-    //     break;
-
     case 'login':
         $User->inForUser();
         break;
@@ -46,12 +50,8 @@ switch ($act) {
         $main->reder_product();
         break;
 
-        case 'dashboard':
-            $User->dashboard();
-            break;
-
-    case 'comment':
-        $Review->insertComment();
+    case 'dashboard':
+        $User->dashboard();
         break;
 
     case 'list-user':
@@ -78,17 +78,25 @@ switch ($act) {
         $Product->detailProduct();
         break; 
         
-        case 'forgot':
-            $User->forgotPasswordUser();
-            break;
+    case 'forgot':
+        $User->forgotPasswordUser();
+        break;
 
-            case 'change':
-                $User->changePassword();
-                break;
+    case 'change':
+        $User->changePassword();
+        break;
 
-                case 'dataComment':
-                    $Review->getDataComment();
-                    break;
+    case 'dataComment':
+        $Review->getDataComment();
+        break;
+    
+    case 'detail_comment':
+        $Review->detail_comment();
+        break;
+
+    case 'feedBack':
+        $Review->feedBack();
+        break;
         
 };
 ?>

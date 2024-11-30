@@ -3,7 +3,13 @@
 class CUserController {
 
         public function dashboard(){
-         $name = $_SESSION['username'];
+            if(!isset($_SESSION['username'])&&!isset($_SESSION['role'])&&$_SESSION['username'] != 'admin'){
+                echo "<script> 
+                alert('Vui long login');
+                window.location.href = '?act=login';
+                </script>";
+                exit;
+            }
 
          include_once './Views/Admin/dashboard.php';
         }
@@ -15,50 +21,72 @@ class CUserController {
 
 
     public function inForUser() {
-        $aUser = new MUser();
-        $inFor = $aUser->getAllUser(); 
+        $MUser = new MUser();
+        $inFor = $MUser->getAllUser(); 
 
         $users = (array) $inFor;
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $emailInput = trim($_POST['email']);
             $passwordInput = trim(strval($_POST['password']));
-            
-  
+               
             foreach ($users as $user) {
-                
-                if (strtolower($user->email) === strtolower($emailInput) ) {
+
+                    if (strtolower($user->email) === strtolower($emailInput) ) {
+
+                        // var_dump(password_verify($passwordInput, $user->password));
+                        // // var_dump($user->status);
+                        // exit;
+
+                        if($user->status === 'inactive'){
+       
+                            echo "<script> 
+                            alert('Tài khoản của bạn đã dừng hoạt động. Vui lòng nhập tài khoản khác');
+                            window.location.href = '?act=login';
+                            </script>";
+                            exit;
+                         
+                             } else if($user->status === 'active'){
             
-                   if(password_verify($passwordInput, $user->password)){
-                        
-                        if($user->role === 'admin'){
-                            $_SESSION['user_id'] = $user->user_id;
-                            $_SESSION['username'] = $user->username;
-                            echo "<script>
-                            alert('Dang nhao vao admin');
-                            window.location.href= '?act=dashboard';
-                          </script>";
-                                exit;
-
-                        } 
-
-                        else if($user->role === 'user'){
-                            $_SESSION['user_id'] = $user->user_id;
-                               if(isset($_POST['remmember'])&&$_POST['remmember']){
-
-                                setcookie("user", $user->username,time()+(86400*2));
-                                setcookie("password", $user->password,time()+(86400*2));
-                                echo "Dang nhap vao user";
-                                header('Location: ?act=trangchu');
-                                exit;
-                               }
-                               echo "Dang nhap vao user";
-                                header('Location: ?act=trangchu');
-                                exit;
+                                if(password_verify($passwordInput, $user->password)){
+     
+                                        if($user->role === 'admin'){
+                                            $_SESSION['user_id'] = $user->user_id;
+                                            $_SESSION['username'] = $user->username;
+                                            $_SESSION['role'] = 'admin';
+                                            echo "<script>
+                                            alert('Dang nhao vao admin');
+                                            window.location.href= '?act=dashboard';
+                                        </script>";
+                                                exit;
+                
+                                      } 
+        
+                                else if($user->role === 'user'){
+                                    $_SESSION['user_id'] = $user->user_id;
+                                    $_SESSION['role'] = 'user';
+                                       if(isset($_POST['remmember'])&&$_POST['remmember']){
+        
+                                        setcookie("user", $user->username,time()+(86400*2));
+                                        setcookie("password", $user->password,time()+(86400*2));
+                                        echo "Dang nhap vao user";
+                                        header('Location: ?act=trangchu');
+                                        exit;
+                                       }
+                                       echo "Dang nhap vao user";
+                                        header('Location: ?act=trangchu');
+                                        exit;
+                                }
+                         } else{
+                            echo "<script> 
+                            alert('Password sai vui long dang nhap lai');
+                            window.location.href = '?act=login';
+                            </script>";
+                            exit;
+                         }
                         }
-
-                    } 
-                   }
+                }   
+              
             }
         }
     
@@ -68,9 +96,9 @@ class CUserController {
     public function insertUser(){
         if(isset($_POST['submit'])){
 
-            $oPro = new MUser();
+            $MUser = new MUser();
 
-            $emailUser = $oPro->getEmailUser();
+            $emailUser = $MUser->getEmailUser();
 
             $email = trim($_POST['email']);
             $phone = $_POST['phone'];
@@ -129,7 +157,7 @@ class CUserController {
                     </script>";
                     return;
                 }
-                    $result = $oPro -> setInsertDataUser('',$user_name,$password,$email,$phone,$address,'user','active',$create_at);
+                    $result = $MUser -> setInsertDataUser('',$user_name,$password,$email,$phone,$address,'user','active',$create_at);
                     header('location: ?act=login');
 
             }
@@ -140,8 +168,8 @@ class CUserController {
 public function forgotPasswordUser() {
      if (isset($_POST['submit'])) {
 
-    $aUser = new MUser();
-    $inFor = $aUser->getAllUser(); 
+    $MUser = new MUser();
+    $inFor = $MUser->getAllUser(); 
 
     $users = (array) $inFor;
    
@@ -196,8 +224,8 @@ public function forgotPasswordUser() {
         if(isset($_POST['submit'])){
             if(isset($_SESSION['id'])){
             $id = $_SESSION['id'];
-            $cPro = new MUser();
-            $getDataId = $cPro->getAllUser();
+            $MUser = new MUser();
+            $getDataId = $MUser->getAllUser();
 
             if(!$id){
                 echo "<script>
@@ -213,7 +241,7 @@ public function forgotPasswordUser() {
             
             if(trim(strtolower($_POST['pass1'])) === trim(strtolower($_POST['pass2']))){
                 $password = password_hash($_POST['pass1'], PASSWORD_DEFAULT);
-                $change = $cPro->changePass($password,$id);
+                $change = $MUser->changePass($password,$id);
 
                 echo "<script>
                 alert('Sua thong tin thanh cong');

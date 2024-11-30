@@ -1,4 +1,11 @@
-<!DOCTYPE html>
+<?php
+if($_SESSION['role'] && $_SESSION['role'] === 'admin'){
+    header('Location: ?act=login');
+    var_dump($_SESSION['role']);
+    exit;
+} else{
+    ?>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -85,3 +92,6 @@ foreach($listProduct as $value){
 
 </body>
 </html>
+    <?php
+}
+?>
