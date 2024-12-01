@@ -156,6 +156,54 @@ class CProduct{
         include_once 'Views/Users/home.php';
     }
 
+    public function Shop()
+    {
+        $mProduct = new Products();
+        $mProductCategories = new ProductCategories();
+        $mCategories = new Categories();
+
+        $listCategories = $mCategories->getDataCategories();
+        
+        $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $perPage = 20;
+        $offset =  ($currentPage - 1) * $perPage;
+        $product_name = isset($_POST['product_name']) ? $_POST['product_name'] : null;
+        $categoryId = isset($_POST['category_id']) ? intval($_POST['category_id']) : null;
+        // var_dump($product_name);
+        // var_dump($categoryId);
+        // die();
+            if (!empty($_POST['product_name']) && !empty($_POST['category_id'])) {
+                // Tìm kiếm theo tên sản phẩm và danh mục
+                echo '1';
+                $totalProducts = $mProduct->countAllShopByNameAndCategoryId($categoryId,$product_name);
+                $listProduct = $mProduct->getDataShopByCategoryIdAndNameWithPagination($categoryId, $product_name, $offset, $perPage);
+            }elseif (!empty($product_name)) {
+                // Tìm kiếm theo tên sản phẩm
+                echo '2';
+                $totalProducts = $mProduct->countAllShopByName($product_name);
+                $listProduct = $mProduct->getDataShopWithPaginationAndName($product_name, $offset, $perPage);
+            } elseif (!empty($categoryId)) {
+                // Lọc theo danh mục
+                echo '3';
+                $totalProducts = $mProduct->countShopByCategoryId($categoryId);
+                $listProduct = $mProduct->getDataShopByCategoryIdWithPagination($categoryId, $offset, $perPage);
+                var_dump($mProduct->getDataShopByCategoryIdWithPagination(18, 0, 20));
+
+            } else {
+                // Hiển thị tất cả sản phẩm
+                echo '4';
+                $totalProducts = $mProduct->countAllShop();
+                $listProduct = $mProduct->getDataShopWithPagination($offset, $perPage);
+            }
+
+        // Tính tổng số trang
+        $totalPages = ceil(($totalProducts -> total) / $perPage);
+        // Hiển thị danh sách sản phẩm
+        // var_dump($totalPages);
+
+        include_once 'Views/Users/shop.php';
+    }
+
     public function ProductDetails()
     {
         $mProduct = new Products();
@@ -176,5 +224,7 @@ class CProduct{
         }
         include_once 'Views/Users/detailProduct.php';
     }
+
+
 }
 ?>  

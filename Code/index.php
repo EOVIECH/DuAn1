@@ -136,6 +136,11 @@ switch($options){
         $cProduct -> ProductDetails();
         break;
     }
+    case 'Shop':
+    {
+        $cProduct -> Shop();
+        break;
+    }
   // End Home
 }
 ?>

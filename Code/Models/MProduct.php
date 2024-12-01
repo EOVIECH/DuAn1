@@ -78,14 +78,16 @@ class Products
     {
         $sql = 'SELECT COUNT(*) AS total FROM products
                 JOIN productcategories ON products.product_id = productcategories.product_id
-                 WHERE productcategories.category_id = ? AND products.name LIKE ?';
+                 WHERE productcategories.category_id = ?  AND products.name LIKE ? AND products.status = "active"?';
         $this -> connect -> setQuery($sql);
-        echo $sql;
         return $this -> connect -> loadData([$categoryId,'%' . $productName . '%'],false);
     }
 
+    
+
     public function getDataProductByCategoryIdAndNameWithPagination($category_id,$productName,$offset,$perPage)
     {
+
         $sql = 'SELECT products.*, brands.name as brand_name, categories.name as category_name, categories.category_id FROM products
                 JOIN brands on products.brand_id = brands.brand_id
                 JOIN productcategories on products.product_id = productcategories.product_id
@@ -249,6 +251,136 @@ class Products
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData([$product_id,$color_id]);
     }   
+    public function countAllShop()
+    {
+        $sql = 'SELECT COUNT(*) AS total FROM products WHERE status = "active"';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([],false);
+    }
+
+    public function countAllShopByName($productName)
+    {
+        $sql = 'SELECT COUNT(*) AS total FROM products WHERE products.name LIKE ? AND products.status = "active"';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData(['%' . $productName . '%'],false);
+    }
+
+    public function countShopByCategoryId($categoryId)
+    {
+        $sql = "SELECT COUNT(*) AS total 
+                FROM products 
+                JOIN productcategories ON products.product_id = productcategories.product_id
+                WHERE productcategories.category_id = ? AND products.status = 'active'";
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$categoryId],false);
+    }
+    public function countAllShopByNameAndCategoryId($categoryId,$productName)
+    {
+        $sql = 'SELECT COUNT(*) AS total FROM products
+                JOIN productcategories ON products.product_id = productcategories.product_id
+                 WHERE productcategories.category_id = ?  AND products.name LIKE ? AND products.status = "active"?';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$categoryId,'%' . $productName . '%'],false);
+    }
+
+    public function getDataShopByCategoryIdAndNameWithPagination($category_id,$productName,$offset,$perPage)
+    {
+         
+
+        $sql = 'SELECT 
+                    products.*, 
+                    products.product_id, 
+                    images.album, 
+                    images.link, 
+                    MIN(productvariants.price) AS min_price, 
+                    MAX(productvariants.price) AS max_price, 
+                    categories.name AS category_name, 
+                    categories.category_id 
+                FROM productvariants
+                JOIN products ON productvariants.product_id = products.product_id
+                JOIN productcategories ON products.product_id = productcategories.product_id
+                JOIN categories ON productcategories.category_id = categories.category_id
+                JOIN images ON productvariants.product_variant_id = images.product_variant_id
+                WHERE products.status = "active" 
+                    AND images.album = 1 
+                    AND categories.category_id = ?
+                    AND products.name LIKE ?
+                GROUP BY products.product_id
+                ORDER BY products.created_at DESC
+                LIMIT '. (int)$offset . ',' . (int)$perPage;
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$category_id,'%' . $productName . '%']);
+    }
+
+    public function getDataShopWithPaginationAndName($productName,$offset,$perPage)
+    {
+        $sql = 'SELECT 
+                    products.*, 
+                    products.product_id, 
+                    images.album, 
+                    images.link, 
+                    MIN(productvariants.price) AS min_price, 
+                    MAX(productvariants.price) AS max_price
+                FROM productvariants
+                JOIN products ON productvariants.product_id = products.product_id
+                JOIN images ON productvariants.product_variant_id = images.product_variant_id
+                WHERE products.status = "active" 
+                    AND images.album = 1 
+                    AND products.name LIKE ?
+                GROUP BY products.product_id
+                ORDER BY products.created_at DESC 
+                LIMIT ' . $offset . ', ' . $perPage;
+        $this->connect->setQuery($sql);
+        return $this->connect->loadData(['%' . $productName . '%']);
+    }
+
+    public function getDataShopByCategoryIdWithPagination($category_id,$offset,$perPage)
+    {
+        $sql = 'SELECT 
+                products.*, 
+                products.product_id, 
+                images.album, 
+                images.link, 
+                MIN(productvariants.price) AS min_price, 
+                MAX(productvariants.price) AS max_price,
+                categories.name as category_name, categories.category_id
+            FROM productvariants
+            JOIN products ON productvariants.product_id = products.product_id
+            JOIN images ON productvariants.product_variant_id = images.product_variant_id
+            JOIN productcategories on products.product_id = productcategories.product_id
+            JOIN categories on productcategories.category_id = categories.category_id
+            WHERE products.status = "active" 
+                AND images.album = 1 
+                AND categories.category_id = ?  
+            GROUP BY products.product_id
+            ORDER BY products.created_at DESC LIMIT '. (int)$offset . ',' . (int)$perPage;
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$category_id]);
+    }
+
+    public function getDataShopWithPagination($offset,$perPage)
+    {
+        $sql = 'SELECT 
+                    products.*, 
+                    products.product_id, 
+                    images.album, 
+                    images.link, 
+                    MIN(productvariants.price) AS min_price, 
+                    MAX(productvariants.price) AS max_price,
+                    categories.name as category_name, categories.category_id
+                FROM productvariants
+                JOIN products ON productvariants.product_id = products.product_id
+                JOIN images ON productvariants.product_variant_id = images.product_variant_id
+                JOIN productcategories on products.product_id = productcategories.product_id
+                JOIN categories on productcategories.category_id = categories.category_id
+                WHERE products.status = "active" 
+                    AND images.album = 1 
+                GROUP BY products.product_id
+                ORDER BY products.created_at DESC 
+                LIMIT '. $offset . ',' . $perPage;
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData();
+    }
 
     public function addProduct($id,$brand_id,$name,$des,$status,$created_at)
     {

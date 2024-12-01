@@ -32,8 +32,8 @@
             </div>
         </div>
 
-         <!-- Filter by Categories and Name-Product -->
-         <div class="row">
+        <!-- Filter by Categories and Name-Product -->
+        <div class="row">
             <form action="index.php?act=ListProduct" method="POST">
                 <div class="col-lg-12 mb-4">
                     <div class="input-group">

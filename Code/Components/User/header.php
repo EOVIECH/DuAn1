@@ -85,13 +85,10 @@
 											<li><a href="?act=Home">home</a>					
 											</li>									
 											
-											<li><a href="shop.html">Shop <i class="fa fa-angle-down"></i></a>
+											<li><a href="?act=Shop">Shop <i class="fa fa-angle-down"></i></a>
 												<!-- Sub Menu -->
 												<ul class="sub-menu">
-													<li><a href="product-details.html">Product Details</a></li>
-													<li><a href="cart.html">Cart</a></li>
-													<li><a href="checkout.html">Checkout</a></li>
-													<li><a href="wishlist.html">Wishlist</a></li>
+													<li><a href="">Category Product</a></li>
 												</ul>
 											</li>
 											<li><a href="shop.html">Men <i class="fa fa-angle-down"></i></a>
