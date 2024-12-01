@@ -124,6 +124,19 @@ switch($options){
     }
     
   // END PRODUCT-VARIANT
+
+  // Home
+    case 'Home':
+    {
+        $cProduct -> Home();
+        break;
+    }
+    case 'ProductDetails':
+    {
+        $cProduct -> ProductDetails();
+        break;
+    }
+  // End Home
 }
 ?>
 

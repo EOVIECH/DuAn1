@@ -121,6 +121,135 @@ class Products
         return $this -> connect -> loadData([]);
     }
 
+    public function getProductNewest()
+    {
+        $sql = 'SELECT products.*, images.album, images.link, MIN(price) AS min_price, MAX(price) AS max_price FROM productvariants 
+                JOIN products on productvariants.product_id = products.product_id 
+                JOIN images on productvariants.product_variant_id = images.product_variant_id
+                WHERE productvariants.status = "active" AND images.album = 1
+                GROUP BY product_id 
+                ORDER BY created_at DESC LIMIT 12';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([]);
+    }   
+
+    public function getRelatedProduct($product_id)
+    {
+        $sql = 'SELECT 
+                products.*, 
+                images.album, 
+                images.link, 
+                MIN(productvariants.price) AS min_price, 
+                MAX(productvariants.price) AS max_price 
+                FROM productvariants
+                JOIN products ON productvariants.product_id = products.product_id
+                JOIN images ON productvariants.product_variant_id = images.product_variant_id
+                JOIN productcategories ON products.product_id = productcategories.product_id
+                WHERE productvariants.status = "active" 
+                    AND images.album = 1
+                    AND productcategories.category_id IN (
+                        SELECT category_id 
+                        FROM productcategories 
+                        WHERE product_id = ' . $product_id . ' -- ID của sản phẩm hiện tại
+                    )
+                    AND products.product_id != ' . $product_id . ' -- Loại bỏ sản phẩm hiện tại
+                GROUP BY products.product_id
+                ORDER BY products.created_at DESC 
+                LIMIT 4;';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([]);
+    }   
+
+    public function getColorAvailableInProduct($product_id)
+    {
+        $sql = 'SELECT colors.* FROM `productvariants`
+                JOIN colors on productvariants.color_id = colors.color_id
+                WHERE product_id = ?';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$product_id]);
+    }   
+
+    public function getDataProductDetails($product_id)
+    {
+        $sql = 'SELECT 
+                products.name AS product_name,
+                products.product_id,
+                products.description,
+                colors.color_id,
+                colors.color_code,
+                productvariants.product_variant_id,
+                productvariants.price,
+                productvariants.price_coupon,
+                productvariants.start_date,
+                productvariants.end_date,
+                sizes.size_id,
+                GROUP_CONCAT(DISTINCT sizes.size_id ORDER BY sizes.size_id ASC) AS available_sizesId,
+                GROUP_CONCAT(DISTINCT sizes.name ORDER BY sizes.name ASC) AS available_sizes,
+                (SELECT link 
+                FROM images 
+                WHERE images.product_variant_id = productvariants.product_variant_id 
+                AND images.album = 1 
+                LIMIT 1) AS primary_image,
+                (SELECT 
+                    GROUP_CONCAT(link ORDER BY images.image_id ASC) 
+                FROM images 
+                WHERE images.product_variant_id = productvariants.product_variant_id 
+                AND images.album = 0) AS secondary_images
+                FROM productvariants
+                JOIN products ON productvariants.product_id = products.product_id
+                JOIN colors ON productvariants.color_id = colors.color_id
+                JOIN product_variant_sizes ON productvariants.product_variant_id = product_variant_sizes.product_variant_id
+                JOIN sizes ON product_variant_sizes.size_id = sizes.size_id
+                LEFT JOIN images ON productvariants.product_variant_id = images.product_variant_id
+                WHERE productvariants.status = "active" 
+                AND products.product_id = ?
+                GROUP BY products.product_id, colors.color_id, productvariants.product_variant_id
+                LIMIT 1;
+            ';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$product_id]);
+    }  
+    
+    public function getDataProductDetailsWithColorId($product_id,$color_id)
+    {
+        $sql = 'SELECT 
+                products.name AS product_name,
+                products.product_id,
+                products.description,
+                colors.color_id,
+                colors.color_code,
+                productvariants.product_variant_id,
+                productvariants.price,
+                productvariants.price_coupon,
+                productvariants.start_date,
+                productvariants.end_date,
+                sizes.size_id,
+                GROUP_CONCAT(DISTINCT sizes.size_id ORDER BY sizes.size_id ASC) AS available_sizesId,
+                GROUP_CONCAT(DISTINCT sizes.name ORDER BY sizes.name ASC) AS available_sizes,
+                (SELECT link 
+                FROM images 
+                WHERE images.product_variant_id = productvariants.product_variant_id 
+                AND images.album = 1 
+                LIMIT 1) AS primary_image,
+                (SELECT 
+                    GROUP_CONCAT(link ORDER BY images.image_id ASC) 
+                FROM images 
+                WHERE images.product_variant_id = productvariants.product_variant_id 
+                AND images.album = 0) AS secondary_images
+                FROM productvariants
+                JOIN products ON productvariants.product_id = products.product_id
+                JOIN colors ON productvariants.color_id = colors.color_id
+                JOIN product_variant_sizes ON productvariants.product_variant_id = product_variant_sizes.product_variant_id
+                JOIN sizes ON product_variant_sizes.size_id = sizes.size_id
+                LEFT JOIN images ON productvariants.product_variant_id = images.product_variant_id
+                WHERE productvariants.status = "active" AND products.product_id = ? AND colors.color_id = ?
+                GROUP BY products.product_id, colors.color_id, productvariants.product_variant_id
+                LIMIT 1
+            ';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$product_id,$color_id]);
+    }   
+
     public function addProduct($id,$brand_id,$name,$des,$status,$created_at)
     {
         $sql = 'INSERT INTO products VALUES (?,?,?,?,?,?)';

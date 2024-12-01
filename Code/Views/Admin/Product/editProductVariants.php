@@ -51,21 +51,21 @@ h<!DOCTYPE html>
                                       <div class="col-md-6">
                                           <div class="form-group">
                                               <label for="variant_priceCoupon">Price Coupon *</label>
-                                              <input type="number" name="variant_priceCoupon" value="<?php echo $listProductVariantById -> price_coupon ?>"  class="form-control" placeholder="Enter Price Coupon" data-errors="Please Enter Price Coupon." required>
+                                              <input type="number" name="variant_priceCoupon" value="<?php echo $listProductVariantById -> price_coupon ?>"  class="form-control" placeholder="Enter Price Coupon" data-errors="Please Enter Price Coupon." >
                                               <div class="help-block with-errors"></div>
                                           </div>
                                       </div> 
                                       <div class="col-md-6">
                                           <div class="form-group">
                                               <label for="variant_start_date">Start Date *</label>
-                                              <input type="date" name="variant_start_date" value="<?php echo $listProductVariantById -> start_date ?>"  class="form-control" placeholder="Choose Start Date" data-errors="Please Enter Date." required>
+                                              <input type="date" name="variant_start_date" value="<?php echo $listProductVariantById -> start_date ?>"  class="form-control" placeholder="Choose Start Date" data-errors="Please Enter Date." >
                                               <div class="help-block with-errors"></div>
                                           </div>
                                       </div> 
                                       <div class="col-md-6">
                                           <div class="form-group">
                                               <label for="variant_end_date">End Date *</label>
-                                              <input type="date" name="variant_end_date"  value="<?php echo $listProductVariantById -> end_date ?>" class="form-control" placeholder="Choose End Date" data-errors="Please Enter Date." required>
+                                              <input type="date" name="variant_end_date"  value="<?php echo $listProductVariantById -> end_date ?>" class="form-control" placeholder="Choose End Date" data-errors="Please Enter Date." >
                                               <div class="help-block with-errors"></div>
                                           </div>
                                       </div> 

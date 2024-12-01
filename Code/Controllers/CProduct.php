@@ -147,5 +147,34 @@ class CProduct{
         }
         include_once 'Views/Admin/Brand/listProduct.php';
     }
+
+    public function Home()
+    {
+        $mProduct = new Products();
+        $listProductNewest = $mProduct -> getProductNewest();
+        
+        include_once 'Views/Users/home.php';
+    }
+
+    public function ProductDetails()
+    {
+        $mProduct = new Products();
+        if(isset($_GET['id']) && !empty($_GET['id']))
+        {
+            $product_id = $_GET['id'];
+            $listColor = $mProduct -> getColorAvailableInProduct($product_id);
+            $relatedProduct = $mProduct -> getRelatedProduct($product_id,$product_id);
+            if(isset($_GET['color']))
+            {
+                $listProductDetails = $mProduct -> getDataProductDetailsWithColorId($product_id,$_GET['color']);
+            }else
+            {
+                $listProductDetails = $mProduct -> getDataProductDetails($product_id);
+            }
+            // var_dump($listProductDetails);
+            // die();
+        }
+        include_once 'Views/Users/detailProduct.php';
+    }
 }
 ?>  
