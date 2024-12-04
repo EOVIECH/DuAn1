@@ -46,7 +46,7 @@
       <div class="data-scrollbar" data-scroll="1">
         <nav class="iq-sidebar-menu">
           <ul id="iq-sidebar-toggle" class="iq-menu">
-            <li class="active">
+            <li>
               <a href="index.html" class="svg-icon">
                 <svg
                   class="svg-icon"
@@ -254,6 +254,7 @@
                 </li>
               </ul>
             </li>
+           
             <li class=" ">
               <a
                 href="#purchase"
@@ -277,7 +278,7 @@
                   <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
                   <line x1="1" y1="10" x2="23" y2="10"></line>
                 </svg>
-                <span class="ml-4">Purchases</span>
+                <span class="ml-4">Order</span>
                 <svg
                   class="svg-icon iq-arrow-right arrow-active"
                   width="20"
@@ -300,13 +301,8 @@
                 data-parent="#iq-sidebar-toggle"
               >
                 <li class="">
-                  <a href="page-list-purchase.html">
-                    <i class="las la-minus"></i><span>List Purchases</span>
-                  </a>
-                </li>
-                <li class="">
-                  <a href="page-add-purchase.html">
-                    <i class="las la-minus"></i><span>Add purchase</span>
+                  <a href="?act=ListOrder">
+                    <i class="las la-minus"></i><span>List Order</span>
                   </a>
                 </li>
               </ul>

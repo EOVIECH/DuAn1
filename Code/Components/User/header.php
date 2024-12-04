@@ -74,7 +74,7 @@
 				<div class="container">
 					<div class="row">		
 						<div class="col-xs-12 col-sm-12 col-md-3"> 
-							<a class="logo" href="index.html"> <img alt="" src="Views/Users/Assets/img/logo.png"></a> 
+							<a class="logo" href="?act=Home"> <img alt="" src="Views/Users/Assets/img/logo.png"></a> 
 						</div><!--  End Col -->
 						
 						<div class="col-xs-12 col-sm-12 col-md-9 text-right">
@@ -86,105 +86,21 @@
 											</li>									
 											
 											<li><a href="?act=Shop">Shop <i class="fa fa-angle-down"></i></a>
-												<!-- Sub Menu -->
-												<ul class="sub-menu">
-													<li><a href="">Category Product</a></li>
-												</ul>
 											</li>
-											<li><a href="shop.html">Men <i class="fa fa-angle-down"></i></a>
-												<!-- Mega Menu -->
-												<div class="mega-menu mm-4-column mm-left">
-													<div class="mm-column mm-column-link float-left">
-														<h3>Men</h3>
-														<a href="#">Blazers</a>
-														<a href="#">Jackets</a>
-														<a href="#">Collections</a>
-														<a href="#">T-Shirts</a>
-														<a href="#">jens pant’s</a>
-														<a href="#">sports shoes</a>												
-													</div>
-													
-													<div class="mm-column mm-column-link float-left">
-														<h3>Women</h3>
-														<a href="#">Blazers</a>
-														<a href="#">Jackets</a>
-														<a href="#">Collections</a>
-														<a href="#">T-Shirts</a>
-														<a href="#">jens pant’s</a>
-														<a href="#">sports shoes</a>												
-													</div>
-													
-													<div class="mm-column mm-column-link float-left">
-														<h3>Jackets</h3>
-														<a href="#">Blazers</a>
-														<a href="#">Jackets</a>
-														<a href="#">Collections</a>
-														<a href="#">T-Shirts</a>
-														<a href="#">jens pant’s</a>
-														<a href="#">sports shoes</a>	
-													</div>						
-
-													<div class="mm-column mm-column-link float-left">
-														<h3>jens pant’s</h3>
-														<a href="#">Blazers</a>
-														<a href="#">Jackets</a>
-														<a href="#">Collections</a>
-														<a href="#">T-Shirts</a>
-														<a href="#">jens pant’s</a>
-														<a href="#">sports shoes</a>	
-													</div>
-
-												</div>
-											</li>
-											<li><a href="#">Women <i class="fa fa-angle-down"></i></a>
-												<!-- Mega Menu -->
-												<div class="mega-menu mm-3-column mm-left">
-													<div class="mm-column mm-column-link float-left">
-														<h3>Woment</h3>
-														<a href="#">Blazers</a>
-														<a href="#">Jackets</a>
-														<a href="#">Collections</a>
-														<a href="#">T-Shirts</a>
-														<a href="#">jens pant’s</a>
-														<a href="#">sports shoes</a>	
-													</div>
-													
-													<div class="mm-column mm-column-link float-left">
-														<h3>T-Shirts</h3>
-														<a href="#">Blazers</a>
-														<a href="#">Jackets</a>
-														<a href="#">Collections</a>
-														<a href="#">T-Shirts</a>
-														<a href="#">jens pant’s</a>
-														<a href="#">sports shoes</a>	
-													</div>					
-
-													<div class="mm-column mm-column-link float-left">
-														<h3>Jackets</h3>
-														<a href="#">Blazers</a>
-														<a href="#">Jackets</a>
-														<a href="#">Collections</a>
-														<a href="#">T-Shirts</a>
-														<a href="#">jens pant’s</a>
-														<a href="#">sports shoes</a>	
-													</div>												
-				
-												</div>
-											</li>
-											
-											<li><a href="#">pages <i class="fa fa-angle-down"></i></a>
-												<!-- Sub Menu -->
-												<ul class="sub-menu">
-													<li><a href="left-sidebar-blog.html">Left Sidebar Blog</a></li>
-													<li><a href="right-sidebar-blog.html">Right Sidebar Blog</a></li>
-													<li><a href="full-width-blog.html">Full Width Blog</a></li>
-													<li><a href="blog-details.html">Blog Details</a></li>
-													<li><a href="about-us.html">About Us</a></li>
-													<li><a href="contact.html">Contact Us</a></li>
-													<li><a href="404.html">404 Page</a></li>
-												</ul>
-											</li>
-											<li><a href="contact.html">contact</a></li>
+											<?php
+											require_once 'Models/MCategories.php';
+											$mCategories = new Categories();
+											$listCategories = $mCategories->getDataCategories();
+											foreach($listCategories as $category)
+											{	
+												?>
+													<li>
+														<a href="?act=Shop&category=<?php echo $category -> category_id ?>"><?php echo $category -> name ?><i class="fa fa-angle-down"></i></a>
+													</li>
+												<?php
+											}
+											?>
+											<li><a href="?act=Order">Order</a></li>
 										</ul>
 									</nav>
 								</div> <!--  End Main Menu -->					
@@ -233,7 +149,7 @@
 													<li><a href="404.html">404 Page</a></li>
 												</ul>
 											</li>
-											<li><a href="#">contact</a></li>
+											<li><a href="?act=Order">Order</a></li>
 										</ul>
 									</nav>
 								</div> <!--  End mobile-menu -->
@@ -257,7 +173,7 @@
 										<li>
 											<div class="cart_menu_area">
 												<div class="cart_icon">
-													<a href="#"><i class="fa fa-shopping-bag " aria-hidden="true"></i></a>
+													<a href="?act=Cart"><i class="fa fa-shopping-bag " aria-hidden="true"></i></a>
 													<span class="cart_number">2</span>
 												</div>
 												

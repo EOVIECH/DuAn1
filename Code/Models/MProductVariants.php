@@ -88,7 +88,7 @@ class ProductsVariants
         return $this -> connect -> loadData();
     }
 
-    public function getDataProductVariantByProductIdWithPagination($product_id,$offset,$perPage)
+    public function getDataProductVariantByProductNameWithPagination($product_name,$offset,$perPage)
     {
         $sql = 'SELECT 
                 productvariants.product_variant_id,
@@ -114,10 +114,14 @@ class ProductsVariants
                     product_variant_sizes ON productvariants.product_variant_id = product_variant_sizes.product_variant_id
                 JOIN 
                     sizes ON product_variant_sizes.size_id = sizes.size_id
-                WHERE products.product_id = ? AND productvariants.status = "active" ORDER BY product_variant_id DESC
-                LIMIT '. (int)$offset . ',' . (int)$perPage;
+                WHERE 
+                    productvariants.status = "active" AND products.name like ?
+                GROUP BY 
+                    productvariants.product_variant_id
+                ORDER BY 
+                    product_variant_id DESC LIMIT '. (int)$offset . ',' . (int)$perPage;
         $this -> connect -> setQuery($sql);
-        return $this -> connect -> loadData([$product_id]);
+        return $this -> connect -> loadData(['%' . $product_name . '%']);
     }
 
     public function countAllProductVariants()
@@ -127,13 +131,11 @@ class ProductsVariants
         return $this -> connect -> loadData([],false);
     }
 
-    public function countProductVariantsByProductId($productId)
+    public function countProductVariantByName($productName)
     {
-        $sql = "SELECT COUNT(*) AS total 
-                FROM productvariants 
-                WHERE productvariants.product_id = ?";
+        $sql = 'SELECT COUNT(*) AS total FROM products WHERE products.name LIKE ? AND products.status = "active"';
         $this -> connect -> setQuery($sql);
-        return $this -> connect -> loadData([$productId],false);
+        return $this -> connect -> loadData(['%' . $productName . '%'],false);
     }
 
 
@@ -146,7 +148,7 @@ class ProductsVariants
 
     public function deleteProductVariant($productVariant_id)
     {
-        $sql = 'UPDATE productvariants SET status = "inactive" WHERE product_id = ?';
+        $sql = 'UPDATE productvariants SET status = "inactive" WHERE product_variant_id = ? ';
         $this -> connect -> setQuery($sql);
         $this -> connect -> execute([$productVariant_id]);
     }

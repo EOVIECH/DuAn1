@@ -4,6 +4,9 @@ require_once 'Controllers/CBrand.php';
 require_once 'Controllers/CCategories.php';
 require_once 'Controllers/CProduct.php';
 require_once 'Controllers/CProductVariants.php';
+require_once 'Controllers/CUserController.php';
+require_once 'Controllers/CManage_client.php';
+
 
 const BaseUrl = "http://localhost/DuAn1/Code/";
 
@@ -11,6 +14,10 @@ $cBrand = new CBrand();
 $cCategories = new CCategories();
 $cProduct = new CProduct();
 $cProductVariants = new CProductVariants();
+$User = new CUserController();
+$manage_client = new CClientController();
+
+
 $options = isset($_GET['act']) ? $_GET['act'] : '/';
 switch($options){
   // CASE BRAND
@@ -122,6 +129,11 @@ switch($options){
         $cProductVariants -> UpdateProductVariant();
         break;
     }
+    case 'DeleteProductVariant':
+    {
+        $cProductVariants -> DeleteProductVariant();
+        break;
+    }
     
   // END PRODUCT-VARIANT
 
@@ -141,7 +153,66 @@ switch($options){
         $cProduct -> Shop();
         break;
     }
+    case 'AddCart':
+    {
+      $cProduct -> AddCart();
+      break;
+    }
+    case 'Cart':
+    {
+      $cProduct -> Cart();
+      break;
+    }
+    case 'DeleteItemCart':
+    {
+      $cProduct -> DeleteCart ();
+      break;
+    }
+    case 'Checkout':
+    {
+      $cProduct -> Checkout();
+      break;
+    }
+    case 'Order':
+    {
+      $cProduct -> Order();
+      break;
+    }
+    case 'OrderDetails':
+    {
+      $cProduct -> OrderDetails();
+      break;
+    }
+    case 'ListOrder':
+    {
+      $cProduct -> OrderMangage();
+      break;
+    }
+    case 'OrderDetailsMangage':
+    {
+      $cProduct -> OrderDetailsMangage();
+      break;
+    }
   // End Home
+
+  // Users
+    case 'login':
+    {
+        $User->inForUser();
+        break;
+    }
+    case 'register':
+    {
+        $User->insertUser();
+        break;
+    }
+    case 'logout':
+    {
+        $User->logOut();
+        break;
+    }
+
+  // End Users
 }
 ?>
 

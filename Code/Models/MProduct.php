@@ -166,7 +166,7 @@ class Products
     {
         $sql = 'SELECT colors.* FROM `productvariants`
                 JOIN colors on productvariants.color_id = colors.color_id
-                WHERE product_id = ?';
+                WHERE product_id = ? AND productvariants.status = "active"';
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData([$product_id]);
     }   
@@ -206,7 +206,7 @@ class Products
                 WHERE productvariants.status = "active" 
                 AND products.product_id = ?
                 GROUP BY products.product_id, colors.color_id, productvariants.product_variant_id
-                LIMIT 1;
+                LIMIT 1 ;
             ';
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData([$product_id]);
@@ -249,7 +249,7 @@ class Products
                 LIMIT 1
             ';
         $this -> connect -> setQuery($sql);
-        return $this -> connect -> loadData([$product_id,$color_id]);
+        return $this -> connect -> loadData([$product_id,$color_id],false);
     }   
     public function countAllShop()
     {

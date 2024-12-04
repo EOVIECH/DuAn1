@@ -27,7 +27,18 @@
                 </div>
             </div>
 
-            
+
+            <!-- Filter by Categories and Name-Product -->
+            <div class="row">
+                <form action="index.php?act=ListProductVariant" method="POST">
+                    <div class="col-lg-12 mb-4">
+                        <div class="input-group">
+                            <input type="search" name="product_name" class="form-control rounded" placeholder="Search" aria-label="Search By Name" aria-describedby="search-addon" />
+                            <button type="submit" name="search" class="btn btn-outline-primary" data-mdb-ripple-init>Filter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
 
             <!-- Product Variant Table -->
             <form action="?act=DeleteSelectedProductVariant" method="post">
@@ -50,7 +61,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($listProductVariants as $variant): ?>
+                            
+                            
+                            <?php
+                            
+                             foreach($listProductVariants as $variant): ?>
                                 <tr>
                                     <td><input type="checkbox" class="checkbox" name="checkboxes[]" value="<?php echo $variant->product_variant_id ?>"></td>
                                     <td><?php echo $variant->product_variant_id ?></td>

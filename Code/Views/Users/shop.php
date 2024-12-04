@@ -104,12 +104,7 @@
 											<div class="single_product">
 												<div class="product_image">
 													<a href="?act=ProductDetails&id=<?php echo $product -> product_id ?>"><img style="height: 256px;" src="<?php echo $product -> link ?>" alt=""/></a>
-													<div class="new_badge">New</div>
-													<div class="box-content">
-														<a style="line-height: 35px;" href="#"><i class="fa fa-heart-o"></i></a>
-														<a href="#"><i class="fa fa-cart-plus"></i></a>
-														<!-- <a href="#"><i class="fa fa-search"></i></a> -->
-													</div>										
+													<div class="new_badge">New</div>									
 												</div>
 
 												<div class="product_btm_text">

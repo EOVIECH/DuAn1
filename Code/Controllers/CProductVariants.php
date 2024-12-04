@@ -155,7 +155,8 @@ class CProductVariants{
         $mProduct = new Products();
         $listProduct = $mProduct -> getDataProduct();
         $listProductVariantSize = $mProductVariantSize -> ListProductVariantsSize();
-
+        $product_name = isset($_POST['product_name']) ? $_POST['product_name'] : null;
+     
         // Phân trang
         $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
         $perPage = 10; // Số sản phẩm trên mỗi trang
@@ -164,12 +165,13 @@ class CProductVariants{
         $productId = isset($_GET['product_id']) ? $_GET['product_id'] : null;
         // var_dump($listProductVariants);
 
-        if ($productId) {
+        if ($product_name) {
             // Lọc sản phẩm theo category_id
-            $totalProductVariants = $mProductVariants->countProductVariantsByProductId($productId); // Tổng số sản phẩm theo danh mục
-            $listProductVariants = $mProductVariants->getDataProductVariantByProductIdWithPagination($productId,$offset,$perPage);
+            $totalProductVariants = $mProductVariants->countProductVariantByName($product_name); // Tổng số sản phẩm theo danh mục
+            $listProductVariants = $mProductVariants->getDataProductVariantByProductNameWithPagination($product_name,$offset,$perPage);
+           
         } else {
-            // Hiển thị tất cả sản phẩm
+            // Hiển thị tất cả sản phẩm 
             $totalProductVariants = $mProductVariants->countAllProductVariants(); // Tổng số sản phẩm 
             $listProductVariants = $mProductVariants->getDataProductVariantWithPagination($offset,$perPage);
         }
@@ -334,6 +336,18 @@ class CProductVariants{
             include_once 'Views/Admin/Product/editProductVariants.php';
         }
         
+    }
+
+    public function DeleteProductVariant()
+    {
+        if(isset($_GET['id']))
+        {
+            $id = $_GET['id'];
+            $mProductVariants = new ProductsVariants();
+            $mProductVariants -> deleteProductVariant($id);
+            header('Location: index.PHP?act=ListProductVariant');
+        }
+        include_once 'Views/Admin/Brand/listProduct.php';
     }
 }
 ?>
