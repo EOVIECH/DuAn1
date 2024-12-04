@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/form.css">
+    <title>Add Size</title>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Add Size</h2>
+        <form action="/add-size" method="POST">
+            <div class="form-group">
+                <label for="size-name">Size Name:</label>
+                <input type="text" id="size-name" name="size_name" placeholder="Enter size (e.g., S, M, L)" required>
+            </div>
+            <div class="form-group">
+                <label for="size-description">Description:</label>
+                <input type="text" id="size-description" name="size_description" placeholder="Description (optional)">
+            </div>
+            <div class="form-group">
+                <button type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
