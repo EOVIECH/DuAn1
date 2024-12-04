@@ -18,9 +18,13 @@
                     <thead>
                         <tr>
                             <th>Order ID</th>
+                            <th>Name Product</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Address</th>
                             <th>Customer Name</th>
                             <th>Total Price</th>
-                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -31,8 +35,8 @@
                             ?>
                             <tr>
                                 <td><?php echo $order->order_id; ?></td>
-                                <td><?php echo $order->username; ?></td>
-                                <td>$<?php echo $order->total_price; ?></td>
+                                <td><?php echo $order->product_name; ?></td>
+                                <td><?php echo $order->order_date; ?></td>
                                 <td>
                                     <form action="?act=ListOrder" method="POST">
                                         <select name="status">
@@ -44,6 +48,11 @@
                                         <input type="hidden" name="order_id" value="<?php echo $order->order_id; ?>">
                                         <input type="submit" name="updateStatus" value="Update Status">
                                     </form>
+                                <td><?php echo $order->payment_status; ?></td>
+                                <td><?php echo $order->address; ?></td>
+                                <td><?php echo $order->username; ?></td>    
+                                <td><?php echo $order->total_price; ?></td>
+
                                 </td>
                                 <td>
                                     <a href="?act=OrderDetailsMangage&order_id=<?php echo $order->order_id; ?>" class="btn btn-view">View Details</a>

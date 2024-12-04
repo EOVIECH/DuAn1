@@ -6,6 +6,7 @@ require_once './Models/MProductCategories.php';
 require_once './Models/MCart.php';
 require_once './Models/MOrders.php';
 require_once './Models/MDiscount.php';
+require_once './Models/MPayment.php';
 
 class CProduct{
     public $connect;
@@ -272,6 +273,14 @@ class CProduct{
             $listCart = $mCart -> listCart($_SESSION['user_id']);
         }
 
+
+        if(empty($listCart))
+        {
+            unset($_SESSION['discount_code']);
+            unset($_SESSION['discount_amount']);
+            unset($_SESSION['final_price']);
+        }
+
         // Tính tổng giá trị giỏ hàng
         foreach ($listCart as $cart) {
             $totalPrice += $cart->quantity * $cart->price;
@@ -450,6 +459,7 @@ class CProduct{
     public function OrderMangage()
     {
         $mOrder = new Orders();
+        $mPayment = new Payment();
         $orders = $mOrder->getAllOrders();
         if(isset($_POST['updateStatus']))
         {
@@ -457,6 +467,17 @@ class CProduct{
             {
                 $mOrder -> updateOrderStatus($_POST['status'],$_POST['order_id']);
                 header('Location: ?act=ListOrder');
+            }
+
+            if($_POST['status'] == 'completed')
+            {
+                $mPayment -> updatePaymentStatus('completed',$_POST['order_id']);
+            }elseif($_POST['status'] == 'canceled')
+            {
+                $mPayment -> updatePaymentStatus('failed',$_POST['order_id']);
+            }else
+            {
+                $mPayment -> updatePaymentStatus('pending',$_POST['order_id']);
             }
         }
         include_once 'Views/Admin/Order/listOrder.php';
@@ -472,6 +493,16 @@ class CProduct{
             $total +=  $mOrder -> totalOrder($_GET['order_id']) -> total;
         }
         include_once 'Views/Admin/Order/detailOrder.php';
+    }
+
+    public function deleteOrder()
+    {
+        $mOrder = new Orders();
+        if(isset($_GET['orderId']))
+        {
+            $mOrder -> deleteOrder((int)$_GET['orderId']);
+            header('Location: ?act=Order');
+        }
     }
 
 }

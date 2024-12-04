@@ -34,7 +34,42 @@ class Orders
 
     public function listOrders($user_id)
     {
-        $sql = 'SELECT * FROM orders WHERE user_id = ? ORDER BY orders.order_date DESC';
+        $sql = 'SELECT
+					orderdetails.order_detail_id,
+                    orderdetails.order_id,
+                    orderdetails.product_variant_id,
+                    orderdetails.quantity,
+                    orderdetails.price,
+                    orders.order_date,
+                    orders.status,
+                    payments.status AS payment_status,
+                    payments.payment_method,
+                    users.address,
+                    products.name AS product_name,
+                    products.product_id,
+                    (orderdetails.quantity * orderdetails.price) AS total_price
+                FROM 
+                    orderdetails
+                JOIN 
+                    productvariants ON orderdetails.product_variant_id = productvariants.product_variant_id
+                JOIN 
+                    products ON productvariants.product_id = products.product_id
+                JOIN orders on orderdetails.order_id = orders.order_id
+                JOIN users on orders.user_id = users.user_id
+                JOIN payments on orders.order_id = payments.order_id
+                WHERE users.user_id = ? and orders.status != "canceled"
+                
+                GROUP BY 
+                    orderdetails.order_detail_id, 
+                    orderdetails.order_id, 
+                    orderdetails.product_variant_id,
+                    orderdetails.quantity,
+                    orderdetails.price,
+                    products.name,
+                    products.product_id,
+                    orderdetails.color,
+                    orderdetails.size
+                ORDER BY orders.order_date DESC';
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData([$user_id]);
     }
@@ -90,44 +125,41 @@ class Orders
     
     public function getAllOrders()
     {
-        $sql = 'SELECT 
-                orderdetails.order_detail_id,
-                orderdetails.order_id,
-                orderdetails.product_variant_id,
-                orderdetails.quantity,
-                orderdetails.price,
-                users.username,
-                orders.status,
-                products.name AS product_name,
-                products.product_id,
-                orderdetails.color,
-                orderdetails.size,
-                images.link,
-                (orderdetails.quantity * orderdetails.price) AS total_price
-            FROM 
-                orderdetails
-            JOIN 
-                productvariants ON orderdetails.product_variant_id = productvariants.product_variant_id
-            JOIN 
-                products ON productvariants.product_id = products.product_id
-            JOIN 
-                orders ON orderdetails.order_id = orders.order_id
-            JOIN 
-                users ON orders.user_id = users.user_id
-            JOIN 
-                (
-                    SELECT 
-                        product_variant_id, 
-                        MIN(link) AS link 
-                    FROM 
-                        images 
-                    WHERE 
-                        album = 1 
-                    GROUP BY 
-                        product_variant_id
-                ) AS images ON productvariants.product_variant_id = images.product_variant_id
-            ORDER BY 
-                orders.order_date DESC';
+        $sql = 'SELECT
+					orderdetails.order_detail_id,
+                    orderdetails.order_id,
+                    orderdetails.product_variant_id,
+                    orderdetails.quantity,
+                    orderdetails.price,
+                    orders.order_date,
+                    orders.status,
+                    payments.status AS payment_status,
+                    payments.payment_method,
+                    users.address,
+                    users.username,
+                    products.name AS product_name,
+                    products.product_id,
+                    (orderdetails.quantity * orderdetails.price) AS total_price
+                FROM 
+                    orderdetails
+                JOIN 
+                    productvariants ON orderdetails.product_variant_id = productvariants.product_variant_id
+                JOIN 
+                    products ON productvariants.product_id = products.product_id
+                JOIN orders on orderdetails.order_id = orders.order_id
+                JOIN users on orders.user_id = users.user_id
+                JOIN payments on orders.order_id = payments.order_id
+                GROUP BY 
+                    orderdetails.order_detail_id, 
+                    orderdetails.order_id, 
+                    orderdetails.product_variant_id,
+                    orderdetails.quantity,
+                    orderdetails.price,
+                    products.name,
+                    products.product_id,
+                    orderdetails.color,
+                    orderdetails.size
+                ORDER BY orders.order_date DESC';
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData();
     }
@@ -137,6 +169,13 @@ class Orders
         $sql = 'UPDATE orders SET status = ? WHERE order_id = ?';
         $this -> connect -> setQuery($sql);
         $this -> connect -> execute([$status,$order_id]);
+    }
+
+    public function deleteOrder($order_id)
+    {
+        $sql = 'UPDATE orders SET status = "canceled" WHERE order_id = ?';
+        $this -> connect -> setQuery($sql);
+        $this -> connect -> execute([$order_id]);
     }
 }
 ?>

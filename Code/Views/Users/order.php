@@ -25,11 +25,14 @@
                         <table class="table order_prdct_table text-center">
                             <thead>
                                 <tr>
-                                    <th class="opt_no">Order ID</th>
+                                    <th class="opt_nameProduct">Name Product</th>
                                     <th class="opt_date">Order Date</th>
                                     <th class="opt_status">Status</th>
+                                    <th class="opt_payment">Payment</th>
+                                    <th class="opt_address">Address</th>
                                     <th class="opt_total">Total</th>
                                     <th class="opt_action">Details</th>
+                                    <th class="opt_delete"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,15 +40,18 @@
                                 foreach ($listOrders as $order) {
                                     ?>
                                     <tr>
-                                        <td><span class="op_no"><?php echo $order->order_id; ?></span></td>
+                                        <td><span class="op_date"><?php echo $order->product_name; ?></span></td>
                                         <td><span class="op_date"><?php echo $order->order_date; ?></span></td>
                                         <td><span class="op_status"><?php echo ucfirst($order->status); ?></span></td>
-                                        <td><span class="op_total">$<?php echo $order->total; ?></span></td>
+                                        <td><span class="op_payment"><?php echo $order -> payment_status ?></span></td>
+                                        <td><span class="op_status"><?php echo ucfirst($order->address); ?></span></td>
+                                        <td><span class="op_total">$<?php echo $order->total_price; ?></span></td>
                                         <td>
                                             <a href="?act=OrderDetails&order_id=<?php echo $order->order_id; ?>" class="btn btn-default op_view">
                                                 View Details
                                             </a>
                                         </td>
+                                        <td><button onclick="confirmDeleted('?act=deleteOrder&orderId=<?php echo $order -> order_id ?>')">DELETE ORDER</button></td>
                                     </tr>
                                     <?php
                                 }
@@ -67,3 +73,13 @@
 
 </body>
 </html>
+<script>
+    function confirmDeleted(delURL)
+    {
+        if(confirm('DO YOU WANT TO DELETE ORDER'))
+        {
+            document.location = delURL;
+        }
+    }
+   
+</script>

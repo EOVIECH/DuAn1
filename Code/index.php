@@ -193,6 +193,11 @@ switch($options){
       $cProduct -> OrderDetailsMangage();
       break;
     }
+    case 'deleteOrder':
+    {
+      $cProduct -> deleteOrder();
+      break;
+    }
   // End Home
 
   // Users
