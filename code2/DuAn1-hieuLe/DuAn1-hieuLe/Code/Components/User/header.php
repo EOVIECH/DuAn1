@@ -16,7 +16,8 @@
 	<link rel="stylesheet" href="Views/Users/Assets/css/font-awesome.css" />
 	<link rel="stylesheet" href="Views/Users/Assets/css/bootstrap.min.css" />	
 	<link rel="stylesheet" href="Views/Users/style.css" />
-	<link rel="stylesheet" href="Views/Users/Assets/css/responsive.css" />	
+	<link rel="stylesheet" href="Views/Users/Assets/css/responsive.css" />
+	<script src="https://kit.fontawesome.com/e2b0b931b4.js" crossorigin="anonymous"></script>	
 </head>
 	<body>
 	
@@ -50,9 +51,10 @@
 						
 						<div class="col-xs-12 col-sm-6">
 							<ul class="hdr_tp_right text-right">
-								<?php $dangnhap = isset($_SESSION['user_id'])? '<li class="account_area"><a href="?act=logout"><i class="fa fa-lock"></i> logOut</a></li>': '<li class="account_area"><a href="?act=login"><i class="fa fa-lock"></i> LogIn</a></li>' ;
+								<?php $dangnhap = isset($_SESSION['user_id'])? '<li class="account_area"><a href="?act=logout"><i class="fa fa-lock"></i> logOut</a></li>  <a href="?act=dataWishlist"><i class="fa-regular fa-heart"></i></a>': '<li class="account_area"><a href="?act=login"><i class="fa fa-lock"></i> LogIn</a></li>' ;
 								echo $dangnhap;
 								?>
+							
 							
 								<li class="account_area"><a href=""><i class="fa fa-lock"></i> My Account</a></li>
 								<li class="lan_area"><a href="#"><i class="fa fa-language "></i> Language <i class="fa fa-caret-down"></i></a>
@@ -78,7 +80,7 @@
 				<div class="container">
 					<div class="row">		
 						<div class="col-xs-12 col-sm-12 col-md-3"> 
-							<a class="logo" href="index.html"> <img alt="" src="Views/Users/Assets/img/logo.png"></a> 
+							<a class="logo" href="?act=Home"> <img alt="" src="Views/Users/Assets/img/logo.png"></a> 
 						</div><!--  End Col -->
 						
 						<div class="col-xs-12 col-sm-12 col-md-9 text-right">

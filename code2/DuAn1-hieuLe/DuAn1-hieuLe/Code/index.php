@@ -107,6 +107,12 @@ switch($options){
             $cProduct -> wishlist();
             break;
         }
+
+        case 'dataWishlist':
+            {
+                $cProduct -> getDataWishlist();
+                break;
+            }
     case 'DeleteProduct':
     {
         $cProduct -> DeleteProduct();

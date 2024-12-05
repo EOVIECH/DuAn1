@@ -306,56 +306,47 @@ class CProduct{
     }
 
     public function wishlist() {
-        if(isset($_GET['id'])){
+        if(isset($_GET['id'], $_GET['act']) && $_GET['act'] = 'wishlist'){
+            $id = $_GET['id'];
         $mProduct = new Products();
-        $id = $_GET['id'];
-        if (isset($_POST['submit'])) {
-            $delWishList = $mProduct->delWishList(0, $id);
-            echo "<script>
-                alert('Bạn xóa thành công');
-                window.location.href = '?act=ProductDetails&id='+ $id;
-                </script>";
-            exit;
-        } else{
-            if (isset($_GET['act'], $_GET['id']) && $_GET['act'] === 'wishlist') {
-
-                if( isset($_GET['color']) && isset($_GET['size'])) {
-                    if($_GET['color'] === '#' && $_GET['size'] === '#'){
-                        echo "<script>
-                        alert('Bạn cần chọn màu và kích thước cho sản phẩm');
-                        window.location.href = '?act=ProductDetails&id='+ $id;
-                        </script>";
-                    exit;
-                    } else{
-                        $product_variant_id = $mProduct->getVariant($_GET['size'], $_GET['color'], $id);
-        
-                        if (!empty($product_variant_id)) {
-            
-                            foreach($product_variant_id as $index){
-                    
-                                $_SESSION['product_variant_id'] = $index;
-                              }
-            
-                           
-                            $wishlist = $mProduct->addWishlist('', $_SESSION['user_id'], $_SESSION['product_variant_id'], 1);
-                            echo "<script>alert('Bạn đã yêu thích sản phẩm này');</script>";
-                            $listWishList = $mProduct->getAllDataProduct($_SESSION['product_variant_id'], $_GET['size'], $_GET['color']);
-                        }
-                    }
-                    
-                }
+        if(isset($_SESSION['color'],$_SESSION['size'])){
+            $color = $_SESSION['color'];
+            $size = $_SESSION['size'];
+            $variant_id = $mProduct->getVariant($size,$id,$color);
+            foreach($variant_id as $index){
+                $product_variant = $index->variant_id;
             }
-        
+            // var_dump($product_variant);
+            // exit;
+           
+        $wishlist = $mProduct->addWishlist('', $_SESSION['user_id'], $product_variant, 1,$id);
+            echo "<script>
+            alert('Bạn đã yêu thích sản phẩm này');
+            window.location.href = '?act=ProductDetails&id=' + $id;
+            </script>";
+            exit;
+            
         }
- 
         }
-       
-    
-        // Handle removal from wishlist
-       
-    
+    }
+
+    public function getDataWishlist(){
+        $mProduct = new Products();
+        $wishlist = $mProduct -> getAllDataProduct();
+        if(isset($_POST['submit'])){
+
+            $id = $_POST['submit'];
+           $del = $mProduct -> delWishList(0,$id);
+            echo "<script>
+            alert('Xoa du lieu thanh cong');
+            window.location.href = '?act=dataWishlist';
+            </script>";
+            exit;
+        }
+
         include_once './Views/Admin/Product/wishlist.php';
     }
+
     
         }
     

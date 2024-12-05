@@ -404,36 +404,38 @@ class Products
         $this -> connect -> execute([$product_id]);
     }
 
-    public function getAllDataProduct($id,$size,$color)
+    public function getAllDataProduct()
     {
-        $sql = 'SELECT products.name AS product, colors.name AS color, sizes.name AS sizez , productvariants.price AS price , wishlist.wishlist_id AS id, wishlist.status AS statuss 
-        FROM `productvariants` 
-        JOIN wishlist ON productvariants.product_variant_id = wishlist.product_variant_id 
-        JOIN products ON productvariants.product_id = products.product_id 
-        JOIN colors ON productvariants.color_id = colors.color_id 
-        JOIN product_variant_sizes ON productvariants.product_variant_id = product_variant_sizes.product_variant_id 
-        JOIN sizes ON product_variant_sizes.size_id = sizes.size_id 
-        WHERE productvariants.product_variant_id = ? AND sizes.size_id = ? AND colors.color_id = ?;';
+        $sql = 'SELECT products.name AS names, 
+        brands.name AS brands, brands.image AS images, 
+        wishlist.wishlist_id AS wishlistid, products.product_id AS id,
+        wishlist.status AS statuss
+        FROM `wishlist` 
+        JOIN products ON wishlist.product_id = products.product_id 
+        JOIN brands ON products.brand_id = brands.brand_id;
+        ';
 
         $this->connect->setQuery($sql);
-        return $this->connect->loadData([$id,$size,$color]);
+        return $this->connect->loadData([]);
     }
 
-    public function addWishlist($wishlist_id,$user_id,$product_variant_id,$status)
+    public function addWishlist($wishlist_id,$user_id,$product_variant_id,$status,$product_id)
     {
-        $sql = 'INSERT INTO wishlist VALUES (?,?,?,?)';
+        $sql = 'INSERT INTO wishlist VALUES (?,?,?,?,?)';
         $this -> connect -> setQuery($sql);
-        $this -> connect -> execute([$wishlist_id,$user_id,$product_variant_id,$status]);
+        $this -> connect -> execute([$wishlist_id,$user_id,$product_variant_id,$status,$product_id]);
     }
 
-    public function getVariant($size_id,$color_id,$product_id)
+    public function getVariant($size,$product_id,$color_id)
     {
-        $sql = 'SELECT product_variant_sizes.product_variant_id FROM product_variant_sizes 
-        JOIN productvariants ON product_variant_sizes.product_variant_id = productvariants.product_variant_id 
-        JOIN sizes ON product_variant_sizes.size_id = sizes.size_id 
-        WHERE sizes.size_id = ? AND productvariants.color_id = ? AND productvariants.product_id = ?;';
+        $sql = 'SELECT productvariants.product_variant_id AS variant_id FROM `productvariants` 
+        JOIN product_variant_sizes ON productvariants.product_variant_id = product_variant_sizes.product_variant_id 
+        JOIN sizes ON product_variant_sizes.size_id = sizes.size_id
+        WHERE sizes.size_id = ?
+        AND productvariants.product_id = ? 
+        AND productvariants.color_id = ?';
         $this -> connect -> setQuery($sql);
-        return $this -> connect -> loadData([$size_id,$color_id,$product_id],false);
+        return $this -> connect -> loadData([$size,$product_id,$color_id]);
     }
 
     public function delWishList($status,$id)
@@ -441,6 +443,13 @@ class Products
         $sql = 'UPDATE `wishlist` SET `status`= ? WHERE wishlist.wishlist_id = ?;';
         $this -> connect -> setQuery($sql);
         $this -> connect -> execute([$status,$id]);
+    }
+
+    public function getSku($id)
+    {
+        $sql = 'SELECT productvariants.sku FROM productvariants WHERE productvariants.product_variant_id = ?';
+        $this->connect->setQuery($sql);
+        return $this->connect->loadData([$id]);
     }
 }
 

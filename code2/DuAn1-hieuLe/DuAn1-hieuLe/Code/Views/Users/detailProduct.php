@@ -218,12 +218,12 @@
                                             {
                                                 $getSize = isset($_GET['size']) ? $_GET['size'] : 1 ;
                                                 ?>
-                                                    <a  href="index.php?act=ProductDetails&id=<?php echo $product -> product_id ?>&size=<?= $getSize ?>&color=<?php echo $color -> color_id?>" class="<?php if($color -> color_id == $product -> color_id){echo 'active';} ?>" style="background: <?php echo $color -> color_code ?>;"><?php echo $color -> name ?></a>
+                                                    <a  href="?act=ProductDetails&id=<?php echo $product -> product_id ?>&size=<?= $getSize ?>&color=<?php echo $color -> color_id?>" class="<?php if($color -> color_id == $product -> color_id){echo 'active';} ?>" style="background: <?php echo $color -> color_code ?>;"><?php echo $color -> name ?></a>
                                                 <?php
                                             }
 
-                                            $colorr = isset($_GET['color']) ? $_GET['color'] : '';
-                                            $sizer = isset($_GET['size']) ? $_GET['size'] : '';
+                                            $colorr = isset($_GET['color']) ? $_SESSION['color'] = $_GET['color'] : '';
+                                            $sizer = isset($_GET['size']) ? $_SESSION['size']  = $_GET['size'] : '';
          
                                         ?>
                                     </div>
@@ -239,7 +239,7 @@
                                             <form action="" method="post" enctype="multipart/form-data">
                                             <a class="btn btn-default acc_btn">add to bag</a>
 
-                                    <a class="btn btn-default acc_btn btn_icn" href="?act=wishlist&id=<?php echo $_GET['id'] ?>&color=<?php echo $colorr ?>&size=<?php echo $sizer ?>"><i class="fa fa-heart"></i></a>
+                                    <a class="btn btn-default acc_btn btn_icn" href="?act=wishlist&id=<?php echo $_GET['id'] ?>"><i class="fa fa-heart"></i></a>
                                     <a class="btn btn-default acc_btn btn_icn"><i class="fa fa-refresh"></i></a>
                                             </form>
                                 </div>
@@ -322,7 +322,7 @@
     <?php
     if(!isset($_SESSION['user_id'])){
     echo '<a href="?act=login">Muốn comment thì phải đăng nhập</a>';
-    exit;
+    // exit;
     
   } elseif(isset($_SESSION['user_id'])){
     ?>

@@ -1,8 +1,5 @@
-<?php
-if(isset($_GET['id']) && $_GET['color'] !== '' && $_GET['size'] !== ''){
-    ?>
-    <!DOCTYPE html>
-    <html lang="vi">
+<!DOCTYPE html>
+<html lang="vi">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,37 +31,40 @@ if(isset($_GET['id']) && $_GET['color'] !== '' && $_GET['size'] !== ''){
         <table>
             <thead>
                 <tr>
-                    <th>Tên sản phẩm</th>
-                    <th>Color</th>
-                    <th>size</th>
-                    <th>Price</th>
+                    <th>STT</th>
+                    <th>Name</th>
+                    <th>Brand</th>
+                    <th>Img</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
             
-                if (!empty($listWishList)){ 
+                if (!empty($wishlist)){ 
                     // var_dump($listWishList);
                     // exit;
-                   foreach ($listWishList as $item){
+                   foreach ($wishlist as $index => $item){
                     if($item->statuss === '1'){
-                    ?>
+                            ?>
+                    
                             <tr>
-                                <td><?= $item->product ?></td>
-                                <td><?= $item->color ?></td>
-                                <td><?= $item->sizez ?></td>
-                                <td><?= $item->price ?></td>
+                            <td>
+                                <?= $index+1 ?></td>
+                                <td><?= $item->names ?></td>
+                                <td><?= $item->brands ?></td>
+                                <td style="width: 200px; height:auto;"><img src="<?= $item->images ?>" alt=""></td>
+                                
                                 <td>
                                    <form action="" method="post" enctype="multipart/form-data">
-                                   <button name="submit" class="btn btn-danger" value="<?= $item->id ?>">Xoa</button>
-                                   <button class="btn btn-primary">Mua</button>
+                                   <button name="submit" class="btn btn-danger" value="<?=$item->wishlistid?>">Xoa</button>
+                                    <button  class="btn btn-primary"><a href="?act=ProductDetails&id=<?= $item->id ?>" style="color: #f4f4f4;">Chi tiet</a></button>
                                    </form>
                                 </td>
                             </tr>
                         <?php
+                        }
                            } 
-                    } 
                 }
 
                         ?>
@@ -77,19 +77,3 @@ if(isset($_GET['id']) && $_GET['color'] !== '' && $_GET['size'] !== ''){
         require_once './components/User/footer.php';
         ?>
     </html>
-    <?php
-}
-else if(empty($_SESSION['user_id'])){
-    echo "<script>
-    alert('Bạn không chưa đăng nhập');
-    window.location.href = '?act=login';
-    </script>";
-    exit;
-} else{
-    echo "<script>
-    alert('NOT FOUND 404');
-    window.location.href = '?act=Home';
-    </script>";
-    exit;
-}
-?>
