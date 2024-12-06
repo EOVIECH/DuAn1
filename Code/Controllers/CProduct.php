@@ -444,6 +444,29 @@ class CProduct{
         }
         include_once 'Views/Users/order.php';
     }
+    public function OrderCancelled()
+    {
+        $mOrder = new Orders();
+        if(isset($_SESSION['user_id']))
+        {
+            $listOrders = $mOrder -> listOrderCanceled($_SESSION['user_id']);
+            if($listOrders == '')
+            {
+                echo 'khong co san pham';
+                exit;
+            }
+        }
+        include_once 'Views/Users/orderCanceled.php';
+    }
+    public function OrderProductCanceled()
+    {
+        $mOrder = new Orders();
+        if(isset($_SESSION['user_id']) && !empty($_GET['orderId']))
+        {
+            $listOrders = $mOrder -> updateOrderStatus('pending',$_GET['orderId']);
+            header('Location: index.php?act=OrderCanceled');
+        }
+    }
     public function OrderDetails()
     {
         $mOrder = new Orders();

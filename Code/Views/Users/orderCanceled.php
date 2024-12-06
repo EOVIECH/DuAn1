@@ -17,7 +17,6 @@
 			</div>
 		</div>
 	</div>
-    <a href="?act=OrderCanceled">Order Canceled</a>
     <div class="order_page_area">
         <div class="container">
             <div class="row">
@@ -38,23 +37,27 @@
                             </thead>
                             <tbody>
                                 <?php
-                                foreach ($listOrders as $order) {
-                                    ?>
-                                    <tr>
-                                        <td><span class="op_date"><?php echo $order->product_name; ?></span></td>
-                                        <td><span class="op_date"><?php echo $order->order_date; ?></span></td>
-                                        <td><span class="op_status"><?php echo ucfirst($order->status); ?></span></td>
-                                        <td><span class="op_payment"><?php echo $order -> payment_status ?></span></td>
-                                        <td><span class="op_status"><?php echo ucfirst($order->address); ?></span></td>
-                                        <td><span class="op_total">$<?php echo $order->total_price; ?></span></td>
-                                        <td>
-                                            <a href="?act=OrderDetails&order_id=<?php echo $order->order_id; ?>" class="btn btn-default op_view">
-                                                View Details
-                                            </a>
-                                        </td>
-                                        <td><button onclick="confirmDeleted('?act=deleteOrder&orderId=<?php echo $order -> order_id ?>')">DELETE ORDER</button></td>
-                                    </tr>
-                                    <?php
+                                if(!empty($listOrders))
+                                {
+                                    foreach ($listOrders as $order) {
+                                        ?>
+                                        <tr>
+                                            <td><span class="op_date"><?php echo $order->product_name; ?></span></td>
+                                            <td><span class="op_date"><?php echo $order->order_date; ?></span></td>
+                                            <td><span class="op_status"><?php echo ucfirst($order->status); ?></span></td>
+                                            <td><span class="op_payment"><?php echo $order -> payment_status ?></span></td>
+                                            <td><span class="op_status"><?php echo ucfirst($order->address); ?></span></td>
+                                            <td><span class="op_total">$<?php echo $order->total_price; ?></span></td>
+                                            <td>
+                                                <a href="?act=OrderDetails&order_id=<?php echo $order->order_id; ?>" class="btn btn-default op_view">
+                                                    View Details
+                                                </a>
+                                            </td>
+                                            <td><button onclick="confirmDeleted('?act=updateOrderStatus&orderId=<?php echo $order -> order_id ?>')">ORDER</button></td>
+                                        </tr>
+                                        <?php
+                                    }
+                                    
                                 }
                                 ?>
                             </tbody>
@@ -75,12 +78,4 @@
 </body>
 </html>
 <script>
-    function confirmDeleted(delURL)
-    {
-        if(confirm('DO YOU WANT TO DELETE ORDER'))
-        {
-            document.location = delURL;
-        }
-    }
-   
 </script>

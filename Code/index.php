@@ -178,9 +178,19 @@ switch($options){
       $cProduct -> Order();
       break;
     }
+    case 'OrderCanceled':
+    {
+      $cProduct -> OrderCancelled();
+      break;
+    }
     case 'OrderDetails':
     {
       $cProduct -> OrderDetails();
+      break;
+    }
+    case 'updateOrderStatus':
+    {
+      $cProduct -> OrderProductCanceled();
       break;
     }
     case 'ListOrder':

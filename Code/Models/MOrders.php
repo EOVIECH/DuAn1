@@ -73,6 +73,49 @@ class Orders
         $this -> connect -> setQuery($sql);
         return $this -> connect -> loadData([$user_id]);
     }
+
+    public function listOrderCanceled($user_id)
+    {
+        $sql = 'SELECT
+					orderdetails.order_detail_id,
+                    orderdetails.order_id,
+                    orderdetails.product_variant_id,
+                    orderdetails.quantity,
+                    orderdetails.price,
+                    orders.order_date,
+                    orders.status,
+                    payments.status AS payment_status,
+                    payments.payment_method,
+                    users.address,
+                    products.name AS product_name,
+                    products.product_id,
+                    (orderdetails.quantity * orderdetails.price) AS total_price
+                FROM 
+                    orderdetails
+                JOIN 
+                    productvariants ON orderdetails.product_variant_id = productvariants.product_variant_id
+                JOIN 
+                    products ON productvariants.product_id = products.product_id
+                JOIN orders on orderdetails.order_id = orders.order_id
+                JOIN users on orders.user_id = users.user_id
+                JOIN payments on orders.order_id = payments.order_id
+                WHERE users.user_id = ? and orders.status = "canceled"
+                
+                GROUP BY 
+                    orderdetails.order_detail_id, 
+                    orderdetails.order_id, 
+                    orderdetails.product_variant_id,
+                    orderdetails.quantity,
+                    orderdetails.price,
+                    products.name,
+                    products.product_id,
+                    orderdetails.color,
+                    orderdetails.size
+                ORDER BY orders.order_date DESC';
+        $this -> connect -> setQuery($sql);
+        return $this -> connect -> loadData([$user_id]);
+    }
+
     public function listOrderDetails($order_id)
     {
         $sql = 'SELECT 
