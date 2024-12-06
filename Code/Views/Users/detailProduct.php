@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -294,12 +294,44 @@
                                         <div class="rtng_cmnt_form_area fix">
                                             <h3>Add your Comments</h3>
                                             <div class="rtng_form">
-                                                <form action="#">
-                                                    <div class="input-area"><input type="text" placeholder="Type your name" /></div>
-                                                    <div class="input-area"><input type="text" placeholder="Type your email address" /></div>
-                                                    <div class="input-area"><textarea name="message" placeholder="Write a review"></textarea></div>
-                                                    <input class="btn border-btn" type="submit" value="Add Review" />
-                                                </form>
+                                            <?php
+                                            if(!isset($_SESSION['user_id']))
+                                            {
+                                            echo '<a href="?act=login">Muốn comment thì phải đăng nhập</a>';
+                                            // exit;
+                                            } elseif(isset($_SESSION['user_id']))
+                                            {
+                                                ?>
+                                                <div class="comment-container">
+                                                    <h2>Để lại bình luận</h2>
+                                                    <form action="" method="POST" enctype="multipart/form-data">
+                                                        <div class="form-group">
+                                                            <label for="comment">Bình luận</label>
+                                                            <textarea id="comment" name="comment" placeholder="Nhập nội dung bình luận" ></textarea>
+                                                            <br> <br>
+
+                                                            <div class="rating">
+                                                        <input type="radio" id="star5" name="rating" value="5">
+                                                        <label for="star5">&#9733;</label>
+                                                        <input type="radio" id="star4" name="rating" value="4">
+                                                        <label for="star4">&#9733;</label>
+                                                        <input type="radio" id="star3" name="rating" value="3">
+                                                        <label for="star3">&#9733;</label>
+                                                        <input type="radio" id="star2" name="rating" value="2">
+                                                        <label for="star2">&#9733;</label>
+                                                        <input type="radio" id="star1" name="rating" value="1">
+                                                        <label for="star1">&#9733;</label>
+                                                    </div>
+                                                    <button type="submit" name="sendReviews" class="btn btn-success">Gửi đánh giá</button>
+                                                        </div>
+                                                        <div>
+                                                            <p><em style="color: red;"><?php echo $_SESSION['average'] ?> tren 5</em></p>
+                                                        </div>
+                                            </form>
+                                                </div>
+                                            <?php
+                                            }
+                                            ?>
                                             </div>
                                         </div>
                                     </div>

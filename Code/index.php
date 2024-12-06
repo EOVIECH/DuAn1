@@ -226,6 +226,19 @@ switch($options){
         $User->logOut();
         break;
     }
+    case 'forgot':
+    {
+      $User->forgotPasswordUser();
+      break;
+    }
+    case 'change':
+    {
+      $User->changePassword();
+      break;
+    }
+        
+      
+
 
   // End Users
 }

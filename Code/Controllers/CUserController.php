@@ -93,6 +93,61 @@ class CUserController {
         include_once 'Views/Users/login.php';
     }
 
+    public function forgotPasswordUser() {
+        if (isset($_POST['submit'])) {
+   
+       $MUser = new MUser();
+       $inFor = $MUser->getAllUser(); 
+   
+       $users = (array) $inFor;
+      
+           $user_name = trim($_POST['username']);
+           $emailInput = trim($_POST['email']);
+           $phone = trim($_POST['phone']);
+           
+   
+           $error = null;
+   
+           foreach ($users as $user) {
+               if (trim(strtolower($user->username)) === strtolower($user_name)) {
+   
+                   if (strtolower($user->email) === strtolower($emailInput)) {
+   
+                       if (trim($user->phone) === $phone) {
+                          
+                           $_SESSION['id'] = $user->user_id;
+                           echo "<script>
+                               alert('Xác nhận người dùng thành công!');
+                               window.location.href= '?act=change';
+                           </script>";
+                           exit;
+                       } else {
+                           $error = 'Số điện thoại sai, vui lòng đăng nhập lại.';
+                           break;
+                       }
+                   } else {
+                       $error = 'Email sai, vui lòng đăng nhập lại.';
+                       break;
+                   }
+               }
+           }
+           
+           if (!$error) {
+               $error = 'Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại tên';
+           }
+           
+           echo "<script>
+               alert('$error');
+               window.location.href= '?act=forgot';
+           </script>";
+   
+       }
+   
+       // Include the login form
+       include_once './Views/Users/forgotPassword.php';
+   }
+    
+
     public function insertUser(){
         if(isset($_POST['submit'])){
 
@@ -165,61 +220,6 @@ class CUserController {
      }
         include_once 'Views/Users/register.php';
 }
-
-public function forgotPasswordUser() {
-     if (isset($_POST['submit'])) {
-
-    $MUser = new MUser();
-    $inFor = $MUser->getAllUser(); 
-
-    $users = (array) $inFor;
-   
-        $user_name = trim($_POST['username']);
-        $emailInput = trim($_POST['email']);
-        $phone = trim($_POST['phone']);
-        
-
-        $error = null;
-
-        foreach ($users as $user) {
-            if (trim(strtolower($user->username)) === strtolower($user_name)) {
-
-                if (strtolower($user->email) === strtolower($emailInput)) {
-
-                    if (trim($user->phone) === $phone) {
-                       
-                        $_SESSION['id'] = $user->user_id;
-                        echo "<script>
-                            alert('Xác nhận người dùng thành công!');
-                            window.location.href= '?act=change';
-                        </script>";
-                        exit;
-                    } else {
-                        $error = 'Số điện thoại sai, vui lòng đăng nhập lại.';
-                        break;
-                    }
-                } else {
-                    $error = 'Email sai, vui lòng đăng nhập lại.';
-                    break;
-                }
-            }
-        }
-        
-        if (!$error) {
-            $error = 'Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại tên';
-        }
-        
-        echo "<script>
-            alert('$error');
-            window.location.href= '?act=forgot';
-        </script>";
-
-    }
-
-    // Include the login form
-    include_once './Views/Users/forgotPassword.php';
-}
-
 
     public function changePassword(){
         if(isset($_POST['submit'])){

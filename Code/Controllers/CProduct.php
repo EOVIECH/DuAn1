@@ -7,6 +7,7 @@ require_once './Models/MCart.php';
 require_once './Models/MOrders.php';
 require_once './Models/MDiscount.php';
 require_once './Models/MPayment.php';
+require_once './Models/MReviews.php';
 
 class CProduct{
     public $connect;
@@ -215,6 +216,7 @@ class CProduct{
     public function ProductDetails()
     {
         $mProduct = new Products();
+        $mReview = new MReview();
         if(isset($_GET['id']) && !empty($_GET['id']))
         {
             $product_id = $_GET['id'];
@@ -239,6 +241,90 @@ class CProduct{
                 echo json_encode($response);
                 exit; 
             }
+
+            $rating = $mReview->getRatingComment($_GET['id']);
+   
+            $arrayRating = (array) $rating;
+   
+            $count = count($arrayRating);
+   
+            $sum = 0;
+            $average = 0;
+            foreach($arrayRating as $value){
+             $sum += $value->rating;
+              $average = $sum/$count;   
+            }
+   
+            $_SESSION['average'] = number_format($average,1);
+    
+              if (isset($_POST['rating'])) {
+                  $rating = intval($_POST['rating']);
+                 
+              } else {
+                  $rating = null;
+              }
+
+              if(isset($_POST['sendReviews']))
+              {
+      
+                $content = $_POST['comment'];
+                $user_id = $_SESSION['user_id'];
+                $product_id = $_GET['id'];
+                $create_at = date('Y-m-d');
+
+                //   var_dump($content);
+                //   exit;
+        
+                $error = [];
+        
+                    if(empty($content))
+                    {
+                        $id = isset($_GET['id']) ? $_GET['id'] : 0;
+                    echo "<script>
+                    alert('Nội dung không được để trống.')
+                    window.location.href = '?act=ProductDetails&id='+ $id;
+                    </script>";
+                    exit;
+                    }
+        
+                    if(empty($user_id))
+                    {
+                        echo "<script>
+                    alert('Không tim thấy thông tin của người dùng.')
+                    window.location.href = '?act=Home';
+                    </script>";
+                    exit;
+                    }
+        
+                    if(empty($product_id))
+                    {
+                        echo "<script>
+                    alert('Không tìm thấy thông tin của sản phẩm.')
+                    window.location.href = '?act=Home';
+                    </script>";
+                    exit;
+                    }
+        
+                    if (!empty($error)) 
+                    {
+                    foreach ($error as $key => $errors) 
+                    {
+                        echo "
+                        <p style='color: red;'>$errors</p>
+                        ";  
+                    }
+                    exit; 
+                }
+                
+                $result = $mReview -> setInsertComment('',$user_id,$product_id,$rating,$content,$create_at,0);
+                //   $feedBack = $mReview->feedBack();
+    
+                    echo "<script>
+                    alert('Bạn đã thêm bình luận thành công!')
+                    </script>";
+                 }
+
+        
         }
         include_once 'Views/Users/detailProduct.php';
     }
