@@ -1,26 +1,31 @@
 <?php
-
-
+session_start();
+require_once 'Controllers/CBrand.php';
+require_once 'Controllers/CCategories.php';
+require_once 'Controllers/CProduct.php';
+require_once 'Controllers/CProductVariants.php';
+require_once 'Controllers/CUserController.php';
+require_once 'Controllers/CManage_client.php';
 require_once 'Controllers/CChart.php';
 
 const BaseUrl = "http://localhost/DuAn1/Code/";
 
-
-
-$id = $_GET['id'] ?? false;
+$cBrand = new CBrand();
+$cCategories = new CCategories();
+$cProduct = new CProduct();
+$cProductVariants = new CProductVariants();
+$User = new CUserController();
+$manage_client = new CClientController();
 $cChart = new CChart();
 
-
 $options = isset($_GET['act']) ? $_GET['act'] : '/';
+switch($options){
+  case 'Chart': {
+    $cChart->Chart();
+    break;
+}
+  // CASE BRAND
 
-switch ($options) {
-    // Chart case
-    case 'Chart': {
-        $cChart->Chart();
-        break;
-    }
-
-    
     case 'AddBrand':
     {
         $cBrand -> InsertBrand();
@@ -128,11 +133,121 @@ switch ($options) {
         $cProductVariants -> UpdateProductVariant();
         break;
     }
+    case 'DeleteProductVariant':
+    {
+        $cProductVariants -> DeleteProductVariant();
+        break;
+    }
     
   // END PRODUCT-VARIANT
-    
+
+  // Home
+    case 'Home':
+    {
+        $cProduct -> Home();
+        break;
+    }
+    case 'ProductDetails':
+    {
+        $cProduct -> ProductDetails();
+        break;
+    }
+    case 'Shop':
+    {
+        $cProduct -> Shop();
+        break;
+    }
+    case 'AddCart':
+    {
+      $cProduct -> AddCart();
+      break;
+    }
+    case 'Cart':
+    {
+      $cProduct -> Cart();
+      break;
+    }
+    case 'DeleteItemCart':
+    {
+      $cProduct -> DeleteCart ();
+      break;
+    }
+    case 'Checkout':
+    {
+      $cProduct -> Checkout();
+      break;
+    }
+    case 'Order':
+    {
+      $cProduct -> Order();
+      break;
+    }
+    case 'OrderCanceled':
+    {
+      $cProduct -> OrderCancelled();
+      break;
+    }
+    case 'OrderDetails':
+    {
+      $cProduct -> OrderDetails();
+      break;
+    }
+    case 'updateOrderStatus':
+    {
+      $cProduct -> OrderProductCanceled();
+      break;
+    }
+    case 'ListOrder':
+    {
+      $cProduct -> OrderMangage();
+      break;
+    }
+    case 'OrderDetailsMangage':
+    {
+      $cProduct -> OrderDetailsMangage();
+      break;
+    }
+    case 'deleteOrder':
+    {
+      $cProduct -> deleteOrder();
+      break;
+    }
+  // End Home
+
+  // Users
+    case 'login':
+    {
+        $User->inForUser();
+        break;
+    }
+    case 'register':
+    {
+        $User->insertUser();
+        break;
+    }
+    case 'logout':
+    {
+        $User->logOut();
+        break;
+    }
+    case 'forgot':
+    {
+      $User->forgotPasswordUser();
+      break;
+    }
+    case 'change':
+    {
+      $User->changePassword();
+      break;
+    }
+        
+      
+
+
+  // End Users
 }
 ?>
+
 
 <script>
     function selectAll()
@@ -143,7 +258,6 @@ switch ($options) {
         checkbox.checked = true;
       });
     }
-
     function deselectAll()
     {
       let checkboxes = document.querySelectorAll('.checkbox');
