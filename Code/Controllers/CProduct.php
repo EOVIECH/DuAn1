@@ -260,6 +260,10 @@ class CProduct{
                 header('Location: index.php?act=Cart');
                 exit;
             }
+        }else
+        {
+            header('Location: index.php?act=login');
+            exit;
         }
     }
 

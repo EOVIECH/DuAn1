@@ -50,6 +50,9 @@
 						
 						<div class="col-xs-12 col-sm-6">
 							<ul class="hdr_tp_right text-right">
+								<?php $dangnhap = isset($_SESSION['user_id'])? '<li class="account_area"><a href="?act=logout"><i class="fa fa-lock"></i> logOut</a></li>  <a href="?act=dataWishlist"><i class="fa-regular fa-heart"></i></a>': '<li class="account_area"><a href="?act=login"><i class="fa fa-lock"></i> LogIn</a></li>' ;
+									echo $dangnhap;
+								?>
 								<li class="account_area"><a href="login.html"><i class="fa fa-lock"></i> My Account</a></li>
 								<li class="lan_area"><a href="#"><i class="fa fa-language "></i> Language <i class="fa fa-caret-down"></i></a>
 									<ul class="csub-menu">
