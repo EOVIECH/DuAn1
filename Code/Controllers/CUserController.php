@@ -1,5 +1,4 @@
 <?php
-
 class CUserController {
 
         public function dashboard(){
@@ -72,18 +71,21 @@ class CUserController {
                                         echo "Dang nhap vao user";
                                         header('Location: ?act=trangchu');
                                         exit;
-                                       }
-                                       echo "Dang nhap vao user";
+                                       } else{
+                                         echo "Dang nhap vao user";
                                         header('Location: ?act=trangchu');
                                         exit;
+                                       }
+                                      
                                 }
-                         } else{
-                            echo "<script> 
-                            alert('Password sai vui long dang nhap lai');
-                            window.location.href = '?act=login';
-                            </script>";
-                            exit;
-                         }
+                         } 
+                        //  else{
+                        //     echo "<script> 
+                        //     alert('Password sai vui long dang nhap lai');
+                        //     window.location.href = '?act=login';
+                        //     </script>";
+                        //     exit;
+                        //  }
                         }
                 }   
               
