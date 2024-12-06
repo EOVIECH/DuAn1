@@ -22,8 +22,7 @@
       href="Views/Admin/assets/vendor/remixicon/fonts/remixicon.css"
     />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.css">
+
     <title>Document</title>
   </head>
   <body>
@@ -46,7 +45,8 @@
       <div class="data-scrollbar" data-scroll="1">
         <nav class="iq-sidebar-menu">
           <ul id="iq-sidebar-toggle" class="iq-menu">
-            <li>
+
+            <li class="active">
               <a href="index.html" class="svg-icon">
                 <svg
                   class="svg-icon"
