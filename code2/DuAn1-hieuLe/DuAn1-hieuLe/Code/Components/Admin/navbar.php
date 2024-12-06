@@ -1,3 +1,15 @@
+<?php
+if(!isset($_SESSION['role']) || $_SESSION['role'] == 'user'){
+  echo "<script>
+  alert('NOT FOUND 404');
+  window.location.href= '?act=logout';
+      </script>";
+      exit;
+
+} else if(isset($_SESSION['role']) && $_SESSION['role'] === 'admin'){
+// var_dump($_SESSION['role']);
+// exit;
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -1776,3 +1788,6 @@
  
  <!-- app JavaScript -->
  <script src="Views/Admin/assets/js/app.js"></script>
+<?php
+}
+?>

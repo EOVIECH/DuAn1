@@ -1,9 +1,4 @@
-<?php
-if(isset($_SESSION['role']) && $_SESSION['role']==='user'){
-    header('location: ?act=login');
-	exit;
-} else{
-    ?>
+
     <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +13,3 @@ require_once './Components/Admin/navbar.php';
     ?>
 </body>
 </html>
-<?php
-}
-?>

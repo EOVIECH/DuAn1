@@ -7,18 +7,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
-<style>
-
-.comments{
-  max-width: 80%;
-  position: relative;
-  top: 100px;
-  left: 270px;
-}
-</style>
 <body>
 <?php require_once './Components/Admin/navbar.php' ?>
-  <div class="comments">
+
+    <div class="content-page">
+    <div class="container-fluid">
+
+    <div class="comments">
   <h1> Theo dõi bình luận</h1>
     <!-- <a href="?act=AddBrand"><button class="btn btn-secondary">Back</button></a>
     <br> -->
@@ -35,26 +30,24 @@
 
         echo $filters;
       ?>
-      
-      <a href="?act=dataComment"><button type="submit">Back</button></a>
     </form>
-    <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">STT</th>
+    <form action="?act=DeleteSelectedProduct" method="post">
+                <div class="table-responsive border rounded shadow-sm">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead class="table-success">
+                            <tr>
+                            <th scope="col">STT</th>
       <th scope="col">Name</th>
       <th scope="col">Sản phẩm</th>
       <th scope="col">Nội dung</th>
       <th scope="col">Ngày tạo</th>
       <th scope="col">Trạng thái</th>
       <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <?php
-// var_dump($data);
-// exit;
-
-if(!empty($search)){
+                            </tr>
+                        </thead>
+                        <tbody>
+                          <?php
+                        if(!empty($search)){
   foreach($search as $index){
       $status = ($index->status == 1) ? 'active' : 'Inactive' ;
         ?>
@@ -69,9 +62,9 @@ if(!empty($search)){
                     <td><?php echo $status ?></td>
                     <td>
                       <form action="" method="POST" enctype="multipart/form-data">
-                <a href=""><button class="btn btn-danger">Xoa</button></a>
+                <a href=""><button class="btn btn-danger btn-sm">Xoa</button></a>
                 <?php
-                $duyet = ($index->status == 1) ? null : '<button name="submit" class="btn btn-info" value="' . $index->review_id . '">Duyet</button>';
+                $duyet = ($index->status == 1) ? null : '<button name="submit" class="btn btn-danger btn-sm" value="' . $index->review_id . '">Duyet</button>';
                 echo $duyet; 
                 ?>
                       </form>
@@ -98,9 +91,9 @@ if(!empty($search)){
                   <td><?php echo $status ?></td>
                   <td>
                     <form action="" method="POST" enctype="multipart/form-data">
-              <a href=""><button class="btn btn-danger">Xoa</button></a>
+              <a href=""><button class="btn btn-danger btn-sm">Xoa</button></a>
               <?php
-              $duyet = ($index->status == 1) ? null : '<button name="submit" class="btn btn-info" value="' . $index->review_id . '">Duyet</button>';
+              $duyet = ($index->status == 1) ? null : '<button name="submit" class="btn btn-danger btn-sm" value="' . $index->review_id . '">Duyet</button>';
               echo $duyet; 
               ?>
                     </form>
@@ -126,9 +119,9 @@ else{
                 <td><?php echo $status ?></td>
                 <td>
                   <form action="" method="POST" enctype="multipart/form-data">
-            <a href=""><button class="btn btn-danger">Xoa</button></a>
+            <a href=""><button class="btn btn-danger btn-sm">Xoa</button></a>
             <?php
-            $duyet = ($index->status == 1) ? null : '<button name="submit" class="btn btn-info" value="' . $index->review_id . '">Duyet</button>';
+            $duyet = ($index->status == 1) ? null : '<button name="submit" class="btn btn-danger btn-sm" value="' . $index->review_id . '">Duyet</button>';
             echo $duyet; 
             ?>
                   </form>
@@ -141,8 +134,12 @@ else{
 }
 
   ?>
+                        </tbody>
+                    </table>
+                </div>
 
-</table>
+    </div>
+    </div>
   </div>
 </body>
 </html>

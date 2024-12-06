@@ -46,7 +46,6 @@ class CUserController {
                                             $_SESSION['username'] = $user->username;
                                             $_SESSION['role'] = 'admin';
                                             echo "<script>
-                                            alert('Dang nhao vao admin');
                                             window.location.href= '?act=admin-index';
                                         </script>";
                                                 exit;
@@ -68,7 +67,7 @@ class CUserController {
                                         header('Location: ?act=Home');
                                         exit;
                                        }
-                                      
+                                     exit; 
                                 }
                          } 
                          else{
@@ -255,6 +254,10 @@ public function forgotPasswordUser() {
         }
         
         include_once './changePass.php';
+    }
+
+    public function checkAdmin(){
+        
     }
     
 

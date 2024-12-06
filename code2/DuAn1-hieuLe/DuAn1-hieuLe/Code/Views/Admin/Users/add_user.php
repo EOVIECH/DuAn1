@@ -26,9 +26,9 @@
 </style>
 <body>
 <?php require_once './Components/Admin/navbar.php' ?>
-    <div class="containers mt-5">
-        <!-- <a href="?act=AddBrand"><button class="btn btn-secondary">Back</button></a> -->
-        <h2 class="text-center">Thêm thông tin khách hàng</h2>
+<div class="content-page">
+<div class="container-fluid add-form-list">
+<h2 class="text-center">Thêm thông tin khách hàng</h2>
         <form action="?act=add-user" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
             <!-- Trường Name -->
             <div class="mb-3">
@@ -73,7 +73,8 @@
             <button type="submit" class="btn btn-primary">Cập nhật</button>
             <a href="index.php" class="btn btn-secondary">Hủy</a> -->
         </form>
-    </div>
+</div>
+</div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     function validateForm() {

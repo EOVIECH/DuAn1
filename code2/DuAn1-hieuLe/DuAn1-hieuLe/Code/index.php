@@ -12,7 +12,7 @@ require_once './Controllers/CReview.php';
 
 const BaseUrl = "http://localhost/DuAn1/Code/";
 
-// var_dump($_SESSION['user_id']);
+// var_dump($_SESSION['role']);
 // exit;
 
 $cBrand = new CBrand();
@@ -237,6 +237,8 @@ case 'feedBack':
     $Review->feedBack();
     break;
 }
+
+
 ?>
 
 

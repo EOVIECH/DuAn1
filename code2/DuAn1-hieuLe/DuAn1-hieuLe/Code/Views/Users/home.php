@@ -1,12 +1,4 @@
-<?php
-if(isset($_SESSION['role']) && $_SESSION['role'] === 'admin'){
-	// var_dump($_SESSION['role']);
-	header('location: ?act=login');
-	exit;
-	?>
-	<?php
-} else{
-	?>
+
 	<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,6 +79,3 @@ if(isset($_SESSION['role']) && $_SESSION['role'] === 'admin'){
 	<?php require_once 'Components/User/footer.php';?>
 </body>
 </html>
-<?php
-}
-?>

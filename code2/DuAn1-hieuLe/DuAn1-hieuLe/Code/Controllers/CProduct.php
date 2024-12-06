@@ -209,6 +209,8 @@ class CProduct{
         $mProduct = new Products();
         $mReview = new MReview();
         $MSize = new Size();
+
+        $feedBack = $mReview->feedBack();
        
         if(isset($_GET['id']) && !empty($_GET['id']))
         {

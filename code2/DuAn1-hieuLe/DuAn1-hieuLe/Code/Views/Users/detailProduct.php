@@ -259,111 +259,110 @@
                     </div>
                     
                     <div class="row">
-                        <div class="col-xs-12">					
-                            <div class="pd_tab_area fix">									
-                                <ul class="pd_tab_btn nav nav-tabs" role="tablist">
-                                    <li>
-                                    <a class="active" href="#description" role="tab" data-toggle="tab">Description</a>
-                                    </li>
-                                    <li>
-                                    <a href="#information" role="tab" data-toggle="tab">Information</a>
-                                    </li>
-                                    <li>
-                                    <a href="#reviews" role="tab" data-toggle="tab">Reviews</a>
-                                    </li>
-                                </ul>
+    <div class="col-xs-12">					
+        <div class="pd_tab_area fix">									
+            <ul class="pd_tab_btn nav nav-tabs" role="tablist">
+                <li>
+                    <a class="active" href="#description" role="tab" data-toggle="tab" onclick="showTab('description')">Description</a>
+                </li>
+                <li>
+                    <a href="#information" role="tab" data-toggle="tab" onclick="showTab('information')">Information</a>
+                </li>
+                <li>
+                    <a href="#reviews" role="tab" data-toggle="tab" onclick="showTab('reviews')">Reviews</a>
+                </li>
+            </ul>
 
-                                <!-- Tab panes -->
-                                <div class="tab-content">
-                                    <div role="tabpanel" class="tab-pane fade show active" id="description">
-                                        <p><?php echo $product -> description ?></p>
-                                        <!-- <ul>
-                                            <li>Lorem ipsum dolor sit amet, consectetur product</li>
-                                            <li>Duis aute irure dolor in reprehenderit in voluptate velit esse</li>
-                                            <li>Excepteur sinted occaecat cupidatat non proident products</li>
-                                            <li>Voluptate velit esse cillum.</li>
-                                        </ul>					   -->
-                                    </div>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade show active" id="description">
+                    <p><?php echo $product->description ?></p>
+                </div>
 
-                                    <div role="tabpanel" class="tab-pane fade" id="information">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>										  
-                                    </div>
+                <div role="tabpanel" class="tab-pane fade" id="information">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
+                    incididunt ut labore et dolore magna aliqua.</p>										  
+                </div>
 
-                                        <div role="tabpanel" class="tab-pane fade" id="reviews">
-                                            <div class="pda_rtng_area fix">
-                                                <h4>4.5 <span>(Overall)</span></h4>
-                                                <span>Based on 9 Comments</span>
-                                            </div>
-                                            <div class="rtng_cmnt_area fix">
-                                                <div class="single_rtng_cmnt">
-                                                    <div class="rtngs">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    <span>(4)</span>
-                                                    </div>
-                                                    <div class="rtng_author">
-                                                        <h3>John Doe</h3>
-                                                        <span>11:20</span>
-                                                        <span>6 January 2017</span>
-                                                    </div>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nost rud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nost.</p>
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6 rcf_pdnglft">
-                                                <div class="rtng_cmnt_form_area fix">
-                                                <h3>COMMENT</h3> 
-    <?php
-    if(!isset($_SESSION['user_id'])){
-    echo '<a href="?act=login">Muốn comment thì phải đăng nhập</a>';
-    // exit;
-    
-  } elseif(isset($_SESSION['user_id'])){
-    ?>
-     <div class="comment-container">
-        <h2>Để lại bình luận</h2>
-        <form action="" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="comment">Bình luận</label>
-                <textarea id="comment" name="comment" placeholder="Nhập nội dung bình luận" ></textarea>
-                <br> <br>
-
-                <div class="rating">
-            <input type="radio" id="star5" name="rating" value="5">
-            <label for="star5">&#9733;</label>
-            <input type="radio" id="star4" name="rating" value="4">
-            <label for="star4">&#9733;</label>
-            <input type="radio" id="star3" name="rating" value="3">
-            <label for="star3">&#9733;</label>
-            <input type="radio" id="star2" name="rating" value="2">
-            <label for="star2">&#9733;</label>
-            <input type="radio" id="star1" name="rating" value="1">
-            <label for="star1">&#9733;</label>
-        </div>
-        <button type="submit" name="submit" class="btn btn-success">Gửi đánh giá</button>
-            </div>
-            <div>
-                <p><em style="color: red;"><?php echo $_SESSION['average'] ?> tren 5</em></p>
-            </div>
-</form>
-    </div>
- <?php
-}
-?>
-
-                                                </div>
-                                            </div>				  
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div role="tabpanel" class="tab-pane fade" id="reviews">
+                    <div class="pda_rtng_area fix">
+                        <h4>4.5 <span>(Overall)</span></h4>
+                        <span>Based on 9 Comments</span>
                     </div>
+                    <div class="rtng_cmnt_area fix">
+                        <div class="single_rtng_cmnt">
+                            <?php foreach ($feedBack as $index) {
+                                if ($index->status == 1) {
+                                    $comment = isset($index->comment) ? $index->comment : 'Không có nội dung'; ?>
+                                    <h3><?= $index->username ?></h3>
+                                    <span><?= $index->created_at ?></span>
+                                    <p><?= $comment ?></p>
+                                <?php }
+                            } ?>
+                        </div>
+                    </div>
+                    <div class="rtng_cmnt_form_area fix">
+                        <?php if (!isset($_SESSION['user_id'])) { ?>
+                            <a href="?act=login">Muốn comment thì phải đăng nhập</a>
+                        <?php } else { ?>
+                            <div class="comment-container">
+                                <h2>Để lại bình luận</h2>
+                                <form action="" method="POST" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="comment">Bình luận</label>
+                                        <textarea id="comment" name="comment" placeholder="Nhập nội dung bình luận"></textarea>
+                                        <br><br>
+                                        <div class="rating">
+                                            <input type="radio" id="star5" name="rating" value="5">
+                                            <label for="star5">&#9733;</label>
+                                            <input type="radio" id="star4" name="rating" value="4">
+                                            <label for="star4">&#9733;</label>
+                                            <input type="radio" id="star3" name="rating" value="3">
+                                            <label for="star3">&#9733;</label>
+                                            <input type="radio" id="star2" name="rating" value="2">
+                                            <label for="star2">&#9733;</label>
+                                            <input type="radio" id="star1" name="rating" value="1">
+                                            <label for="star1">&#9733;</label>
+                                        </div>
+                                        <button type="submit" name="submit" class="btn btn-success">Gửi đánh giá</button>
+                                    </div>
+                                    <p><em style="color: red;"><?php echo $_SESSION['average'] ?> trên 5</em></p>
+                                </form>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    function showTab(tabId) {
+        // Hide all tab content
+        document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('show', 'active'));
+        
+        // Show selected tab content
+        const selectedTab = document.getElementById(tabId);
+        selectedTab.classList.add('show', 'active');
+
+        // Show/hide comments based on the tab
+        if (tabId === 'reviews') {
+            document.querySelector('.rtng_cmnt_area').style.display = 'block';
+            document.querySelector('.rtng_cmnt_form_area').style.display = 'block';
+        } else {
+            document.querySelector('.rtng_cmnt_area').style.display = 'none';
+            document.querySelector('.rtng_cmnt_form_area').style.display = 'none';
+        }
+    }
+
+    // Initialize: Hide comments if not on Reviews tab
+    document.addEventListener('DOMContentLoaded', () => {
+        showTab('description'); // Default to Description
+    });
+</script>
+
                 </div>
             <?php
         }
@@ -407,4 +406,5 @@
 
     <?php require_once 'Components/User/footer.php';?>
 </body>
+
 </html>
