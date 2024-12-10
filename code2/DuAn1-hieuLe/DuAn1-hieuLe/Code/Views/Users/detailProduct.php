@@ -100,6 +100,22 @@
         .rating label:hover ~ label {
             color: #f5a623; /* Màu vàng cho sao được chọn */
         }
+
+        .color-btn {
+    width: 50px;
+    height: 50px; 
+    border: none;
+    cursor: pointer; 
+    margin: 5px;
+    border-radius: 5px; 
+    transition: transform 0.2s ease; 
+    border: 1px solid black;
+}
+
+.color-btn:hover {
+    transform: scale(1.1); 
+}
+
     </style>
 </head>
 <body>
@@ -202,30 +218,42 @@
                                 </div>
                                 <div class="pd_img_size fix">
                                     <h4>size:</h4>
-                                    <?php 
+                                    <form action="" method="post" enctype="multipart/form-data"> 
+                                         <?php 
                                     foreach($sizes as $size)
                                     {
-                                        $value = (isset($size->status) && $size->status === 'inactive') ? '' : '<a href="index.php?act=ProductDetails&id='.$_GET['id'].'&size='. $size -> size_id.'">'. htmlspecialchars($size->name).'</a>';
+                                        $value = (isset($size->status) && $size->status === 'inactive') 
+                                        ? '' 
+                                        : '<button type="submit" name="size" value="' . htmlspecialchars($size->size_id) . '">' . htmlspecialchars($size->name) .'</button>';
                                      echo $value;
                                     }
+                                    if(isset($_POST['size'])){
+                                        $_SESSION['size'] = $_POST['size'];
+                                    }
+                                   
                                     ?>
+                                    </form>
+    
                                 </div>
                                 <div class="pd_clr_qntty_dtls fix">
                                     <div class="pd_clr">
                                         <h4>color:</h4>
-                                        <?php
-                                            foreach($listColor as $color)
-                                            {
-                                                $getSize = isset($_GET['size']) ? $_GET['size'] : 1 ;
-                                                ?>
-                                                    <a  href="?act=ProductDetails&id=<?php echo $product -> product_id ?>&size=<?= $getSize ?>&color=<?php echo $color -> color_id?>" class="<?php if($color -> color_id == $product -> color_id){echo 'active';} ?>" style="background: <?php echo $color -> color_code ?>;"><?php echo $color -> name ?></a>
-                                                <?php
-                                            }
+                                        <form action="" method="post" enctype="multipart/form-data">
+                                            <?php
+                                            foreach($listColor as $color) {
+                                                $value = (isset($color->status) && $color->status === 'inactive') 
+                                                    ? '' 
+                                                    : '<button class="color-btn" type="submit" name="color" value="'.$color->color_id.'" style="background-color: ' . htmlspecialchars($color->color_code) . ';"></button>';
+                                                echo $value;
+                                                     }
+                                                     if(isset($_POST['color'])){
+                                                        $_SESSION['color'] = $_POST['color'];
+                                                    }
+                                                       
+                                            ?>
+                                        </form>  
 
-                                            $colorr = isset($_GET['color']) ? $_SESSION['color'] = $_GET['color'] : '';
-                                            $sizer = isset($_GET['size']) ? $_SESSION['size']  = $_GET['size'] : '';
-         
-                                        ?>
+                                    
                                     </div>
                                     <div class="pd_qntty_area">
                                         <h4>quantity:</h4>

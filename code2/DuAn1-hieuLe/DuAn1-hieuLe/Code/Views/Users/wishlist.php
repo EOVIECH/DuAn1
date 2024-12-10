@@ -42,10 +42,8 @@
                 <?php
             
                 if (!empty($wishlist)){ 
-                    // var_dump($listWishList);
-                    // exit;
                    foreach ($wishlist as $index => $item){
-                    if($item->statuss === '1'){
+                    if($item->statuss === 'active'){
                             ?>
                     
                             <tr>

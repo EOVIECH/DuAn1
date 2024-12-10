@@ -1734,7 +1734,7 @@ if(!isset($_SESSION['role']) || $_SESSION['role'] == 'user'){
                               class="btn border mr-2"
                               >Profile</a
                             >
-                            <a href="auth-sign-in.html" class="btn border"
+                            <a href="?act=logout" class="btn border"
                               >Sign Out</a
                             >
                           </div>

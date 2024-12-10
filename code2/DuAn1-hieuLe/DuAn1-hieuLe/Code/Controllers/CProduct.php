@@ -218,6 +218,8 @@ class CProduct{
             $listColor = $mProduct -> getColorAvailableInProduct($product_id);
             $relatedProduct = $mProduct -> getRelatedProduct($product_id,$product_id);
             $sizes = $MSize-> getDataSize();
+            // var_dump($sizes);
+            // exit;
             if(isset($_GET['color']))
             {
                 $listProductDetails = $mProduct -> getDataProductDetailsWithColorId($product_id,$_GET['color']);
@@ -241,22 +243,18 @@ class CProduct{
    
             $_SESSION['average'] = number_format($average,1);
     
-              if (isset($_POST['rating'])) {
-                  $rating = intval($_POST['rating']);
-                 
-              } else {
-                  $rating = null;
-              }
-   
+                    if (isset($_POST['rating'])) {
+                        $rating = intval($_POST['rating']);
+                        
+                    } else {
+                        $rating = null;
+                    }
          if(isset($_POST['submit'])){
       
               $content = $_POST['comment'];
               $user_id = $_SESSION['user_id'];
               $product_id = $_GET['id'];
               $create_at = date('Y-m-d');
-
-            //   var_dump($content);
-            //   exit;
       
               $error = [];
       
@@ -295,17 +293,13 @@ class CProduct{
               }
               
               $result = $mReview -> setInsertComment('',$user_id,$product_id,$rating,$content,$create_at,0);
-            //   $feedBack = $mReview->feedBack();
-   
                   echo "<script>
                   alert('Bạn đã thêm bình luận thành công!')
                   </script>";
-          }
-
-        
-        }
+                }
+            }
         include_once './Views/Users/detailProduct.php';
-    }
+        }
 
     public function wishlist() {
         if(isset($_GET['id'], $_GET['act']) && $_GET['act'] = 'wishlist'){
@@ -314,56 +308,49 @@ class CProduct{
         if(isset($_SESSION['color'],$_SESSION['size'])){
             $color = $_SESSION['color'];
             $size = $_SESSION['size'];
+
             $variant_id = $mProduct->getVariant($size,$id,$color);
-            foreach($variant_id as $index){
-                $product_variant = $index->variant_id;
+
+                    foreach($variant_id as $index){
+                        $product_variant = $index->variant_id;
+                    }
+
+                if(isset($product_variant ) && $product_variant !==''){
+                    $wishlist = $mProduct->addWishlist('', $_SESSION['user_id'], $product_variant, 'active',$id);
+                    echo "<script>
+                    alert('Bạn đã yêu thích sản phẩm này');
+                    window.location.href = '?act=ProductDetails&id=' + $id;
+                    </script>";
+                    exit;
+                } else{
+                    echo "<script>
+                    alert('Ban can chon du lieu de co the yeu thich');
+                    window.location.href = '?act=ProductDetails&id=' + $id;
+                    </script>";
+                    exit;
+                }
+                
             }
-            // var_dump($product_variant);
-            // exit;
-           
-        $wishlist = $mProduct->addWishlist('', $_SESSION['user_id'], $product_variant, 1,$id);
-            echo "<script>
-            alert('Bạn đã yêu thích sản phẩm này');
-            window.location.href = '?act=ProductDetails&id=' + $id;
-            </script>";
-            exit;
-            
-        }
         }
     }
 
     public function getDataWishlist(){
         $mProduct = new Products();
         $wishlist = $mProduct -> getAllDataProduct();
-        if(isset($_POST['submit'])){
 
-            $id = $_POST['submit'];
-           $del = $mProduct -> delWishList(0,$id);
-            echo "<script>
-            alert('Xoa du lieu thanh cong');
-            window.location.href = '?act=dataWishlist';
-            </script>";
-            exit;
+                if(isset($_POST['submit'])){
+                    $id = $_POST['submit'];
+                    $del = $mProduct -> delWishList('inactive',$id);
+                    echo "<script>
+                    alert('Xoa du lieu thanh cong');
+                    window.location.href = '?act=dataWishlist';
+                    </script>";
+                    exit;
+                    }
+
+        include_once './Views/Users/wishlist.php';
+            }
+
         }
-
-        include_once './Views/Admin/Product/wishlist.php';
-    }
-
     
-        }
-    
-
-    
-
-    // public function addWishlist(){
-    //     if(isset($_GET['id'])){
-    //         if(isset($_SESSION['user_id'])){
-
-    //             $user_id = $_SESSION['user_id'];
-    //             // $product_variant_id = ;
-    //             $mProduct = new Products();
-    //             $addWishList = $mProduct->addWishlist();
-    //         }
-    //     }
-    // }
 ?>  
