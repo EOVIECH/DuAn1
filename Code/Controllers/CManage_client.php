@@ -1,4 +1,6 @@
 <?php
+require_once 'Models/MUsers.php';
+
 
 class CClientController {
     public function inForClient(){
@@ -7,7 +9,7 @@ class CClientController {
 
         // var_dump($in);
 
-        include_once './Views/Admin/list_user.php';
+        include_once './Views/Admin/Users/list_user.php';
     }
 
 
@@ -79,7 +81,7 @@ class CClientController {
                     }
                     //  var_dump($nPro);
                   }
-                  include_once './Views/Admin/add_user.php';   
+                  include_once './Views/Admin/Users/add_user.php';   
     }
 
 
@@ -115,7 +117,7 @@ class CClientController {
                     // exit;
                  }
             }
-            include_once './Views/Admin/edit_user.php';
+            include_once './Views/Admin/Users/edit_user.php';
  }
 
 

@@ -74,7 +74,7 @@ class CReviewController{
     
 }
   
-        include_once './Views/Admin/Reviews/dataComment.php';
+        include_once 'Views/Admin/Reviews/dataComment.php';
     }
 
     public function detail_comment(){
@@ -100,7 +100,7 @@ class CReviewController{
         $mReview = new MReview();
         $feedBack = $mReview->feedBack();
 
-      include_once './Views/Users/feedBack.php';
+      include_once 'Views/Users/feedBack.php';
     }
 
 }

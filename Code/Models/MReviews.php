@@ -81,7 +81,7 @@ class MReview
     }
 
     public function feedBack(){
-        $sql = 'SELECT users.username, reviews.review_id , reviews.user_id , reviews.product_id, reviews.comment FROM reviews JOIN users ON reviews.user_id = users.user_id WHERE reviews.status = 1;`';
+        $sql = 'SELECT users.username, reviews.* FROM reviews JOIN users ON reviews.user_id = users.user_id WHERE reviews.status = "active";`';
         $this->connect->setQuery($sql);
         return $this->connect->loadData();
     }

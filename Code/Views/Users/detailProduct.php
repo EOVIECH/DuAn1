@@ -74,6 +74,72 @@
             color: white;
             border-color: #007bff;
         }
+        .comment-container {
+            width: 100%;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .comment-container h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .form-group textarea {
+            resize: none;
+            height: 100px;
+        }
+        .comment-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #3498db;
+            color: #ccc;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .comment-button:hover {
+            background-color: #2980b9;
+        }
+
+        .rating {
+            direction: rtl; /* Đảo chiều để chọn sao từ phải sang trái */
+            unicode-bidi: bidi-override;
+            display: inline-flex;
+        }
+        .rating input[type="radio"] {
+        display: none;
+        }
+
+        .rating label {
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+        }
+        .rating input:checked ~ label,
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #f5a623; /* Màu vàng cho sao được chọn */
+        }
     </style>
 </head>
 
@@ -201,7 +267,7 @@
                                         <?php
                                         }
                                         ?>
-                                    </div>
+                                    </div>  
                                     <div class="pd_qntty_area">
                                         <h4>quantity:</h4>
                                         <div class="pd_qty fix">
@@ -212,7 +278,7 @@
                                 <!-- Product Action -->
                                 <div class="pd_btn fix">
                                     <input type="submit" class="btn btn-default acc_btn" value="Add To Cart">
-                                    <a class="btn btn-default acc_btn btn_icn"><i class="fa fa-heart"></i></a>
+                                    <a class="btn btn-default acc_btn btn_icn" href="?act=wishlist&id=<?php echo $_GET['id'] ?>"><i class="fa fa-heart"></i></a>
                                     <a class="btn btn-default acc_btn btn_icn"><i class="fa fa-refresh"></i></a>
                                 </div>
                                 <div class="pd_share_area fix">
@@ -273,22 +339,15 @@
                                     </div>
                                     <div class="rtng_cmnt_area fix">
                                         <div class="single_rtng_cmnt">
-                                            <div class="rtngs">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star-o"></i>
-                                                <span>(4)</span>
-                                            </div>
-                                            <div class="rtng_author">
-                                                <h3>John Doe</h3>
-                                                <span>11:20</span>
-                                                <span>6 January 2017</span>
-                                            </div>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nost rud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nost.</p>
-                                        </div>
-
+                                        <?php foreach ($feedBack as $index) 
+                                        {
+                                            if ($index->status == 'active') {
+                                                $comment = isset($index->comment) ? $index->comment : 'Không có nội dung'; ?>
+                                                <h3><?php echo  $index->username ?></h3>
+                                                <span><?php echo  $index->created_at ?></span>
+                                                <p><?php echo  $comment ?></p>
+                                            <?php }
+                                        } ?>
                                     </div>
                                     <div class="col-md-6 rcf_pdnglft">
                                         <div class="rtng_cmnt_form_area fix">

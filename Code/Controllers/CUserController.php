@@ -2,6 +2,10 @@
 require_once 'Models/MUsers.php';
 class CUserController {
 
+        public function admin(){
+            include_once 'Views/Admin/admin_index.php';
+        }
+
         public function dashboard(){
             if(!isset($_SESSION['username'])&&!isset($_SESSION['role'])&&$_SESSION['username'] != 'admin'){
                 echo "<script> 
@@ -11,7 +15,7 @@ class CUserController {
                 exit;
             }
 
-         include_once './Views/Admin/dashboard.php';
+         include_once 'Views/Admin/dashboard.php';
         }
 
         public function logOut(){
@@ -54,10 +58,7 @@ class CUserController {
                                             $_SESSION['user_id'] = $user->user_id;
                                             $_SESSION[' '] = $user->username;
                                             $_SESSION['role'] = 'admin';
-                                            echo "<script>
-                                            alert('Dang nhao vao admin');
-                                            window.location.href= '?act=listProduct';
-                                        </script>";
+                                            header('Location: ?act=ListProduct');
                                                 exit;
                 
                                       } 
@@ -220,6 +221,7 @@ class CUserController {
      }
         include_once 'Views/Users/register.php';
 }
+
 
     public function changePassword(){
         if(isset($_POST['submit'])){

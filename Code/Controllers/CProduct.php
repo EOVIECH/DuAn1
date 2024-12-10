@@ -8,6 +8,7 @@ require_once './Models/MOrders.php';
 require_once './Models/MDiscount.php';
 require_once './Models/MPayment.php';
 require_once './Models/MReviews.php';
+require_once './Models/MWishlist.php';
 
 class CProduct{
     public $connect;
@@ -217,6 +218,10 @@ class CProduct{
     {
         $mProduct = new Products();
         $mReview = new MReview();
+
+        $feedBack = $mReview -> feedBack();
+        // var_dump($feedBack);
+        // die();
         if(isset($_GET['id']) && !empty($_GET['id']))
         {
             $product_id = $_GET['id'];
@@ -316,7 +321,7 @@ class CProduct{
                     exit; 
                 }
                 
-                $result = $mReview -> setInsertComment('',$user_id,$product_id,$rating,$content,$create_at,0);
+                $result = $mReview -> setInsertComment('',$user_id,$product_id,$rating,$content,$create_at,'inactive');
                 //   $feedBack = $mReview->feedBack();
     
                     echo "<script>
@@ -616,6 +621,55 @@ class CProduct{
             $mOrder -> deleteOrder((int)$_GET['orderId']);
             header('Location: ?act=Order');
         }
+    }
+
+    public function wishlist() 
+    {
+        $mWishlist = new Wishlist();
+        if(isset($_GET['id'], $_GET['act']) && $_GET['act'] = 'wishlist')
+        {
+            $id = $_GET['id'];
+            var_dump($_SESSION['color']);
+            var_dump($_SESSION['size']);    
+            if(isset($_SESSION['color'],$_SESSION['size']))
+            {
+                echo '1';
+                $color = $_SESSION['color'];
+                $size = $_SESSION['size'];
+                $variant_id = $mWishlist->getVariant($size,$id,$color);
+                foreach($variant_id as $index){
+                    $product_variant = $index->variant_id;
+                }
+            
+            $wishlist = $mWishlist->addWishlist('', $_SESSION['user_id'], $product_variant, 'active',$id);
+                echo "<script>
+                alert('Bạn đã yêu thích sản phẩm này');
+                window.location.href = '?act=ProductDetails&id=' + $id;
+                </script>";
+                exit;
+                
+            }
+        }
+    }
+
+    public function getDataWishlist()
+    {
+        $mProduct = new Products();
+        $mWishlist = new Wishlist();
+        $wishlist = $mProduct -> getAllDataProduct();
+        if(isset($_POST['submit']))
+        {
+
+            $id = $_POST['submit'];
+           $del = $mWishlist -> delWishList(0,$id);
+            echo "<script>
+            alert('Xoa du lieu thanh cong');
+            window.location.href = '?act=dataWishlist';
+            </script>";
+            exit;
+        }
+
+        include_once 'Views/Users/wishlist.php';
     }
 
 }

@@ -10,6 +10,21 @@ class Products
         $this -> connect = new ConnectDB();
     }
 
+    public function getAllDataProduct()
+    {
+        $sql = 'SELECT products.name AS names, 
+        brands.name AS brands, brands.image AS images, 
+        wishlist.wishlist_id AS wishlistid, products.product_id AS id,
+        wishlist.status AS statuss
+        FROM `wishlist` 
+        JOIN products ON wishlist.product_id = products.product_id 
+        JOIN brands ON products.brand_id = brands.brand_id;
+        ';
+
+        $this->connect->setQuery($sql);
+        return $this->connect->loadData([]);
+    }
+
     public function getDataProductWithPagination($offset,$perPage)
     {
         $sql = 'SELECT products.*, brands.name as brand_name, categories.name as category_name, categories.category_id FROM products
@@ -403,5 +418,7 @@ class Products
         $this -> connect -> setQuery($sql);
         $this -> connect -> execute([$product_id]);
     }
+
+    
 }
 ?>

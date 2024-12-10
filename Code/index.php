@@ -6,7 +6,8 @@ require_once 'Controllers/CProduct.php';
 require_once 'Controllers/CProductVariants.php';
 require_once 'Controllers/CUserController.php';
 require_once 'Controllers/CManage_client.php';
-
+require_once 'Controllers/CChart.php';
+require_once 'Controllers/CReview.php';
 
 const BaseUrl = "http://localhost/DuAn1/Code/";
 
@@ -16,6 +17,8 @@ $cProduct = new CProduct();
 $cProductVariants = new CProductVariants();
 $User = new CUserController();
 $manage_client = new CClientController();
+$cChart = new CChart();
+$Review = new CReviewController();
 
 
 $options = isset($_GET['act']) ? $_GET['act'] : '/';
@@ -236,10 +239,77 @@ switch($options){
       $User->changePassword();
       break;
     }
-        
+    case 'list-user':
+    {
+      $manage_client->inForClient();
+      break;
+    }
+  
+    case 'add-user':
+    {
+      $manage_client->addClient();
+      break;
+    }
+    
+    case 'edit-user':
+    {
+      $manage_client->updateClient();
+      break;   
+    }
+    case 'edit-user':
+    {
+      $manage_client->updateClient();
+      break;
+    }
+      
+    case 'admin-index':
+    {
+      $User->admin();
+      break;
+    }
+    
+
+    // Chart
+    case 'Chart': 
+      {
+        $cChart->Chart();
+        break;
+      }
+    // End Chart
       
 
+    // Review
+    case 'dataComment':
+    {
+      $Review->getDataComment();
+      break;
+    }
+  
+    case 'detail_comment':
+    {
+      $Review->detail_comment();
+      break;
+    }
+    case 'feedBack':
+    {
+      $Review->feedBack();
+      break;
+    }
+    // End Review
 
+    // Wishlist
+    case 'wishlist':
+    {
+        $cProduct -> wishlist();
+        break;
+    }
+
+    case 'dataWishlist':
+    {
+        $cProduct -> getDataWishlist();
+        break;
+    }
+    // End Wishlist
   // End Users
 }
 ?>
